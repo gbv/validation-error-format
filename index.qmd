@@ -1,0 +1,311 @@
+---
+title: Data Validation Error Format
+subtitle: Version 0.0.1
+#date: 2024-09-30
+#doi: 10.5281/zenodo......
+authors:
+- name: Jakob Voß
+  orcid: 0000-0002-7613-4123
+  affiliations:
+   - name: Verbundzentrale des GBV (VZG)
+abstract: |
+ This document specifies a data format to report validation errors of digital objects.
+---
+
+# Introduction
+
+## Motivation and scope
+
+Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No uniform standard exist to express error reports (apart from formats used in unit testing in software development such as [JUnit XML]).
+
+The specification of **Data Validation Error Format** has two goals:
+
+- unify how validation errors are reported by different validators
+- address positions of errors in validated documents
+
+Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.
+
+The format is strictly limited to errors and error positions. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include concepts of test cases, schemas or other information about validation internals.
+
+## Overview
+
+@fig-validation illustrates the validation process with core concepts used in this specification: a **validator** checks whether a **document** conforms to some requirements and returns a list of **errors** in return. Each error can refer to its locations in the document via **positions**. These concepts are defined more formally with details in the following normative section.
+
+::: {#fig-validation}
+
+```{mermaid fig-align=left}
+graph LR
+   document --- validator --> errors
+   errors -. positions .-> document
+   validator(validator)
+```
+Validation process
+:::
+
+Every document conforms to a **document model**. For instance a JSON document conforms to the JSON model, and a character string conforms to the model "sequence of characters from a known character set". Document models come with **encodings** how to express conforming documents in form of documents of another document model on a lower level. For instance a JSON document can be encoded with JSON syntax in Unicode strings and Unicode strings can be encoded with UTF-8 as sequence of bytes (see labeled arrows in @fig-encodings-and-locators). Eventually all documents are given as digital objects, encoded as sequence of bytes. Encodings using a sequence of characters are also called textual data formats, in contrast to binary data formats.
+
+Error positions are given in form of **locators**, each conforming to a **locator model**. Each locator model refers to a limited set of document models: for instance JSON Pointer refers to JSON, line numbers refer to any model segmenting a document into a sequence of lines, and index numbers refer to any model with a sequence of elements -- such as sequences of bytes and Unicode strings (@fig-encodings-and-locators).^[Unicode strings are sequences of code points, which are different from characters, so "character position" is a different locator model. Line numbers in Unicode are not trivial neither because multiple definitions of line breaks exist.] The Data Validation Error Format requires each locator model to have exactely one encoding called its **locator format** to encode locators as Unicode strings.
+
+::: {#fig-encodings-and-locators}
+
+```{mermaid fig-align=left}
+graph LR
+   JSON -- JSON syntax --> Unicode
+   Unicode -- UTF-8   --> Bytes
+   Unicode[Unicode string]
+
+   jsonpointer(JSON Pointer)
+   line(line number)
+   index(index number)
+   index -.-> Unicode
+
+   style jsonpointer fill:#fff,stroke:#fff
+   style line fill:#fff,stroke:#fff
+   style index fill:#fff,stroke:#fff
+
+   jsonpointer -.-> JSON
+   line -.-> Unicode
+   index -.-> Bytes
+```
+Example of encodings and locator formats
+:::
+
+[JUnit XML]: https://github.com/testmoapp/junitxml
+[JSON Pointer]: https://datatracker.ietf.org/doc/html/rfc6901
+
+## Example
+
+*This section needs to be written...*
+
+A JSON file can be invalid on many levels:
+
+- Invalid UTF-8 (see <https://en.wikipedia.org/wiki/UTF-8#Error_handling>)
+- JSON syntax error (e.g. document starts with `}`)
+- JSON schema error (e.g. missing required element)
+
+TODO: illustrate all three cases
+
+# Terminology
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 ([RFC 2119] and [RFC 8174]) when, and only when, they appear in all capitals, as shown here.
+
+A **validator** is an executable function that transforms a **document** into a (possibly empty) set of **errors**.
+
+# Errors
+
+An **Error** is a JSON object with: 
+
+- mandatory field `message` with an **error message**, being a non-empty string
+- optional field `type` with an **error type**, being a non-empty string (SHOULD be an URI)
+- optional field `level` with one of the strings `error` or `warning`
+- optional field `position` with [positions]
+
+An error is also called **warning** if field `level` has value `warning`.
+
+::: {.callout-note}
+Language and localisation of error messages is out of the scope of this specification.
+:::
+
+# Positions
+
+An error can have one or more **positions**. Positions are
+
+- either a JSON array of [locators] (detailled form),
+- or a [locator map] (condense form).
+
+Every locator map can be transformed to an equivalent array of locators. The reverse transformation is not always possible.
+
+[locator format]: #locator-formats
+[locator map]:: #locator-maps
+
+## Locators
+
+A **locator** is a JSON object with
+
+- mandatory field `format` with the [locator format]
+- mandatory field `value` with the **locator value**, being a string
+- optional field `position` with nested [positions]
+
+```{#lst-locator .json lst-cap="A simple locator indicating the position line 7"}
+{ "format": "line", "value": "7" }
+```
+
+TODO: explain locator value and nested positions
+
+<!--
+Each locator format assumes a model of the document. For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
+-->
+
+
+```{#lst-nested-example .json lst-cap="Error in line 2 of file `example.txt` in archive `archive.zip`"}
+{
+  "message": "Invalid value in line 2 of file example.txt in file archive.zip",
+  "position": [
+    {
+      "format": "file",
+      "value": "archive.zip",
+      "position": [
+        {
+          "format": "file",
+          "value": "example.txt",
+          "position": [ 
+            {
+              "format": "line",
+              "value": "2"
+            } 
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Locator maps
+
+A **locator map** is a JSON object that maps [locator formats] to **locator values**.
+
+```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7"}
+{ "line": "7" }
+```
+
+::: {.callout-note}
+Locator maps simplify access to error positions when applications assume known locator formats without nested positions.
+:::
+
+A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `format` and `value` of each locator.
+
+# Locator formats
+
+Each locator format encodes a locator model that refers to a set of document models.
+
+A **locator format** is a string that identifies a formal language to locate positions or sections in a document. The identifier must start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
+
+Preliminary registry of locator formats:
+
+identifier      | locator format        | document model
+---------------:|-----------------------|----------------
+`index`         | number (first: 1)     | sequence of elements
+`line`          | line number (first: 1)| sequence of lines, separated by ...?
+`rfc5147`       | character positions   | sequence of characters, separated into lines
+`jsonpointer`   | JSON Pointer          | JSON
+`file`          | POSIX Path            | directory tree
+...             | ...                   |
+
+```{#lst-fq .json lst-cap="Error using fq to locate the internal timestamp of a file in a .gz archive"}
+{
+  "message": "Timestamp must not be in the future!",
+  "position": {
+    "fq": "gzip:.members[0].mtime"
+  }
+}
+```
+
+Each locator format implies an encoding of the locator value. Locator values MUST be strings!
+
+# Notes
+
+*TODO*: the following are unstructured notes and ideas:
+
+## Common locator formats
+
+- POSIX Path (any except `\0` and ` \ `)
+- JSON Pointer
+- XPath (or a subset)
+- IIIF
+- line number (but multiple definitions exist, e.g. in some they may include U+0B, U+0C, U+85, U+2028, U+2029)
+- Cell address in spreadsheet (column uses Hexavigesimalsystem, row uses numbers)
+- PDF highlighted text annotations
+- ...
+
+Non-quite-but-usable-as-such
+
+- Normalized `fq` element path with document
+- Subsets of query languages (SQL, SPARQL...)
+
+## Including document values/fragments
+
+Given a JSON document
+
+~~~json
+{ "authors": "Bob" }
+~~~
+
+An error in field `authors` could be enriched with document content:
+
+~~~json
+{
+  "message": "authors must be array",
+  "position": [
+    {
+      "format": "jsonpointer",
+      "value": "/authors",
+      "document": [{ "format": "string", "value": "bob" }]
+    }
+  ]
+}
+~~~
+
+Problem: nested documents don't have a simple `format`.
+
+Another example, adding `message` to a position (does this make sense?):
+
+~~~json
+{
+  "message": "Invalid file foo.txt",
+  "position": [
+    {
+      "format": "file",
+      "value": "foo.txt",
+      "document": [{ "format": "string", "value": "alice\nbob\n" }],
+      "message": "Invalid value in line 2",
+      "position": { "line": "2" }
+    }
+  ]
+}
+~~~
+
+# References
+
+## Normative References
+
+[RFC 2119]: https://tools.ietf.org/html/rfc2119
+[RFC 8174]: https://tools.ietf.org/html/rfc8174
+[RFC 8259]: https://tools.ietf.org/html/rfc8259
+
+- Bradner, S.: _Key words for use in RFCs to Indicate Requirement Levels_.
+  BCP 14, RFC 2119, March 1997,
+  <http://www.rfc-editor.org/info/rfc2119>.
+              
+- Bray, T.: _The JavaScript Object Notation (JSON) Data Interchange Format_.
+  RFC 8259, December 2017. <https://tools.ietf.org/html/rfc8259>
+
+- Leiba, B.:  _Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words_.
+  BCP 14, RFC 8174, May 2017,
+  <http://www.rfc-editor.org/info/rfc8174>.
+  
+## Informative references
+
+- [JSON Schema](https://json-schema.org/) schema language
+
+# Appendices {.unnumbered}
+
+The following information is non-normative.
+
+## JSON Schemas {.unnumbered}
+
+Error records can be validated with the non-normative JSON Schema [`schema.json`](schema.json) in the specification repository. Rules not covered by the JSON Schema include:
+
+- ...
+
+## Changes {.unnumbered}
+
+This document is managed in a revision control system at <https://github.com/gbv/validation-error-format>, including an [issue tracker](https://github.com/gbv/validation-error-format/issues).
+
+- **Version 0.0.0**
+
+  Work in progress.
+
+## Acknowledgements {.unnumbered}
+
+...

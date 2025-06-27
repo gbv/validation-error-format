@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "$defs": {
+    "locator": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "value": {
+          "type": "string"
+        },
+        "position": { "$ref": "#/$defs/position" }
+      },
+      "required": ["format", "locator"]
+    },
+    "position": {
+      "description": "positions",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/locator" }
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9-]+$": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "description": "error message"
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "identifier of the error type"
+    },
+    "level": {
+      "type": "string",
+      "enum": ["error", "warning"],
+      "default": "error",
+      "description": "error level ('error' or 'warning')"
+    },
+    "position": { "$ref": "#/$defs/position" }
+  },
+  "required": ["message"]
+}

@@ -1,0 +1,11 @@
+.quarto-figure, .example {
+  box-shadow: 0px 0px 5px 0px #ccc;
+  border: 1px solid #ccc;
+  padding: 0rem 0.5rem;
+}
+figcaption {
+  text-align: center;
+}
+.listing > figure > figcaption {
+  text-align: left;
+}

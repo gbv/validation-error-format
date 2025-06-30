@@ -56,7 +56,7 @@ graph LR
 
    jsonpointer(JSON Pointer)
    line(line number)
-   offset(byte number)
+   offset(byte offset)
 
    style jsonpointer fill:#fff,stroke:#fff
    style line fill:#fff,stroke:#fff
@@ -88,22 +88,25 @@ The JSON syntax could also be invalid. For example the document `{a:1}` is valid
 ```json
 {
   "message": "Expected property name or '}' at index 2",
-  "position": { "line": "1", "char=2" }
+  "position": { "line": "1", "char": "2" }
 }
 ```
 
 Last but not least the UTF-8 encoding could be invalid. For instance the byte sequence `7b 22 c3 a4 c3 a5 22 3a c0 7d` decoded as UTF-8 results in a sequence of Unicode code points (`U+007B`=`{`, `U+0022`=`"`, `U+00E4` =`ä`, `U+00E5` =`å`, `U+0022`=`"`, `U+003A`=`:`) followed by the invalid byte `c0`, and code point `U+007D`=`}`. The error may be judged as warning because the invalid byte can be replaced by a Unicode replacement character. The resulting document with replacement character (`{"äå":�}`) is no valid JSON still.
 
 ```json
-{
-  "message": "Ill-formed UTF-8 byte sequence at offset 8",
-  "level": "warning",
-  "position": { "offset": "8", "line": 1, "char=7" }
-},
-{
-  "message": "Expected JSON value at line 1, column 7",
-  "position": { "line": 1, "char=7" }
-}
+[
+  {
+    "level": "warning",
+    "message": "Ill-formed UTF-8 byte sequence at offset 8",
+    "position": { "offset": "8", "line": 1, "char": "7" }
+  },
+  {
+    "level": "error",
+    "message": "Expected JSON value at line 1, column 7",
+    "position": { "line": 1, "char": "7" }
+  }
+]
 ```
 
 # Terminology
@@ -318,7 +321,9 @@ The following information is non-normative.
 
 Error records can be validated with the non-normative JSON Schema [`schema.json`](schema.json) in the specification repository. Rules not covered by the JSON Schema include:
 
-- ...
+```json
+{{< include schema.json >}}
+```
 
 ## Changes {.unnumbered}
 

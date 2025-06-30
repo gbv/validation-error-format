@@ -95,18 +95,19 @@ The JSON syntax could also be invalid. For example the document `{åå:5}` is va
 }
 ```
 
-Last but not least the UTF-8 encoding could be invalid. The document given in @lst-2 contains an invalid byte code when decoded as UTF-8. Some validators may replace the byte with the Unicode replacement character `U+FFFD` but the resulting Unicode string is invalid JSON syntax still.
-
-::: {#lst-2 lst-cap="Invalid JSON on multiple levels"}
+Last but not least the UTF-8 encoding could be invalid. The following document  contains an invalid byte code when decoded as UTF-8. Some validators may replace the byte with the Unicode replacement character `U+FFFD` but the resulting Unicode string is invalid JSON syntax still (@lst-3).
 
 +---------------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+
-| **Byte**       |`7b`    |`22`    |`c3`    |`a5`    |`22`    |`3a`    |`22`    |`3a`    |`c0`    |`7d`    |
+| **Byte**       |`7b`    |`22`    |`c3`    |`a5`    |`c3`    |`a5`    |`22`    |`3a`    |`c0`    |`7d`    |
 +----------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
 | **Code point** |`U+007B`|`U+0022`|`U+00E5`         |`U+00E5`         |`U+007B`|`U+0022`|ERROR   |`U+0022`|
 |                |        |        |                 |                 |        |        |`U+FFFD`|        |
 +----------------+--------+--------+-----------------+--------+--------+--------+--------+--------+--------+
 | **Character**  |`{`     |`"`     |`å`              |`å`              |`"`     |`:`     |`�`     |`}`     |
 +----------------+--------+--------+-----------------+--------+--------+--------+--------+--------+--------+
+
+
+::: {#lst-3 lst-cap="Invalid JSON on multiple levels"}
 
 
 ```{.json}
@@ -119,7 +120,7 @@ Last but not least the UTF-8 encoding could be invalid. The document given in @l
   {
     "level": "error",
     "message": "Expected JSON value at line 1, column 7",
-    "position": { "line": 1, "char": "7" }
+    "position": { "line": "1", "char": "7" }
   }
 ]
 ```
@@ -227,14 +228,14 @@ identifier      | locator format        | document model
 `file`          | POSIX Path            | directory tree
 `xpath`         | XPath (or a subset)   | XML
 `fq`            | format and path       | all supported by [fq]
-`iiif`          | ...                   | ...
-`rfc7111`       | ...                   | see [RFC 7111](https://tools.ietf.org/html/rfc7111)
-...             | ...                   | ...
+
 
 The locator formats require some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029...
 
-More candidates
+More candidates:
 
+- IIIF
+- [RFC 7111](https://tools.ietf.org/html/rfc7111)
 - Cell address in spreadsheet (column uses Hexavigesimalsystem, row uses numbers)
 - PDF highlighted text annotations
 - Subsets of query languages (SQL, SPARQL...)

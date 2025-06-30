@@ -139,7 +139,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#motivation-and-scope" id="toc-motivation-and-scope" class="nav-link" data-scroll-target="#motivation-and-scope">Motivation and scope</a></li>
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul></li>
   <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology"><span class="header-section-number">2</span> Terminology</a></li>
   <li><a href="#errors" id="toc-errors" class="nav-link" data-scroll-target="#errors"><span class="header-section-number">3</span> Errors</a></li>
@@ -149,9 +149,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#locator-maps" id="toc-locator-maps" class="nav-link" data-scroll-target="#locator-maps">Locator maps</a></li>
   </ul></li>
   <li><a href="#locator-formats" id="toc-locator-formats" class="nav-link" data-scroll-target="#locator-formats"><span class="header-section-number">5</span> Locator formats</a></li>
-  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes"><span class="header-section-number">6</span> Notes</a>
+  <li><a href="#notes-and-ideas" id="toc-notes-and-ideas" class="nav-link" data-scroll-target="#notes-and-ideas"><span class="header-section-number">6</span> Notes and ideas</a>
   <ul class="collapse">
-  <li><a href="#common-locator-formats" id="toc-common-locator-formats" class="nav-link" data-scroll-target="#common-locator-formats">Common locator formats</a></li>
   <li><a href="#including-document-valuesfragments" id="toc-including-document-valuesfragments" class="nav-link" data-scroll-target="#including-document-valuesfragments">Including document values/fragments</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a>
@@ -217,8 +216,21 @@ Figure&nbsp;1: Validation process
 </figcaption>
 </figure>
 </div>
-<p>Every document conforms to a <strong>document model</strong>. For instance a JSON document conforms to the JSON model, and a character string conforms to the model “sequence of characters from a known character set”. Document models come with <strong>encodings</strong> how to express conforming documents in form of documents of another document model on a lower level. For instance a JSON document can be encoded with JSON syntax in Unicode strings and Unicode strings can be encoded with UTF-8 as sequence of bytes (see labeled arrows in <a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>). Eventually all documents are given as digital objects, encoded as sequence of bytes. Encodings using a sequence of characters are also called textual data formats, in contrast to binary data formats.</p>
-<p>Error positions are given in form of <strong>locators</strong>, each conforming to a <strong>locator model</strong>. Each locator model refers to a limited set of document models: for instance JSON Pointer refers to JSON, line numbers refer to any model segmenting a document into a sequence of lines, and offsets refer to simple models of a sequences of elements – such as sequences of bytes (<a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The Data Validation Error Format requires each locator model to have exactely one encoding called its <strong>locator format</strong> to encode locators as Unicode strings.</p>
+<p>Every document conforms to a <strong>document model</strong>. For instance a JSON document conforms to the JSON model, and a character string conforms to the model “sequence of characters from a known character set”. Document models come with <strong>encodings</strong> how to express documents on a lower level in form of documents of another document model. For instance JSON documents can be encoded with JSON syntax as Unicode strings and Unicode strings can be encoded with UTF-8 as sequences of bytes (<a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>, labelled arrows).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Eventually all documents are given as digital objects, encoded as sequence of bytes. Encodings using a sequence of characters are also called textual data formats, in contrast to binary data formats.</p>
+</div>
+</div>
+<p>Error positions are given in form of <strong>locators</strong>, each conforming to a <strong>locator model</strong> and encoded as Unicode string with a <strong>locator format</strong>. Each locator model refers to a limited set of document models: for instance JSON Pointer refers to JSON, line numbers refer to any model segmenting a document into a sequence of lines, and offsets refer to simple models of a sequences of elements – such as sequences of bytes (<a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div id="fig-encodings-and-locators" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-encodings-and-locators-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -256,19 +268,92 @@ Figure&nbsp;2: Example of encodings and locator formats
 </figure>
 </div>
 </section>
-<section id="example" class="level2">
-<h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>A JSON file can be invalid on many levels. For example the JSON document <code>{"a":1}</code> could be invalid on schema level if element <code>a</code> is expected to hold a string instead of a number:</p>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>A JSON file can be invalid on many levels. For example the JSON document <code>{"åå":5}</code> could be invalid on schema level if element <code>åå</code> is expected to hold a string instead of a number (<a href="#lst-1" class="quarto-xref">Example&nbsp;1</a>):</p>
+<div id="lst-1" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<div aria-describedby="lst-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"expected string, got number at element /a"</span><span class="fu">,</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"jsonpointer"</span><span class="fu">:</span> <span class="st">"/a"</span> <span class="fu">}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Expected string, got number at element /a"</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"jsonpointer"</span><span class="fu">:</span> <span class="st">"/a"</span><span class="fu">,</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"1"</span> <span class="fu">}</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The JSON syntax could also be invalid. For example the document <code>{a:1}</code> is valid JavaScript but no valid JSON:</p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Example&nbsp;1: Error in a JSON document
+</figcaption>
+</figure>
+</div>
+<p>The JSON syntax could also be invalid. For example the document <code>{åå:5}</code> is valid JavaScript but no valid JSON (<a href="#lst-2" class="quarto-xref">Example&nbsp;2</a>):</p>
+<div id="lst-2" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<div aria-describedby="lst-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Expected property name or '}' at index 2"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"1"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"2"</span> <span class="fu">}</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Last but not least the UTF-8 encoding could be invalid. For instance the byte sequence <code>7b 22 c3 a4 c3 a5 22 3a c0 7d</code> decoded as UTF-8 results in a sequence of Unicode code points (<code>U+007B</code>=<code>{</code>, <code>U+0022</code>=<code>"</code>, <code>U+00E4</code> =<code>ä</code>, <code>U+00E5</code> =<code>å</code>, <code>U+0022</code>=<code>"</code>, <code>U+003A</code>=<code>:</code>) followed by the invalid byte <code>c0</code>, and code point <code>U+007D</code>=<code>}</code>. The error may be judged as warning because the invalid byte can be replaced by a Unicode replacement character. The resulting document with replacement character (<code>{"äå":�}</code>) is no valid JSON still.</p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Example&nbsp;2: Error in JSON syntax
+</figcaption>
+</figure>
+</div>
+<p>Last but not least the UTF-8 encoding could be invalid. The following document contains an invalid byte code when decoded as UTF-8. Some validators may replace the byte with the Unicode replacement character <code>U+FFFD</code> but the resulting Unicode string is invalid JSON syntax still (<a href="#lst-3" class="quarto-xref">Example&nbsp;3</a>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;"><strong>Byte</strong></td>
+<td style="text-align: center;"><code>7b</code></td>
+<td style="text-align: center;"><code>22</code></td>
+<td style="text-align: center;"><code>c3</code></td>
+<td style="text-align: center;"><code>a5</code></td>
+<td style="text-align: center;"><code>c3</code></td>
+<td style="text-align: center;"><code>a5</code></td>
+<td style="text-align: center;"><code>22</code></td>
+<td style="text-align: center;"><code>3a</code></td>
+<td style="text-align: center;"><code>c0</code></td>
+<td style="text-align: center;"><code>7d</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><strong>Code point</strong></td>
+<td style="text-align: center;"><code>U+007B</code></td>
+<td style="text-align: center;"><code>U+0022</code></td>
+<td colspan="2" style="text-align: center;"><code>U+00E5</code></td>
+<td colspan="2" style="text-align: center;"><code>U+00E5</code></td>
+<td style="text-align: center;"><code>U+007B</code></td>
+<td style="text-align: center;"><code>U+0022</code></td>
+<td style="text-align: center;">ERROR <code>U+FFFD</code></td>
+<td style="text-align: center;"><code>U+0022</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><strong>Character</strong></td>
+<td style="text-align: center;"><code>{</code></td>
+<td style="text-align: center;"><code>"</code></td>
+<td colspan="2" style="text-align: center;"><code>å</code></td>
+<td colspan="2" style="text-align: center;"><code>å</code></td>
+<td style="text-align: center;"><code>"</code></td>
+<td style="text-align: center;"><code>:</code></td>
+<td style="text-align: center;"><code>�</code></td>
+<td style="text-align: center;"><code>}</code></td>
+</tr>
+</tbody>
+</table>
+<div id="lst-3" class="listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<div aria-describedby="lst-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="st">"warning"</span><span class="fu">,</span></span>
@@ -278,9 +363,15 @@ Figure&nbsp;2: Example of encodings and locator formats
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="st">"error"</span><span class="fu">,</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Expected JSON value at line 1, column 7"</span><span class="fu">,</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"7"</span> <span class="fu">}</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"1"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"7"</span> <span class="fu">}</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Example&nbsp;3: Invalid JSON on multiple levels
+</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="terminology" class="level1" data-number="2">
@@ -334,44 +425,35 @@ Note
 <div class="sourceCode" id="cb4"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"7"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-locator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;1: A simple locator indicating the position line 7
+Example&nbsp;4: A simple locator indicating the position line (locator format) 7 (locator value)
 </figcaption>
 </figure>
 </div>
-<p>TODO: explain locator value and nested positions</p>
-<!--
-Each locator format assumes a model of the document. For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
--->
+<p>Nested positions allow to reference locations within nested documents (<a href="#lst-nested-example" class="quarto-xref">Example&nbsp;5</a>).</p>
 <div id="lst-nested-example" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-nested-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="sourceCode" id="cb5"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 of file example.txt in file archive.zip"</span><span class="fu">,</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"archive.zip"</span><span class="fu">,</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"example.txt"</span><span class="fu">,</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"2"</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span> </span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>          <span class="ot">]</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"archive.zip"</span><span class="fu">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"example.txt"</span><span class="fu">,</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"2"</span> <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-nested-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;2: Error in line 2 of file <code>example.txt</code> in archive <code>archive.zip</code>
+Example&nbsp;5: Error in line 2 of file <code>example.txt</code> in archive <code>archive.zip</code>
 </figcaption>
 </figure>
 </div>
+<!--
+Each locator format assumes a model of the document. For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
+-->
 </section>
 <section id="locator-maps" class="level2">
 <h2 class="anchored" data-anchor-id="locator-maps">Locator maps</h2>
@@ -382,10 +464,11 @@ Example&nbsp;2: Error in line 2 of file <code>example.txt</code> in archive <cod
 <div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"7"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;3: A simple locator map indicating the position line 7
+Example&nbsp;6: A simple locator map indicating the position line 7
 </figcaption>
 </figure>
 </div>
+<p>A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field <code>format</code> and <code>value</code> of each locator.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -399,20 +482,15 @@ Note
 <p>Locator maps simplify access to error positions when applications assume known locator formats without nested positions.</p>
 </div>
 </div>
-<p>A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field <code>format</code> and <code>value</code> of each locator.</p>
 </section>
 </section>
 <section id="locator-formats" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Locator formats</h1>
 <p>Each locator format encodes a locator model that refers to a set of document models.</p>
+<p>The Data Validation Error Format requires each locator model to have exactely one encoding called its <strong>locator format</strong> to encode locators as Unicode strings.</p>
 <p>A <strong>locator format</strong> is a string that identifies a formal language to locate positions or sections in a document. The identifier must start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters, digits <code>0</code> to <code>9</code> and/or <code>-</code>.</p>
-<p>Preliminary registry of locator formats:</p>
+<p>Some locator formats (final version of this specification needs to define a registry of locator formats):</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 29%">
-<col style="width: 41%">
-<col style="width: 29%">
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">identifier</th>
@@ -429,7 +507,7 @@ Note
 <tr class="even">
 <td style="text-align: right;"><code>line</code></td>
 <td>line number (first: 1)</td>
-<td>sequence of lines (TODO: definition of line breaks)</td>
+<td>sequence of lines</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"><code>char</code></td>
@@ -439,7 +517,7 @@ Note
 <tr class="even">
 <td style="text-align: right;"><code>character</code></td>
 <td>character position</td>
-<td>sequence of possibly composed Unicode characters</td>
+<td>sequence of (possibly composed) Unicode characters</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"><code>jsonpointer</code></td>
@@ -452,12 +530,26 @@ Note
 <td>directory tree</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">…</td>
-<td>…</td>
-<td></td>
+<td style="text-align: right;"><code>xpath</code></td>
+<td>XPath (or a subset)</td>
+<td>XML</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>fq</code></td>
+<td>format and path</td>
+<td>all supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a></td>
 </tr>
 </tbody>
 </table>
+<p>The locator formats require some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029…</p>
+<p>More candidates:</p>
+<ul>
+<li>IIIF</li>
+<li><a href="https://tools.ietf.org/html/rfc7111">RFC 7111</a></li>
+<li>Cell address in spreadsheet (column uses Hexavigesimalsystem, row uses numbers)</li>
+<li>PDF highlighted text annotations</li>
+<li>Subsets of query languages (SQL, SPARQL…)</li>
+</ul>
 <div id="lst-fq" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -469,33 +561,13 @@ Note
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;4: Error using fq to locate the internal timestamp of a file in a .gz archive
+Example&nbsp;7: Error using fq to locate the internal timestamp of a file in a .gz archive
 </figcaption>
 </figure>
 </div>
-<p>Each locator format implies an encoding of the locator value. Locator values MUST be strings!</p>
 </section>
-<section id="notes" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Notes</h1>
-<p><em>TODO</em>: the following are unstructured notes and ideas:</p>
-<section id="common-locator-formats" class="level2">
-<h2 class="anchored" data-anchor-id="common-locator-formats">Common locator formats</h2>
-<ul>
-<li>POSIX Path (any except <code>\0</code> and <code>\</code>)</li>
-<li>JSON Pointer</li>
-<li>XPath (or a subset)</li>
-<li>IIIF</li>
-<li>line number (but multiple definitions exist, e.g.&nbsp;in some they may include U+0B, U+0C, U+85, U+2028, U+2029)</li>
-<li>Cell address in spreadsheet (column uses Hexavigesimalsystem, row uses numbers)</li>
-<li>PDF highlighted text annotations</li>
-<li>…</li>
-</ul>
-<p>Non-quite-but-usable-as-such</p>
-<ul>
-<li>Normalized <code>fq</code> element path with document</li>
-<li>Subsets of query languages (SQL, SPARQL…)</li>
-</ul>
-</section>
+<section id="notes-and-ideas" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Notes and ideas</h1>
 <section id="including-document-valuesfragments" class="level2">
 <h2 class="anchored" data-anchor-id="including-document-valuesfragments">Including document values/fragments</h2>
 <p>Given a JSON document</p>
@@ -627,7 +699,7 @@ Example&nbsp;4: Error using fq to locate the internal timestamp of a file in a .
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Apart from formats used in unit testing in software development such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>A notable exception are formats from software development used in unit testing such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters. Line numbers in Unicode are not trivial neither because multiple definitions of line breaks exist.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>

@@ -99,7 +99,7 @@ Last but not least the UTF-8 encoding could be invalid. For instance the byte se
   {
     "level": "warning",
     "message": "Ill-formed UTF-8 byte sequence at offset 8",
-    "position": { "offset": "8", "line": 1, "char": "7" }
+    "position": { "offset": "8", "line": "1", "char": "7" }
   },
   {
     "level": "error",

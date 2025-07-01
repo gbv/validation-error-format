@@ -41,10 +41,13 @@
       "minLength": 1,
       "description": "error message"
     },
-    "type": {
-      "type": "string",
-      "minLength": 1,
-      "description": "identifier of the error type"
+    "types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "identifier of an error type"
+      }
     },
     "level": {
       "type": "string",

@@ -2,6 +2,8 @@ project:
   type: manuscript
   output-dir: docs
 
+date: today
+
 manuscript:
   article: index.qmd
   code-links:
@@ -17,7 +19,7 @@ format:
     highlight-style: kate
     notebook-links: false
     number-sections: true
-    number-depth: 1
+    number-depth: 2
     css: style.css
     crossref:
       lst-prefix: "Example"

@@ -9,3 +9,7 @@ figcaption {
 .listing > figure > figcaption {
   text-align: left;
 }
+.callout.callout-style-default .callout-body, 
+.callout.callout-style-default > div.callout-header {
+  font-size: 1rem;
+}

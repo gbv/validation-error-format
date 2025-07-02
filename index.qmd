@@ -23,7 +23,9 @@ The specification of **Data Validation Error Format** has two goals:
 
 Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.
 
-The format is strictly limited to errors and error positions. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include concepts of test cases, schemas or other information about validation internals.
+:::{.callout-warning}
+The format is strictly limited to errors and error positions. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include details about validation such as test cases, schema rules, and individual constraints. Errors can be linked to additional information with error types but the semantics of these types is out of the scope of this specification.
+:::
 
 ## Overview
 
@@ -78,7 +80,7 @@ Example of encodings and locator formats
 
 ## Example
 
-Documents can be invalid compared to document models on many levels. For example the string `{"åå":5}` is valid JSON but it might be invalid if element `åå` is expected to hold a string instead of a number (@lst-1). The error can be located with JSON Pointer in the JSON document and with line and character number its encoding as Unicode string:
+Documents can be invalid compared to document models on many levels. For example the string `{"åå":5}` is valid JSON but it might be invalid if element `åå` is expected to hold a string instead of a number (@lst-1). The error can be located with JSON Pointer in the JSON document and with line and character number of its encoding as Unicode string:
 
 ```{#lst-1 .json lst-cap="Error in a JSON document"}
 {
@@ -96,7 +98,7 @@ The document could also be invalid at JSON syntax level, for example of the clos
 }
 ```
 
-A similar document could be invalid on byte level. The following table illustrates the document from @list-1 with ninth byte replaced by a value not allowed in UTF-8. It is common practice to replace such bytes with the Unicode replacement character `U+FFFD` but the resulting Unicode string is invalid JSON syntax still (@lst-3). The example also illustrates another locator format `linecol` to give a character position by line and column.
+A similar document could be invalid on byte level. The following table illustrates the document from @lst-1 with ninth byte replaced by a value not allowed in UTF-8. It is common practice to replace such bytes with the Unicode replacement character `U+FFFD` but the resulting Unicode string is invalid JSON syntax still (@lst-3). The example also illustrates another locator format `linecol` to give a character position by line and column.
 
 +---------------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+
 | **Byte**       |`7b`    |`22`    |`c3`    |`a5`    |`c3`    |`a5`    |`22`    |`3a`    |`c0`    |`7d`    |
@@ -133,6 +135,11 @@ A similar document could be invalid on byte level. The following table illustrat
 The key words "MUST", "MUST NOT", "REQUIRED", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 ([RFC 2119] and [RFC 8174]) when, and only when, they appear in all capitals, as shown here.
 
 Only section @sec-errors to @sec-locator-formats, excluding examples and notes, and the [list of normative references](#normative-references) are normative parts of this specification.
+
+Specific support of Data Validation Error Format by an application depends on two options. Both MUST be documented by applications:
+
+1. Support either the full format or only support condense form of [positions] being locator maps
+2. The set of supported [locator formats]
 
 <!--
 A **validator** is an executable function that transforms a **document** into a (possibly empty) set of **errors**.
@@ -205,15 +212,13 @@ Nested positions allow to reference locations within nested documents (@lst-nest
 
 A **locator map** is a JSON object that maps names of [locator formats] to **locator values**.
 
-```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7"}
-{ "line": "7" }
+```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7, character 42}
+{ "line": "7", "char": "42" }
 ```
 
-A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `format` and `value` of each locator.
+A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `format` and `value` of each locator. An array of locators can be reduced to a locator map by dropping all nested positions and selecting only the first locator of each locator format.
 
-::: {.callout-note}
-Locator maps simplify access to error positions when applications assume known locator formats without nested positions.
-:::
+Applications MAY restrict their support of Data Validation Error Format to positions with locator maps. In this case nested positions and multiple positions of same locator format are not supported.
 
 # Locator formats {#sec-locator-formats}
 
@@ -255,6 +260,22 @@ The locator formats require some more detailled specification. For instance line
   }
 }
 ```
+
+:::{.callout-note}
+More candidates of locator formats to be specified:
+
+- [RFC 5147](https://tools.ietf.org/html/rfc5147) for ranges of lines and characters
+- [RFC 7111](https://tools.ietf.org/html/rfc7111) for tabular data
+- Cell addresses like used in spreadsheet software (column uses Hexavigesimalsystem, row uses numbers, e.g. `C4`)
+- IIIF (section in an image)
+- RDF graphs (every subset of an RDF graph is another RDF graph)
+- Subsets of query languages (SQL, SPARQL...)
+- PDF highlighted text annotations
+- `id` for data models that refer to elements with an identifier
+- [PICA Path](https://format.gbv.de/query/picapath)
+- [MARCspec](https://format.gbv.de/query/marcspec)
+- ...
+:::
 
 # References
 
@@ -308,16 +329,6 @@ This document is managed in a revision control system at <https://github.com/gbv
 ...
 
 ## Notes and ideas {.unnumbered}
-
-More candidates of [locator formats]:
-
-- [RFC 5147](https://tools.ietf.org/html/rfc5147) for ranges of lines and characters
-- [RFC 7111](https://tools.ietf.org/html/rfc7111) for tabular data
-- Cell address in spreadsheet (column uses Hexavigesimalsystem, row uses numbers)
-- IIIF (section in an image)
-- RDF graphs (every subset of an RDF graph is another RDF graph)
-- Subsets of query languages (SQL, SPARQL...)
-- PDF highlighted text annotations
 
 Given a JSON document
 

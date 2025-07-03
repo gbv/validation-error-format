@@ -2,6 +2,25 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "$defs": {
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "description": "error message"
+    },
+    "types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "identifier of an error type"
+      }
+    },
+    "level": {
+      "type": "string",
+      "enum": ["error", "warning"],
+      "default": "error",
+      "description": "error level ('error' or 'warning')"
+    },
     "locator": {
       "type": "object",
       "properties": {
@@ -13,6 +32,9 @@
           "type": "string"
         },
         "position": { "$ref": "#/$defs/position" }
+        "message": { "$ref": "#/$defs/message" },
+        "types": { "$ref": "#/$defs/types" },
+        "level": { "$ref": "#/$defs/level" }
       },
       "required": ["format", "locator"]
     },
@@ -36,25 +58,9 @@
     }
   },
   "properties": {
-    "message": {
-      "type": "string",
-      "minLength": 1,
-      "description": "error message"
-    },
-    "types": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "description": "identifier of an error type"
-      }
-    },
-    "level": {
-      "type": "string",
-      "enum": ["error", "warning"],
-      "default": "error",
-      "description": "error level ('error' or 'warning')"
-    },
+    "message": { "$ref": "#/$defs/message" },
+    "types": { "$ref": "#/$defs/types" },
+    "level": { "$ref": "#/$defs/level" },
     "position": { "$ref": "#/$defs/position" }
   },
   "required": ["message"]

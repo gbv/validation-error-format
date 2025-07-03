@@ -1,0 +1,117 @@
+#!.venv/bin/python
+
+import xml.etree.ElementTree as ET
+import xmlschema
+import json
+import sys
+import argparse
+from textwrap import indent
+
+valid = True
+count = 0
+schema = None
+
+parser = argparse.ArgumentParser("validate-xml")
+parser.add_argument(
+    "-l", "--lines", action="store_true", help="emit errors as newline delimited JSON"
+)
+parser.add_argument("-s", "--schema", help="Schema file (XSD)", type=str)
+parser.add_argument(
+    "file", help="XML file (- for stdin)", nargs="*", type=str, default=["-"]
+)
+args = parser.parse_args()
+
+nest = len(args.file) > 1
+
+if args.schema:
+    schema = xmlschema.XMLSchema(args.schema)
+
+
+def printStatus(error=None):
+    global valid, count, args
+
+    if not args.lines and count > 0:
+        print(",")
+
+    if error:
+        valid = False
+
+        if args.lines:
+            print(json.dumps(error))
+        else:
+            print(indent(json.dumps(error, indent=2), "  "), end="")
+    elif not args.lines:
+        print("  true", end="")
+
+    count += 1
+
+
+def parse(file):
+    global nest
+
+    source = sys.stdin if file == "-" else file
+
+    try:
+        return ET.parse(source)
+    except ET.ParseError as e:
+        line, col = e.position
+        error = {
+            "message": str(e),
+            "type": [f"expat-error-code:{e.code}"],
+            "position": {
+                "line": line,
+            },
+        }
+        if col > 0:
+            error["position"]["linecol"] = f"{line}:{col}"
+        if nest or file != "-":
+            error["format"] = "file"
+            error["value"] = file
+            error = {"message": f"file {file} is not well-formed", "position": [error]}
+        printStatus(error)
+
+
+def mapSchemaError(e):
+    error = {"message": e.reason}
+    if e.path is not None:
+        error["position"] = {"xpath": e.path}
+    return error
+
+
+if not args.lines:
+    print("[")
+
+for file in args.file:
+    status = count
+
+    tree = parse(file)
+
+    # TODO: DTD validation with lxml
+    # TODO: Schematron validation with pyschematron
+
+    if tree and schema:
+        errors = [mapSchemaError(e) for e in schema.iter_errors(tree)]
+        if len(errors) and nest or file != "-":
+            printStatus(
+                {
+                    "message": f"file {file} is invalid against XML Schema",
+                    "position": [
+                        {
+                            "format": "file",
+                            "value": file,
+                            "position": errors,
+                        }
+                    ],
+                }
+            )
+        else:
+            for e in errors:
+                printStatus(e)
+
+    if not args.lines and status == count:
+        printStatus()
+
+if not args.lines:
+    print("\n]" if count > 0 else "]")
+
+sys.exit(0 if valid else 2)

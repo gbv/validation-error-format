@@ -1,14 +1,11 @@
-Validating XML with XML Schema
+# Validating XML with XML Schema
 
-Install:
+Requires Python >= 3.3.
 
-~~~sh
-python -mvenv .venv
-. .venv/bin/activate
-~~~
+Install dependencies with `make` or `python -mvenv .venv && . .venv/bin/activate`.
 
 Usage:
 
 ~~~sh
-./validate-xsd.py schema.xsd file.xml
+./validate-xml -s schema.xsd file.xml
 ~~~

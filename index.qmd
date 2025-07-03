@@ -156,7 +156,7 @@ An **Error** is a JSON object with:
   Error types can be used for grouping errors and they SHOULD be URIs. Repetitions of
   identical strings in the same array SHOULD be ignored.
 
-- optional field `level` with one of the strings `error` or `warning`.
+- optional field `level` with an **error level**, being one of the strings `error` or `warning`.
 
 - optional field `position` with [positions]
 
@@ -186,6 +186,11 @@ A **locator** is a JSON object with
 - mandatory field `format` with the name of a [locator format], being a non-empty string
 - mandatory field `value` with the **locator value**, being a string
 - optional field `position` with nested [positions]
+- optional field `message` with an [**error messsage**](#sec-errors)
+- optional field `types` with an array of [**error types**](#sec-errors)
+- optional field `level` with a [**error level**](#sec-errors)
+
+Fields `message`, `types`, and `level` are only allowed if the locator also has field `positions`.
 
 ```{#lst-locator .json lst-cap="A simple locator indicating the position line (locator format) 7 (locator value)"}
 { "format": "line", "value": "7" }
@@ -200,6 +205,7 @@ Nested positions allow to reference locations within nested documents (@lst-nest
     "format": "file",
     "value": "archive.zip",
     "position": [ {
+      "message": "Invalid value in line 2 of file example.txt",
       "format": "file",
       "value": "example.txt",
       "position": [ { "format": "line", "value": "2" } ]
@@ -212,7 +218,7 @@ Nested positions allow to reference locations within nested documents (@lst-nest
 
 A **locator map** is a JSON object that maps names of [locator formats] to **locator values**.
 
-```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7, character 42}
+```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7, character 42"}
 { "line": "7", "char": "42" }
 ```
 
@@ -352,22 +358,3 @@ An error in field `authors` could be enriched with document content. However doc
 ~~~
 
 Eventually this would require a way to encode arbitrary documents in JSON, this is likely a can of worms.
-
-Positions could also have messages, at least for nested positions:
-
-~~~json
-{
-  "message": "Invalid file foo.txt",
-  "position": [
-    {
-      "format": "file",
-      "value": "foo.txt",
-      "message": "Invalid value in line 2",
-      "document": [{ "format": "string", "value": "alice\nbob\n" }],
-      "position": { "line": "2" }
-    }
-  ]
-}
-~~~
-
-

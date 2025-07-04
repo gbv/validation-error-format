@@ -170,9 +170,9 @@ Language and localization of error messages is out of the scope of this specific
 
 An error can have one or more **positions**. Positions are
 
-- either a JSON array of [locators] (detailled form),
+- either a JSON array of **[locators]** (detailled form),
 
-- or a [locator map] (condense form).
+- or a **[locator map](#locator-maps)** (condense form).
 
 Every locator map can be transformed to an equivalent array of locators. The reverse transformation is not always possible.
 
@@ -183,9 +183,9 @@ Every locator map can be transformed to an equivalent array of locators. The rev
 
 A **locator** is a JSON object with
 
-- mandatory field `format` with the name of a [locator format], being a non-empty string
-- mandatory field `value` with the **locator value**, being a string
-- optional field `position` with nested [positions]
+- mandatory field `format` with the name of a **[locator format]**, being a non-empty string
+- mandatory field `value` with the **locator value** (also known as "address"), being a string
+- optional field `position` with nested **[positions]**
 - optional field `message` with an [**error messsage**](#sec-errors)
 - optional field `types` with an array of [**error types**](#sec-errors)
 - optional field `level` with a [**error level**](#sec-errors)
@@ -252,6 +252,7 @@ name            | locator format        | document model
 `file`          | POSIX Path            | directory tree
 `jsonpointer`   | JSON Pointer          | JSON
 `xpath`         | XPath (or a subset)   | XML
+`cell`          | [cell reference]      | tabular data models
 `fq`            | format and path       | all binary formats supported by [fq] (see @lst-fq)
 
 The locator formats require some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029...
@@ -272,7 +273,6 @@ More candidates of locator formats to be specified:
 
 - [RFC 5147](https://tools.ietf.org/html/rfc5147) for ranges of lines and characters
 - [RFC 7111](https://tools.ietf.org/html/rfc7111) for tabular data
-- Cell addresses like used in spreadsheet software (column uses Hexavigesimalsystem, row uses numbers, e.g. `C4`)
 - IIIF (section in an image)
 - RDF graphs (every subset of an RDF graph is another RDF graph)
 - Subsets of query languages (SQL, SPARQL...)
@@ -282,6 +282,12 @@ More candidates of locator formats to be specified:
 - [MARCspec](https://format.gbv.de/query/marcspec)
 - ...
 :::
+
+### Cell reference
+
+[cell reference]: #cell-reference
+
+The `cell` locator format is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (`:`) and another pair of column and row. Columns are given inhexavigesimal system (A=1, B=2..., AA=27, AB=28...) and rows are given by numbers, starting from 1.
 
 # References
 

@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <meta name="dcterms.date" content="2025-07-03">
+    <meta name="dcterms.date" content="2025-07-04">
 
     <title>Data Validation Error Format</title>
     <style>
@@ -167,10 +167,10 @@
 <meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2025-07-03">
-<meta name="citation_cover_date" content="2025-07-03">
+<meta name="citation_publication_date" content="2025-07-04">
+<meta name="citation_cover_date" content="2025-07-04">
 <meta name="citation_year" content="2025">
-<meta name="citation_online_date" content="2025-07-03">
+<meta name="citation_online_date" content="2025-07-04">
 <meta name="citation_language" content="en">
 </head>
 
@@ -213,7 +213,7 @@
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">July 3, 2025</p>
+              <p class="date">July 4, 2025</p>
             </div>
           </div>
           
@@ -252,7 +252,10 @@
   <li><a href="#locators" id="toc-locators" class="nav-link" data-scroll-target="#locators"><span class="header-section-number">3.1</span> Locators</a></li>
   <li><a href="#locator-maps" id="toc-locator-maps" class="nav-link" data-scroll-target="#locator-maps"><span class="header-section-number">3.2</span> Locator maps</a></li>
   </ul></li>
-  <li><a href="#sec-locator-formats" id="toc-sec-locator-formats" class="nav-link" data-scroll-target="#sec-locator-formats"><span class="header-section-number">4</span> Locator formats</a></li>
+  <li><a href="#sec-locator-formats" id="toc-sec-locator-formats" class="nav-link" data-scroll-target="#sec-locator-formats"><span class="header-section-number">4</span> Locator formats</a>
+  <ul class="collapse">
+  <li><a href="#cell-reference" id="toc-cell-reference" class="nav-link" data-scroll-target="#cell-reference">Cell reference</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a>
   <ul class="collapse">
   <li><a href="#normative-references" id="toc-normative-references" class="nav-link" data-scroll-target="#normative-references"><span class="header-section-number">5.1</span> Normative References</a></li>
@@ -524,17 +527,17 @@ Note
 <h1 data-number="3"><span class="header-section-number">3</span> Positions</h1>
 <p>An error can have one or more <strong>positions</strong>. Positions are</p>
 <ul>
-<li><p>either a JSON array of <a href="#locators">locators</a> (detailled form),</p></li>
-<li><p>or a <a href=":%20#locator-maps">locator map</a> (condense form).</p></li>
+<li><p>either a JSON array of <strong><a href="#locators">locators</a></strong> (detailled form),</p></li>
+<li><p>or a <strong><a href="#locator-maps">locator map</a></strong> (condense form).</p></li>
 </ul>
 <p>Every locator map can be transformed to an equivalent array of locators. The reverse transformation is not always possible.</p>
 <section id="locators" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="locators"><span class="header-section-number">3.1</span> Locators</h2>
 <p>A <strong>locator</strong> is a JSON object with</p>
 <ul>
-<li>mandatory field <code>format</code> with the name of a <a href="#locator-formats">locator format</a>, being a non-empty string</li>
-<li>mandatory field <code>value</code> with the <strong>locator value</strong>, being a string</li>
-<li>optional field <code>position</code> with nested <a href="#positions">positions</a></li>
+<li>mandatory field <code>format</code> with the name of a <strong><a href="#locator-formats">locator format</a></strong>, being a non-empty string</li>
+<li>mandatory field <code>value</code> with the <strong>locator value</strong> (also known as “address”), being a string</li>
+<li>optional field <code>position</code> with nested <strong><a href="#positions">positions</a></strong></li>
 <li>optional field <code>message</code> with an <a href="#sec-errors"><strong>error messsage</strong></a></li>
 <li>optional field <code>types</code> with an array of <a href="#sec-errors"><strong>error types</strong></a></li>
 <li>optional field <code>level</code> with a <a href="#sec-errors"><strong>error level</strong></a></li>
@@ -648,6 +651,11 @@ Each locator format assumes a model of the document. For instance a `line` locat
 <td>XML</td>
 </tr>
 <tr class="even">
+<td style="text-align: right;"><code>cell</code></td>
+<td><a href="#cell-reference">cell reference</a></td>
+<td>tabular data models</td>
+</tr>
+<tr class="odd">
 <td style="text-align: right;"><code>fq</code></td>
 <td>format and path</td>
 <td>all binary formats supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> (see <a href="#lst-fq" class="quarto-xref">Example&nbsp;7</a>)</td>
@@ -684,7 +692,6 @@ Note
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc5147">RFC 5147</a> for ranges of lines and characters</li>
 <li><a href="https://tools.ietf.org/html/rfc7111">RFC 7111</a> for tabular data</li>
-<li>Cell addresses like used in spreadsheet software (column uses Hexavigesimalsystem, row uses numbers, e.g.&nbsp;<code>C4</code>)</li>
 <li>IIIF (section in an image)</li>
 <li>RDF graphs (every subset of an RDF graph is another RDF graph)</li>
 <li>Subsets of query languages (SQL, SPARQL…)</li>
@@ -696,6 +703,10 @@ Note
 </ul>
 </div>
 </div>
+<section id="cell-reference" class="level3">
+<h3 class="anchored" data-anchor-id="cell-reference">Cell reference</h3>
+<p>The <code>cell</code> locator format is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (<code>:</code>) and another pair of column and row. Columns are given inhexavigesimal system (A=1, B=2…, AA=27, AB=28…) and rows are given by numbers, starting from 1.</p>
+</section>
 </section>
 <section id="references" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> References</h1>
@@ -754,8 +765,8 @@ Note
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"value"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/position"</span> <span class="fu">}</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"message"</span><span class="er">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/message"</span> <span class="fu">},</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/position"</span> <span class="fu">},</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/message"</span> <span class="fu">},</span></span>
 <span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/types"</span> <span class="fu">},</span></span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/level"</span> <span class="fu">}</span></span>
 <span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>

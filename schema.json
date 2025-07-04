@@ -31,7 +31,7 @@
         "value": {
           "type": "string"
         },
-        "position": { "$ref": "#/$defs/position" }
+        "position": { "$ref": "#/$defs/position" },
         "message": { "$ref": "#/$defs/message" },
         "types": { "$ref": "#/$defs/types" },
         "level": { "$ref": "#/$defs/level" }

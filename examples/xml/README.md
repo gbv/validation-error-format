@@ -1,6 +1,6 @@
 # XML Validator emitting Data Validation Error Format
 
-This directory contains a Python implementation of a validator for XML documents. It supports XML Schema and Schematron schemas to validate against.
+This directory contains a Python implementation of a validator for XML documents. It supports XML Schema to validate against.
 
 ## Requirements and installation
 

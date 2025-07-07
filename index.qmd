@@ -14,7 +14,7 @@ abstract: |
 
 # Introduction
 
-Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports.^[A notable exception are formats from software development used in unit testing such as [JUnit XML](https://github.com/testmoapp/junitxml).]
+Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports.^[A notable exception are formats from software development used in unit testing such as [JUnit XML](https://github.com/testmoapp/junitxml) and [Test Anything Protocol](https://testanything.org/).]
 
 The specification of **Data Validation Error Format** has two goals:
 

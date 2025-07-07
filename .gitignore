@@ -1,5 +1,6 @@
 /.quarto/
 /site_libs/
 /docs/
+*.tmp
 
 .venv

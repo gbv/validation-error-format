@@ -1,11 +1,21 @@
-# Validating XML with XML Schema
+# XML Validator emitting Data Validation Error Format
 
-Requires Python >= 3.3.
+This directory contains a Python implementation of a validator for XML documents. It supports XML Schema and Schematron schemas to validate against.
 
-Install dependencies with `make` or `python -mvenv .venv && . .venv/bin/activate`.
+## Requirements and installation
 
-Usage:
+The script requires Python >= 3.3.
+
+Install dependencies listed in `requirements.txt` with `python -mvenv .venv && . .venv/bin/activate` (or just call `make`).
+
+## Usage
+
+Call `./validate-xml --help` for usage help.
 
 ~~~sh
 ./validate-xml -s schema.xsd file.xml
 ~~~
+
+## Tests
+
+Unit tests of the script can be executed with script `./tests.sh` (or just call `make test`). Requires `jq` to be installed).

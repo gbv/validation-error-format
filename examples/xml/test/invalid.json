@@ -1,0 +1,25 @@
+[
+  {
+    "message": "file invalid.xml is invalid against XML Schema",
+    "position": [
+      {
+        "format": "file",
+        "value": "invalid.xml",
+        "position": [
+          {
+            "message": "attribute id='x': invalid literal for int() with base 10: 'x'",
+            "position": {
+              "xpath": "/a/a"
+            }
+          },
+          {
+            "message": "The content of element 'a' is not complete. Tag 'a' expected.",
+            "position": {
+              "xpath": "/a/a"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

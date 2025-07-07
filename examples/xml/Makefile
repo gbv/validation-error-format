@@ -8,3 +8,7 @@ dev: .venv
 		
 lint:
 	. .venv/bin/activate && ruff format validate-xml
+
+.PHONY: test
+test:
+	./test.sh

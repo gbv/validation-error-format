@@ -1,7 +1,7 @@
 ---
 title: Data Validation Error Format
-subtitle: Version 0.0.1
-#date: 2024-09-30
+subtitle: Version 0.1.0
+date: 2025-07-10
 #doi: 10.5281/zenodo......
 authors:
 - name: Jakob Voß
@@ -183,7 +183,7 @@ Every locator map can be transformed to an equivalent array of locators. The rev
 
 A **locator** is a JSON object with
 
-- mandatory field `format` with the name of a **[locator format]**, being a non-empty string
+- mandatory field `format` with a **[locator format name](#sec-locator-formats)**, being a non-empty string
 - mandatory field `value` with the **locator value** (also known as "address"), being a string
 - optional field `position` with nested **[positions]**
 - optional field `message` with an [**error messsage**](#sec-errors)
@@ -216,7 +216,7 @@ Nested positions allow to reference locations within nested documents (@lst-nest
 
 ## Locator maps
 
-A **locator map** is a JSON object that maps names of [locator formats] to **locator values**.
+A **locator map** is a JSON object that maps **[locator format names](#sec-locator-formats)** to **locator values**.
 
 ```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7, character 42"}
 { "line": "7", "char": "42" }
@@ -228,31 +228,37 @@ Applications MAY restrict their support of Data Validation Error Format to posit
 
 # Locator formats {#sec-locator-formats}
 
+A **locator format** is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called **locator values** of the locator format.
+
+Each locator format has a unique **locator format name**. The name is a string that start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
+
+Each locator format can encode positions of documents that conform to a set of matching document models. 
+
 <!--
-Each [locator](#locators) is encoded in 
--->
+
+For instance the `char` format a locator format  
+
+Fir ub
+A locator value (are also referred to as "address") refers to
+
+Locator formats 
+
 <!--
-Each locator format assumes a model of the document. For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
+For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
 -->
 
-Each locator format encodes a locator model that refers to a set of document models.
+The set of normative locator formats has not been finally specified yet. The final version of this specification may need to define a registry of locator formats. The following locator formats will likely be included:
 
-The Data Validation Error Format requires each locator model to have exactely one encoding called its **locator format** to encode locators as Unicode strings.
-
-A **locator format** is a string that identifies a formal language to locate positions or sections in a document. The identifier must start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
-
-Some locator formats (final version of this specification needs to define a registry of locator formats):
-
-name            | locator format        | document model
+name            | locator format        | document models
 ---------------:|-----------------------|----------------
-`offset`        | number (first: 0)     | sequence of elements
+`offset`        | [offset number]       | sequence of elements
+`char`          | [character position]  | sequence of characters or code points
+`cell`          | [cell reference]      | tabular data models
 `line`          | line number (first: 1)| sequence of lines
-`char`          | character positions (first: 1) | sequence of characters or code points
 `linecol`       | line number and column | sequence of characters with line breaks
 `file`          | POSIX Path            | directory tree
 `jsonpointer`   | JSON Pointer          | JSON
 `xpath`         | XPath (or a subset)   | XML
-`cell`          | [cell reference]      | tabular data models
 `fq`            | format and path       | all binary formats supported by [fq] (see @lst-fq)
 
 The locator formats require some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029...
@@ -283,11 +289,19 @@ More candidates of locator formats to be specified:
 - ...
 :::
 
+### Offset number
+
+The **offset number** locator format with name `number` is used to reference an element in a sequence of elements. The locator value is non-negative integer encoded as string without leading zeroes. The first element has number zero (locator value `0`).
+
+### Character position
+
+The **character position** locator format with name `char` is used to reference a character in a sequence of characters from a character set. The locator value is a positive integer encoded as string without leading zeroes. The first character has number one (locator value `1`).
+
+In Unicode strings, this locator format refers to code points instead of visual characters.
+
 ### Cell reference
 
-[cell reference]: #cell-reference
-
-The `cell` locator format is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (`:`) and another pair of column and row. Columns are given inhexavigesimal system (A=1, B=2..., AA=27, AB=28...) and rows are given by numbers, starting from 1.
+The **cell reference** locator format with name `cell` is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (`:`) and another pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
 
 # References
 
@@ -307,6 +321,9 @@ The `cell` locator format is used to reference a cell or a range of cells in a t
               
 - Bray, T.: _The JavaScript Object Notation (JSON) Data Interchange Format_.
   RFC 8259, December 2017. <https://tools.ietf.org/html/rfc8259>
+
+- Bryan, P and Zyp, K. and Nottigham, M.: *JavaScript Object Notation (JSON) Pointer*.
+  RFC 6901, April 2023. <https://tools.ietf.org/html/rfc6901>
 
 - Leiba, B.:  _Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words_.
   BCP 14, RFC 8174, May 2017,
@@ -332,35 +349,7 @@ Error records can be validated with the non-normative JSON Schema [`schema.json`
 
 This document is managed in a revision control system at <https://github.com/gbv/validation-error-format>, including an [issue tracker](https://github.com/gbv/validation-error-format/issues).
 
-- **Version 0.0.0**
+- **Version 0.1.0**
 
   Work in progress.
 
-## Acknowledgements {.unnumbered}
-
-...
-
-## Notes and ideas {.unnumbered}
-
-Given a JSON document
-
-~~~json
-{ "authors": "Bob" }
-~~~
-
-An error in field `authors` could be enriched with document content. However document content conforms to document model but it must be encoded in JSON, e.g.:
-
-~~~json
-{
-  "message": "authors must be array",
-  "position": [
-    {
-      "format": "jsonpointer",
-      "value": "/authors",
-      "document": [{ "format": "string", "value": "bob" }]
-    }
-  ]
-}
-~~~
-
-Eventually this would require a way to encode arbitrary documents in JSON, this is likely a can of worms.

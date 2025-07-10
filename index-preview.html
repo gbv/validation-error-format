@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <meta name="dcterms.date" content="2025-07-07">
+    <meta name="dcterms.date" content="2025-07-10">
 
     <title>Data Validation Error Format</title>
     <style>
@@ -167,10 +167,10 @@
 <meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2025-07-07">
-<meta name="citation_cover_date" content="2025-07-07">
+<meta name="citation_publication_date" content="2025-07-10">
+<meta name="citation_cover_date" content="2025-07-10">
 <meta name="citation_year" content="2025">
-<meta name="citation_online_date" content="2025-07-07">
+<meta name="citation_online_date" content="2025-07-10">
 <meta name="citation_language" content="en">
 </head>
 
@@ -187,7 +187,7 @@
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Data Validation Error Format</h1>
-            <p class="subtitle lead">Version 0.0.1</p>
+            <p class="subtitle lead">Version 0.1.0</p>
           </div>
 
     
@@ -213,7 +213,7 @@
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">July 7, 2025</p>
+              <p class="date">July 10, 2025</p>
             </div>
           </div>
           
@@ -254,6 +254,8 @@
   </ul></li>
   <li><a href="#sec-locator-formats" id="toc-sec-locator-formats" class="nav-link" data-scroll-target="#sec-locator-formats"><span class="header-section-number">4</span> Locator formats</a>
   <ul class="collapse">
+  <li><a href="#offset-number" id="toc-offset-number" class="nav-link" data-scroll-target="#offset-number">Offset number</a></li>
+  <li><a href="#character-position" id="toc-character-position" class="nav-link" data-scroll-target="#character-position">Character position</a></li>
   <li><a href="#cell-reference" id="toc-cell-reference" class="nav-link" data-scroll-target="#cell-reference">Cell reference</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a>
@@ -265,8 +267,6 @@
   <ul class="collapse">
   <li><a href="#json-schemas" id="toc-json-schemas" class="nav-link" data-scroll-target="#json-schemas">JSON Schemas</a></li>
   <li><a href="#changes" id="toc-changes" class="nav-link" data-scroll-target="#changes">Changes</a></li>
-  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
-  <li><a href="#notes-and-ideas" id="toc-notes-and-ideas" class="nav-link" data-scroll-target="#notes-and-ideas">Notes and ideas</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -535,7 +535,7 @@ Note
 <h2 data-number="3.1" class="anchored" data-anchor-id="locators"><span class="header-section-number">3.1</span> Locators</h2>
 <p>A <strong>locator</strong> is a JSON object with</p>
 <ul>
-<li>mandatory field <code>format</code> with the name of a <strong><a href="#locator-formats">locator format</a></strong>, being a non-empty string</li>
+<li>mandatory field <code>format</code> with a <strong><a href="#sec-locator-formats">locator format name</a></strong>, being a non-empty string</li>
 <li>mandatory field <code>value</code> with the <strong>locator value</strong> (also known as “address”), being a string</li>
 <li>optional field <code>position</code> with nested <strong><a href="#positions">positions</a></strong></li>
 <li>optional field <code>message</code> with an <a href="#sec-errors"><strong>error messsage</strong></a></li>
@@ -579,7 +579,7 @@ Example&nbsp;5: An error in line 2 of file <code>example.txt</code> in archive <
 </section>
 <section id="locator-maps" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="locator-maps"><span class="header-section-number">3.2</span> Locator maps</h2>
-<p>A <strong>locator map</strong> is a JSON object that maps names of <a href="#sec-locator-formats">locator formats</a> to <strong>locator values</strong>.</p>
+<p>A <strong>locator map</strong> is a JSON object that maps <strong><a href="#sec-locator-formats">locator format names</a></strong> to <strong>locator values</strong>.</p>
 <div id="lst-locator-map" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -596,29 +596,45 @@ Example&nbsp;6: A simple locator map indicating the position line 7, character 4
 </section>
 <section id="sec-locator-formats" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Locator formats</h1>
+<p>A <strong>locator format</strong> is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called <strong>locator values</strong> of the locator format.</p>
+<p>Each locator format has a unique <strong>locator format name</strong>. The name is a string that start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters, digits <code>0</code> to <code>9</code> and/or <code>-</code>.</p>
+<p>Each locator format can encode positions of documents that conform to a set of matching document models.</p>
 <!--
-Each [locator](#locators) is encoded in 
--->
+
+For instance the `char` format a locator format  
+
+Fir ub
+A locator value (are also referred to as "address") refers to
+
+Locator formats 
+
 <!--
-Each locator format assumes a model of the document. For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
+For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
 -->
-<p>Each locator format encodes a locator model that refers to a set of document models.</p>
-<p>The Data Validation Error Format requires each locator model to have exactely one encoding called its <strong>locator format</strong> to encode locators as Unicode strings.</p>
-<p>A <strong>locator format</strong> is a string that identifies a formal language to locate positions or sections in a document. The identifier must start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters, digits <code>0</code> to <code>9</code> and/or <code>-</code>.</p>
-<p>Some locator formats (final version of this specification needs to define a registry of locator formats):</p>
+<p>The set of normative locator formats has not been finally specified yet. The final version of this specification may need to define a registry of locator formats. The following locator formats will likely be included:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th style="text-align: right;">name</th>
 <th>locator format</th>
-<th>document model</th>
+<th>document models</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: right;"><code>offset</code></td>
-<td>number (first: 0)</td>
+<td><a href="#offset-number">offset number</a></td>
 <td>sequence of elements</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><code>char</code></td>
+<td><a href="#character-position">character position</a></td>
+<td>sequence of characters or code points</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"><code>cell</code></td>
+<td><a href="#cell-reference">cell reference</a></td>
+<td>tabular data models</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;"><code>line</code></td>
@@ -626,34 +642,24 @@ Each locator format assumes a model of the document. For instance a `line` locat
 <td>sequence of lines</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;"><code>char</code></td>
-<td>character positions (first: 1)</td>
-<td>sequence of characters or code points</td>
-</tr>
-<tr class="even">
 <td style="text-align: right;"><code>linecol</code></td>
 <td>line number and column</td>
 <td>sequence of characters with line breaks</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"><code>file</code></td>
 <td>POSIX Path</td>
 <td>directory tree</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;"><code>jsonpointer</code></td>
 <td>JSON Pointer</td>
 <td>JSON</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"><code>xpath</code></td>
 <td>XPath (or a subset)</td>
 <td>XML</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;"><code>cell</code></td>
-<td><a href="#cell-reference">cell reference</a></td>
-<td>tabular data models</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"><code>fq</code></td>
@@ -703,9 +709,18 @@ Note
 </ul>
 </div>
 </div>
+<section id="offset-number" class="level3">
+<h3 class="anchored" data-anchor-id="offset-number">Offset number</h3>
+<p>The <strong>offset number</strong> locator format with name <code>number</code> is used to reference an element in a sequence of elements. The locator value is non-negative integer encoded as string without leading zeroes. The first element has number zero (locator value <code>0</code>).</p>
+</section>
+<section id="character-position" class="level3">
+<h3 class="anchored" data-anchor-id="character-position">Character position</h3>
+<p>The <strong>character position</strong> locator format with name <code>char</code> is used to reference a character in a sequence of characters from a character set. The locator value is a positive integer encoded as string without leading zeroes. The first character has number one (locator value <code>1</code>).</p>
+<p>In Unicode strings, this locator format refers to code points instead of visual characters.</p>
+</section>
 <section id="cell-reference" class="level3">
 <h3 class="anchored" data-anchor-id="cell-reference">Cell reference</h3>
-<p>The <code>cell</code> locator format is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (<code>:</code>) and another pair of column and row. Columns are given inhexavigesimal system (A=1, B=2…, AA=27, AB=28…) and rows are given by numbers, starting from 1.</p>
+<p>The <strong>cell reference</strong> locator format with name <code>cell</code> is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (<code>:</code>) and another pair of column and row. Columns are given in hexavigesimal system (A=1, B=2…, Z=26, AA=27, AB=28…) and rows are given by numbers, starting from 1.</p>
 </section>
 </section>
 <section id="references" class="level1" data-number="5">
@@ -716,6 +731,7 @@ Note
 <li><p>Berners-Lee, T. and Fielding, R. and Masinter, L.: <em>Uniform Resource Identifier (URI): Generic Syntax</em>. RFC 3986, January 2005, <a href="http://www.rfc-editor.org/info/rfc3986" class="uri">http://www.rfc-editor.org/info/rfc3986</a>.</p></li>
 <li><p>Bradner, S.: <em>Key words for use in RFCs to Indicate Requirement Levels</em>. BCP 14, RFC 2119, March 1997, <a href="http://www.rfc-editor.org/info/rfc2119" class="uri">http://www.rfc-editor.org/info/rfc2119</a>.</p></li>
 <li><p>Bray, T.: <em>The JavaScript Object Notation (JSON) Data Interchange Format</em>. RFC 8259, December 2017. <a href="https://tools.ietf.org/html/rfc8259" class="uri">https://tools.ietf.org/html/rfc8259</a></p></li>
+<li><p>Bryan, P and Zyp, K. and Nottigham, M.: <em>JavaScript Object Notation (JSON) Pointer</em>. RFC 6901, April 2023. <a href="https://tools.ietf.org/html/rfc6901" class="uri">https://tools.ietf.org/html/rfc6901</a></p></li>
 <li><p>Leiba, B.: <em>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</em>. BCP 14, RFC 8174, May 2017, <a href="http://www.rfc-editor.org/info/rfc8174" class="uri">http://www.rfc-editor.org/info/rfc8174</a>.</p></li>
 </ul>
 </section>
@@ -804,30 +820,9 @@ Note
 <h2 class="unnumbered anchored" data-anchor-id="changes">Changes</h2>
 <p>This document is managed in a revision control system at <a href="https://github.com/gbv/validation-error-format" class="uri">https://github.com/gbv/validation-error-format</a>, including an <a href="https://github.com/gbv/validation-error-format/issues">issue tracker</a>.</p>
 <ul>
-<li><p><strong>Version 0.0.0</strong></p>
+<li><p><strong>Version 0.1.0</strong></p>
 <p>Work in progress.</p></li>
 </ul>
-</section>
-<section id="acknowledgements" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
-<p>…</p>
-</section>
-<section id="notes-and-ideas" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="notes-and-ideas">Notes and ideas</h2>
-<p>Given a JSON document</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"authors"</span><span class="fu">:</span> <span class="st">"Bob"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>An error in field <code>authors</code> could be enriched with document content. However document content conforms to document model but it must be encoded in JSON, e.g.:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"authors must be array"</span><span class="fu">,</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"jsonpointer"</span><span class="fu">,</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"/authors"</span><span class="fu">,</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"document"</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span> <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"bob"</span> <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Eventually this would require a way to encode arbitrary documents in JSON, this is likely a can of worms.</p>
 </section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">

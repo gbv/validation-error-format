@@ -4,6 +4,8 @@ This repository contains the specification of a data format to report validation
 
 The current, preliminary draft is made available at <https://gbv.github.io/validation-error-format/>.
 
+See [directory `examples`](examples) for an example implementation of an XML validator supporting this error format.
+
 ## tl;dr
 
 Errors have `message`, optional `level` and `types`, and `positions`. Positions can be given in multiple formats, for instance character position, line number, and line/column:

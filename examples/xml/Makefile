@@ -7,7 +7,7 @@ dev: .venv
 	.venv/bin/pip install ruff
 		
 lint:
-	. .venv/bin/activate && ruff format validate-xml
+	. .venv/bin/activate && ruff format xml-validate
 
 .PHONY: test
 test:

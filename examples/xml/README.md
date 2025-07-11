@@ -10,10 +10,10 @@ Install dependencies listed in `requirements.txt` with `python -mvenv .venv && .
 
 ## Usage
 
-Call `./validate-xml --help` for usage help.
+Call `./xml-validate --help` for usage help.
 
 ~~~sh
-./validate-xml -s schema.xsd file.xml
+./xml-validate -s schema.xsd file.xml
 ~~~
 
 ## Tests

@@ -11,7 +11,7 @@ count = 0
 valid = True
 schema = None
 
-parser = argparse.ArgumentParser("validate-xml")
+parser = argparse.ArgumentParser("xml-validate")
 parser.add_argument("-s", "--schema", help="Schema file (XSD)", type=str)
 parser.add_argument(
     "file", help="XML file (- for stdin)", nargs="*", type=str, default=["-"]

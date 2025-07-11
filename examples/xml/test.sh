@@ -18,11 +18,11 @@ validate() {
     want=want.tmp
     normalize < $expect > $want
     
-    ./validate-xml "$@" | normalize > $got
+    ./xml-validate "$@" | normalize > $got
     if diff -Bb $got $want > /dev/null; then
-        ok "./validate-xml $@"
+        ok "./xml-validate $@"
     else
-        not_ok "./validate-xml $@"
+        not_ok "./xml-validate $@"
         diff -Bn $got $want | diag
     fi
 }

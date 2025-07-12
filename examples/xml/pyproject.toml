@@ -1,0 +1,13 @@
+[project]
+name = "xml-validator"
+version = "0.1.0"
+description = "Validate XML against multiple kinds of schemas"
+
+dependencies = [
+  "pyschematron>=1.1.0",
+  "xmlschema"
+]
+requires-python = ">= 3.7"
+
+[project.scripts]
+xml-validate = "xml-validator:cli"

@@ -7,8 +7,8 @@ import sys
 import argparse
 from textwrap import indent
 
-count = 0
-valid = True
+from validation_error import ValidationError
+
 schema = None
 
 parser = argparse.ArgumentParser("xml-validate")
@@ -23,44 +23,6 @@ nested = len(args.file) > 1
 if args.schema:
     schema = xmlschema.XMLSchema(args.schema)
 
-def printStatus(error=None):
-    global valid, count
-
-    if count > 0:
-        print(",")
-    if error:
-        valid = False
-        print(indent(json.dumps(error, indent=2), "  "), end="")
-    else:
-        print("  true", end="")
-
-    count += 1
-
-
-def parse(file):
-    global nested
-
-    source = sys.stdin if file == "-" else file
-
-    try:
-        return ET.parse(source)
-    except ET.ParseError as e:
-        line, col = e.position
-        error = {
-            "message": str(e),
-            "type": [f"expat-error-code:{e.code}"],
-            "position": {
-                "line": line,
-            },
-        }
-        if col > 0:
-            error["position"]["linecol"] = f"{line}:{col}"
-        if nested or file != "-":
-            error["format"] = "file"
-            error["value"] = file
-            error = {"message": f"file {file} is not well-formed", "position": [error]}
-        printStatus(error)
-
 
 def mapSchemaError(e):
     error = {"message": e.reason}
@@ -69,38 +31,68 @@ def mapSchemaError(e):
     return error
 
 
-print("[")
+def validate(file):
+    global nested
 
-for file in args.file:
-    status = count
+    # Parse XML
+    tree = None
+    try:
+        tree = ET.parse(sys.stdin if file == "-" else file)
+    except ET.ParseError as e:
+        line, col = e.position
+        error = {
+            "message": str(e),
+            "position": {
+                "line": line,
+            },
+            "type": [f"expat-error-code:{e.code}"],
+        }
+        if col > 0:
+            error["position"]["linecol"] = f"{line}:{col}"
+        if nested or file != "-":
+            error["format"] = "file"
+            error["value"] = file
+            error = ValidationError(f"file {file} is not well-formed", position=[error])
+        yield error
 
-    tree = parse(file)
-
-    # TODO: DTD validation with lxml
-    # TODO: Schematron validation with pyschematron
-
-    if tree and schema:
-        errors = [mapSchemaError(e) for e in schema.iter_errors(tree)]
-        if file != "-" or (len(errors) and nested):
-            printStatus(
-                {
-                    "message": f"file {file} is invalid against XML Schema",
-                    "position": [
-                        {
-                            "format": "file",
-                            "value": file,
-                            "position": errors,
-                        }
-                    ],
-                }
-            )
+    if tree:
+        # TODO: DTD validation with embedded DTD (with lxml)
+        # TODO: Schematron validation with pyschematron
+        if schema:
+            errors = [mapSchemaError(e) for e in schema.iter_errors(tree)]
+            if file != "-" or (len(errors) and nested):
+                message = (f"file {file} is invalid against XML Schema",)
+                position = [
+                    {
+                        "format": "file",
+                        "value": file,
+                        "position": errors,
+                    }
+                ]
+                yield ValidationError(message, position=position)
+            else:
+                if len(errors):
+                    yield from errors
+                else:
+                    yield None
         else:
-            for e in errors:
-                printStatus(e)
+            yield None
 
-    if status == count:
-        printStatus()
 
-print("\n]" if count > 0 else "]")
+valid = True
+
+print("[")
+for i, file in enumerate(args.file):
+    for status in validate(file):
+        if i > 0:
+            print(",")
+        if status:
+            valid = False
+            if isinstance(status, ValidationError):
+                status = status.__dict__
+            print(indent(json.dumps(status, indent=2), "  "), end="")
+        else:
+            print("  true", end="")
+print("\n]" if len(args.file) > 0 else "]")
 
 sys.exit(0 if valid else 2)

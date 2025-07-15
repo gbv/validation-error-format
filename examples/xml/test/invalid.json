@@ -5,7 +5,7 @@
       {
         "format": "file",
         "value": "invalid.xml",
-        "position": [
+        "errors": [
           {
             "message": "attribute id='x': invalid literal for int() with base 10: 'x'",
             "position": {

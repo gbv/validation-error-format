@@ -150,7 +150,7 @@ The document is valid in this context if the set of errors is empty.
 
 An **Error** is a JSON object with: 
 
-- mandatory field `message` with an **error message**, being a non-empty string
+- optional field `message` with an **error message**, being a non-empty string
 
 - optional field `types` with an array of **error types**, each being a non-empty string.
   Error types can be used for grouping errors and they SHOULD be URIs. Repetitions of
@@ -161,6 +161,8 @@ An **Error** is a JSON object with:
 - optional field `position` with [positions]
 
 An error is also called **warning** if field `level` has value `warning`.
+
+Applications SHOULD add a default value for errors without field `message`.
 
 ::: {.callout-note}
 Language and localization of error messages is out of the scope of this specification.
@@ -176,39 +178,60 @@ An error can have one or more **positions**. Positions are
 
 Every locator map can be transformed to an equivalent array of locators. The reverse transformation is not always possible.
 
+Locators of the same positions SHOULD have an non-empty intersection.
+
 [locator format]: #locator-formats
 [locator map]:: #locator-maps
 
 ## Locators
 
-A **locator** is a JSON object with
+A **Locator** is a JSON object with
 
 - mandatory field `format` with a **[locator format name](#sec-locator-formats)**, being a non-empty string
 - mandatory field `value` with the **locator value** (also known as "address"), being a string
-- optional field `position` with nested **[positions]**
-- optional field `message` with an [**error messsage**](#sec-errors)
-- optional field `types` with an array of [**error types**](#sec-errors)
-- optional field `level` with a [**error level**](#sec-errors)
-
-Fields `message`, `types`, and `level` are only allowed if the locator also has field `positions`.
+- optional field `errors` with an array of [errors](#sec-errors) within the located document fragment.
 
 ```{#lst-locator .json lst-cap="A simple locator indicating the position line (locator format) 7 (locator value)"}
 { "format": "line", "value": "7" }
 ```
 
-Nested positions allow to reference locations within nested documents (@lst-nested-example).
+Errors in the `errors` field are called **nested errors**. Nested errors allow to reference locations within nested documents (@lst-nested-example):
 
 ```{#lst-nested-example .json lst-cap="An error in line 2 of file `example.txt` in archive `archive.zip`"}
 {
-  "message": "Invalid value in line 2 of file example.txt in file archive.zip",
+  "message": "Invalid value in line 2 in file example.txt in file archive.zip",
   "position": [ {
     "format": "file",
     "value": "archive.zip",
-    "position": [ {
-      "message": "Invalid value in line 2 of file example.txt",
-      "format": "file",
-      "value": "example.txt",
-      "position": [ { "format": "line", "value": "2" } ]
+    "errors": [ {
+      "message": "Invalid value in line 2 in file example.txt",
+      "position": [ {
+        "format": "file",
+        "value": "example.txt",
+        "errors": [ { 
+          "message": "Invalid value in line 2",
+          "position": { "line": "2" }
+        } ]
+      } ]
+    } ]
+  } ]
+}
+```
+
+Another example:
+
+```json
+{
+  "message": "Invalid character in line 7, column 3",
+  "position": [ {
+    "format": "linecol",
+    "value": "7:3"
+  }, {
+    "format": "line",
+    "value": "7",
+    "errors": [ {
+      "message": "Invalid character 3"
+      "position": { "char": "3" }
     } ]
   } ]
 }
@@ -228,7 +251,7 @@ Applications MAY restrict their support of Data Validation Error Format to posit
 
 # Locator formats {#sec-locator-formats}
 
-A **locator format** is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called **locator values** of the locator format.
+A **locator format** (also known as "dimension") is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called **locator values** of the locator format.
 
 Each locator format has a unique **locator format name**. The name is a string that start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
 
@@ -254,9 +277,9 @@ name            | locator format        | document models
 `offset`        | [offset number]       | sequence of elements
 `char`          | [character position]  | sequence of characters or code points
 `cell`          | [cell reference]      | tabular data models
+`file`          | [POSIX Path]          | directory tree
 `line`          | line number (first: 1)| sequence of lines
 `linecol`       | line number and column | sequence of characters with line breaks
-`file`          | POSIX Path            | directory tree
 `jsonpointer`   | JSON Pointer          | JSON
 `xpath`         | XPath (or a subset)   | XML
 `fq`            | format and path       | all binary formats supported by [fq] (see @lst-fq)
@@ -302,6 +325,14 @@ In Unicode strings, this locator format refers to code points instead of visual 
 ### Cell reference
 
 The **cell reference** locator format with name `cell` is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (`:`) and another pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
+
+### File path
+
+The **file path** locator format with name `file` is used to reference a file or directory in a directory tree. The locator value must be a POSIX path, being a string optionally beginning with a slash (`/`), followed by zero or more file names, separated by slash. A file name is a non-empty sequence of Unicode code points excluding the slash (`U+002F`) and the null byte (`U+0000`).
+
+::: {.callout-note}
+Depending in the document model, file names may be defined as binary string instead of Unicode strings. In most cases UTF-8 encoding can be assumed to map Unicode code points to bytes but (TODO: this requires more careful examination). 
+:::
 
 # References
 

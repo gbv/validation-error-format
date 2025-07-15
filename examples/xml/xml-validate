@@ -7,7 +7,7 @@ import sys
 import argparse
 from textwrap import indent
 
-from validation_error import ValidationError
+from validation_error import ValidationError, Locator
 
 schema = None
 
@@ -24,11 +24,11 @@ if args.schema:
     schema = xmlschema.XMLSchema(args.schema)
 
 
-def mapSchemaError(e):
-    error = {"message": e.reason}
-    if e.path is not None:
-        error["position"] = {"xpath": e.path}
-    return error
+def xmlSchemaErrors(schema, tree):
+    return [
+        ValidationError(e.reason, position={"xpath": e.path} if e.path else None)
+        for e in schema.iter_errors(tree)
+    ]
 
 
 def validate(file):
@@ -40,36 +40,27 @@ def validate(file):
         tree = ET.parse(sys.stdin if file == "-" else file)
     except ET.ParseError as e:
         line, col = e.position
-        error = {
-            "message": str(e),
-            "position": {
-                "line": line,
-            },
-            "type": [f"expat-error-code:{e.code}"],
-        }
+        pos = {"line": line}
         if col > 0:
-            error["position"]["linecol"] = f"{line}:{col}"
+            pos["linecol"] = f"{line}:{col}"
+        types = [f"expat-error-code:{e.code}"]
+        error = ValidationError(e, position=pos, types=types)
         if nested or file != "-":
-            error["format"] = "file"
-            error["value"] = file
-            error = ValidationError(f"file {file} is not well-formed", position=[error])
+            locator = Locator("file", file, errors=[error])
+            error = ValidationError(
+                f"file {file} is not well-formed", position=[locator]
+            )
         yield error
 
     if tree:
         # TODO: DTD validation with embedded DTD (with lxml)
         # TODO: Schematron validation with pyschematron
         if schema:
-            errors = [mapSchemaError(e) for e in schema.iter_errors(tree)]
+            errors = xmlSchemaErrors(schema, tree)
             if file != "-" or (len(errors) and nested):
-                message = (f"file {file} is invalid against XML Schema",)
-                position = [
-                    {
-                        "format": "file",
-                        "value": file,
-                        "position": errors,
-                    }
-                ]
-                yield ValidationError(message, position=position)
+                message = f"file {file} is invalid against XML Schema"
+                locator = Locator("file", file, errors=errors)
+                yield ValidationError(message, position=[locator])
             else:
                 if len(errors):
                     yield from errors
@@ -83,14 +74,12 @@ valid = True
 
 print("[")
 for i, file in enumerate(args.file):
-    for status in validate(file):
+    for error in validate(file):
         if i > 0:
             print(",")
-        if status:
+        if error:
             valid = False
-            if isinstance(status, ValidationError):
-                status = status.__dict__
-            print(indent(json.dumps(status, indent=2), "  "), end="")
+            print(indent(json.dumps(error.to_dict(), indent=2), "  "), end="")
         else:
             print("  true", end="")
 print("\n]" if len(args.file) > 0 else "]")

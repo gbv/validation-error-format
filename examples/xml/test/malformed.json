@@ -3,16 +3,15 @@
     "message": "file malformed.xml is not well-formed",
     "position": [
       {
-        "message": "mismatched tag: line 2, column 2",
-        "type": [
-          "expat-error-code:7"
-        ],
-        "position": {
-          "line": 2,
-          "linecol": "2:2"
-        },
         "format": "file",
-        "value": "malformed.xml"
+        "value": "malformed.xml",
+        "errors": [
+          {
+            "message": "mismatched tag: line 2, column 2",
+            "types": [ "expat-error-code:7" ],
+            "position": { "line": "2", "linecol": "2:2" }
+          }
+        ]
       }
     ]
   }

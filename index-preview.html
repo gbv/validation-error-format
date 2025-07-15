@@ -538,10 +538,11 @@ Note
 <h2 data-number="3.1" class="anchored" data-anchor-id="locators"><span class="header-section-number">3.1</span> Locators</h2>
 <p>A <strong>Locator</strong> is a JSON object with</p>
 <ul>
-<li>mandatory field <code>format</code> with a <strong><a href="#sec-locator-formats">locator format name</a></strong>, being a non-empty string</li>
-<li>mandatory field <code>value</code> with the <strong>locator value</strong> (also known as “address”), being a string</li>
+<li>mandatory field <code>format</code> with the name of a <strong><a href="#sec-locator-formats">locator format</a></strong>, being a non-empty string</li>
+<li>mandatory field <code>value</code> with the <strong>locator value</strong>, being a string</li>
 <li>optional field <code>errors</code> with an array of <a href="#sec-errors">errors</a> within the located document fragment.</li>
 </ul>
+<p>Locator format and locator name MAY also be referred to as “dimension” and “address” of a locator.</p>
 <div id="lst-locator" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-locator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -552,7 +553,7 @@ Example&nbsp;4: A simple locator indicating the position line (locator format) 7
 </figcaption>
 </figure>
 </div>
-<p>Errors in the <code>errors</code> field are called <strong>nested errors</strong>. Nested errors allow to reference locations within nested documents (<a href="#lst-nested-example" class="quarto-xref">Example&nbsp;5</a>):</p>
+<p>Errors in the <code>errors</code> field are called <strong>nested errors</strong>. Nested errors allow to reference locations within nested documents (<a href="#lst-nested-example" class="quarto-xref">Example&nbsp;5</a> and <a href="#lst-nested-example-2" class="quarto-xref">Example&nbsp;6</a>):</p>
 <div id="lst-nested-example" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-nested-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -580,7 +581,9 @@ Example&nbsp;5: An error in line 2 of file <code>example.txt</code> in archive <
 </figcaption>
 </figure>
 </div>
-<p>Another example:</p>
+<div id="lst-nested-example-2" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<div aria-describedby="lst-nested-example-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid character in line 7, column 3"</span><span class="fu">,</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
@@ -590,11 +593,17 @@ Example&nbsp;5: An error in line 2 of file <code>example.txt</code> in archive <
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid character 3"</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">"position"</span><span class="er">:</span> <span class="fu">{</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"3"</span> <span class="fu">}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid character 3"</span><span class="fu">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"3"</span> <span class="fu">}</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-nested-example-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Example&nbsp;6: An error with position given in two forms, one with a nested error
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="locator-maps" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="locator-maps"><span class="header-section-number">3.2</span> Locator maps</h2>
@@ -605,17 +614,17 @@ Example&nbsp;5: An error in line 2 of file <code>example.txt</code> in archive <
 <div class="sourceCode" id="cb7"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"42"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;6: A simple locator map indicating the position line 7, character 42
+Example&nbsp;7: A simple locator map indicating the position line 7, character 42
 </figcaption>
 </figure>
 </div>
-<p>A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field <code>format</code> and <code>value</code> of each locator. An array of locators can be reduced to a locator map by dropping all nested positions and selecting only the first locator of each locator format.</p>
+<p>A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field <code>format</code> and <code>value</code> of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.</p>
 <p>Applications MAY restrict their support of Data Validation Error Format to positions with locator maps. In this case nested positions and multiple positions of same locator format are not supported.</p>
 </section>
 </section>
 <section id="sec-locator-formats" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Locator formats</h1>
-<p>A <strong>locator format</strong> (also known as “dimension”) is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called <strong>locator values</strong> of the locator format.</p>
+<p>A <strong>locator format</strong> is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called <strong>locator values</strong> of the locator format.</p>
 <p>Each locator format has a unique <strong>locator format name</strong>. The name is a string that start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters, digits <code>0</code> to <code>9</code> and/or <code>-</code>.</p>
 <p>Each locator format can encode positions of documents that conform to a set of matching document models.</p>
 <!--
@@ -657,7 +666,7 @@ For instance a `line` locator assumes a model of lines and a `region` locator as
 </tr>
 <tr class="even">
 <td style="text-align: right;"><code>file</code></td>
-<td>[POSIX Path]</td>
+<td><a href="#file-path">file path</a></td>
 <td>directory tree</td>
 </tr>
 <tr class="odd">
@@ -683,7 +692,7 @@ For instance a `line` locator assumes a model of lines and a `region` locator as
 <tr class="odd">
 <td style="text-align: right;"><code>fq</code></td>
 <td>format and path</td>
-<td>all binary formats supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> (see <a href="#lst-fq" class="quarto-xref">Example&nbsp;7</a>)</td>
+<td>all binary formats supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> (see <a href="#lst-fq" class="quarto-xref">Example&nbsp;8</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -699,7 +708,7 @@ For instance a `line` locator assumes a model of lines and a `region` locator as
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;7: Error using fq to locate the internal timestamp of a file in a .gz archive
+Example&nbsp;8: Error using fq to locate the internal timestamp of a file in a .gz archive
 </figcaption>
 </figure>
 </div>

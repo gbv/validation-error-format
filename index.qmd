@@ -187,15 +187,17 @@ Locators of the same positions SHOULD have an non-empty intersection.
 
 A **Locator** is a JSON object with
 
-- mandatory field `format` with a **[locator format name](#sec-locator-formats)**, being a non-empty string
-- mandatory field `value` with the **locator value** (also known as "address"), being a string
+- mandatory field `format` with the name of a **[locator format](#sec-locator-formats)**, being a non-empty string
+- mandatory field `value` with the **locator value**, being a string
 - optional field `errors` with an array of [errors](#sec-errors) within the located document fragment.
+
+Locator format and locator name MAY also be referred to as "dimension" and "address" of a locator.
 
 ```{#lst-locator .json lst-cap="A simple locator indicating the position line (locator format) 7 (locator value)"}
 { "format": "line", "value": "7" }
 ```
 
-Errors in the `errors` field are called **nested errors**. Nested errors allow to reference locations within nested documents (@lst-nested-example):
+Errors in the `errors` field are called **nested errors**. Nested errors allow to reference locations within nested documents (@lst-nested-example and @lst-nested-example-2):
 
 ```{#lst-nested-example .json lst-cap="An error in line 2 of file `example.txt` in archive `archive.zip`"}
 {
@@ -218,9 +220,7 @@ Errors in the `errors` field are called **nested errors**. Nested errors allow t
 }
 ```
 
-Another example:
-
-```json
+```{#lst-nested-example-2 .json lst-cap="An error with position given in two forms, one with a nested error"}
 {
   "message": "Invalid character in line 7, column 3",
   "position": [ {
@@ -230,7 +230,7 @@ Another example:
     "format": "line",
     "value": "7",
     "errors": [ {
-      "message": "Invalid character 3"
+      "message": "Invalid character 3",
       "position": { "char": "3" }
     } ]
   } ]
@@ -245,13 +245,13 @@ A **locator map** is a JSON object that maps **[locator format names](#sec-locat
 { "line": "7", "char": "42" }
 ```
 
-A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `format` and `value` of each locator. An array of locators can be reduced to a locator map by dropping all nested positions and selecting only the first locator of each locator format.
+A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `format` and `value` of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.
 
 Applications MAY restrict their support of Data Validation Error Format to positions with locator maps. In this case nested positions and multiple positions of same locator format are not supported.
 
 # Locator formats {#sec-locator-formats}
 
-A **locator format** (also known as "dimension") is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called **locator values** of the locator format.
+A **locator format** is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called **locator values** of the locator format.
 
 Each locator format has a unique **locator format name**. The name is a string that start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
 
@@ -277,7 +277,7 @@ name            | locator format        | document models
 `offset`        | [offset number]       | sequence of elements
 `char`          | [character position]  | sequence of characters or code points
 `cell`          | [cell reference]      | tabular data models
-`file`          | [POSIX Path]          | directory tree
+`file`          | [file path]           | directory tree
 `line`          | line number (first: 1)| sequence of lines
 `linecol`       | line number and column | sequence of characters with line breaks
 `jsonpointer`   | JSON Pointer          | JSON

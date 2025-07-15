@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-4c54c7a4b54fd2e89864b79ead122636.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-3eb4fca5cf30c7c1cc01cc7bf748cc7d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c8aa6c55e8a7dbe72ef58f02c50fb7a1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
@@ -163,6 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#offset-number" id="toc-offset-number" class="nav-link" data-scroll-target="#offset-number">Offset number</a></li>
   <li><a href="#character-position" id="toc-character-position" class="nav-link" data-scroll-target="#character-position">Character position</a></li>
   <li><a href="#cell-reference" id="toc-cell-reference" class="nav-link" data-scroll-target="#cell-reference">Cell reference</a></li>
+  <li><a href="#file-path" id="toc-file-path" class="nav-link" data-scroll-target="#file-path">File path</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a>
   <ul class="collapse">
@@ -414,12 +415,13 @@ The document is valid in this context if the set of errors is empty.
 <h1 data-number="2"><span class="header-section-number">2</span> Errors</h1>
 <p>An <strong>Error</strong> is a JSON object with:</p>
 <ul>
-<li><p>mandatory field <code>message</code> with an <strong>error message</strong>, being a non-empty string</p></li>
+<li><p>optional field <code>message</code> with an <strong>error message</strong>, being a non-empty string</p></li>
 <li><p>optional field <code>types</code> with an array of <strong>error types</strong>, each being a non-empty string. Error types can be used for grouping errors and they SHOULD be URIs. Repetitions of identical strings in the same array SHOULD be ignored.</p></li>
 <li><p>optional field <code>level</code> with an <strong>error level</strong>, being one of the strings <code>error</code> or <code>warning</code>.</p></li>
 <li><p>optional field <code>position</code> with <a href="#positions">positions</a></p></li>
 </ul>
 <p>An error is also called <strong>warning</strong> if field <code>level</code> has value <code>warning</code>.</p>
+<p>Applications SHOULD add a default value for errors without field <code>message</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -442,18 +444,15 @@ Note
 <li><p>or a <strong><a href="#locator-maps">locator map</a></strong> (condense form).</p></li>
 </ul>
 <p>Every locator map can be transformed to an equivalent array of locators. The reverse transformation is not always possible.</p>
+<p>Locators of the same positions SHOULD have an non-empty intersection.</p>
 <section id="locators" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="locators"><span class="header-section-number">3.1</span> Locators</h2>
-<p>A <strong>locator</strong> is a JSON object with</p>
+<p>A <strong>Locator</strong> is a JSON object with</p>
 <ul>
 <li>mandatory field <code>format</code> with a <strong><a href="#sec-locator-formats">locator format name</a></strong>, being a non-empty string</li>
 <li>mandatory field <code>value</code> with the <strong>locator value</strong> (also known as “address”), being a string</li>
-<li>optional field <code>position</code> with nested <strong><a href="#positions">positions</a></strong></li>
-<li>optional field <code>message</code> with an <a href="#sec-errors"><strong>error messsage</strong></a></li>
-<li>optional field <code>types</code> with an array of <a href="#sec-errors"><strong>error types</strong></a></li>
-<li>optional field <code>level</code> with a <a href="#sec-errors"><strong>error level</strong></a></li>
+<li>optional field <code>errors</code> with an array of <a href="#sec-errors">errors</a> within the located document fragment.</li>
 </ul>
-<p>Fields <code>message</code>, <code>types</code>, and <code>level</code> are only allowed if the locator also has field <code>positions</code>.</p>
 <div id="lst-locator" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-locator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -464,29 +463,49 @@ Example&nbsp;4: A simple locator indicating the position line (locator format) 7
 </figcaption>
 </figure>
 </div>
-<p>Nested positions allow to reference locations within nested documents (<a href="#lst-nested-example" class="quarto-xref">Example&nbsp;5</a>).</p>
+<p>Errors in the <code>errors</code> field are called <strong>nested errors</strong>. Nested errors allow to reference locations within nested documents (<a href="#lst-nested-example" class="quarto-xref">Example&nbsp;5</a>):</p>
 <div id="lst-nested-example" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-nested-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="sourceCode" id="cb5"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 of file example.txt in file archive.zip"</span><span class="fu">,</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 in file example.txt in file archive.zip"</span><span class="fu">,</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"archive.zip"</span><span class="fu">,</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 of file example.txt"</span><span class="fu">,</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"example.txt"</span><span class="fu">,</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"2"</span> <span class="fu">}</span> <span class="ot">]</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 in file example.txt"</span><span class="fu">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"example.txt"</span><span class="fu">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2"</span><span class="fu">,</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"2"</span> <span class="fu">}</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-nested-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Example&nbsp;5: An error in line 2 of file <code>example.txt</code> in archive <code>archive.zip</code>
 </figcaption>
 </figure>
 </div>
+<p>Another example:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid character in line 7, column 3"</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"linecol"</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"7:3"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span> <span class="fu">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"format"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid character 3"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="st">"position"</span><span class="er">:</span> <span class="fu">{</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"3"</span> <span class="fu">}</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="locator-maps" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="locator-maps"><span class="header-section-number">3.2</span> Locator maps</h2>
@@ -494,7 +513,7 @@ Example&nbsp;5: An error in line 2 of file <code>example.txt</code> in archive <
 <div id="lst-locator-map" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"42"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"42"</span> <span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Example&nbsp;6: A simple locator map indicating the position line 7, character 42
@@ -507,7 +526,7 @@ Example&nbsp;6: A simple locator map indicating the position line 7, character 4
 </section>
 <section id="sec-locator-formats" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Locator formats</h1>
-<p>A <strong>locator format</strong> is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called <strong>locator values</strong> of the locator format.</p>
+<p>A <strong>locator format</strong> (also known as “dimension”) is a formal language of Unicode strings to locate positions in a document. The sets of strings of the language are called <strong>locator values</strong> of the locator format.</p>
 <p>Each locator format has a unique <strong>locator format name</strong>. The name is a string that start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters, digits <code>0</code> to <code>9</code> and/or <code>-</code>.</p>
 <p>Each locator format can encode positions of documents that conform to a set of matching document models.</p>
 <!--
@@ -548,19 +567,19 @@ For instance a `line` locator assumes a model of lines and a `region` locator as
 <td>tabular data models</td>
 </tr>
 <tr class="even">
+<td style="text-align: right;"><code>file</code></td>
+<td>[POSIX Path]</td>
+<td>directory tree</td>
+</tr>
+<tr class="odd">
 <td style="text-align: right;"><code>line</code></td>
 <td>line number (first: 1)</td>
 <td>sequence of lines</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"><code>linecol</code></td>
 <td>line number and column</td>
 <td>sequence of characters with line breaks</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;"><code>file</code></td>
-<td>POSIX Path</td>
-<td>directory tree</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"><code>jsonpointer</code></td>
@@ -583,12 +602,12 @@ For instance a `line` locator assumes a model of lines and a `region` locator as
 <div id="lst-fq" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="sourceCode" id="cb7"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Timestamp must not be in the future!"</span><span class="fu">,</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"gzip:.members[0].mtime"</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Timestamp must not be in the future!"</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"gzip:.members[0].mtime"</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Example&nbsp;7: Error using fq to locate the internal timestamp of a file in a .gz archive
@@ -633,6 +652,23 @@ Note
 <h3 class="anchored" data-anchor-id="cell-reference">Cell reference</h3>
 <p>The <strong>cell reference</strong> locator format with name <code>cell</code> is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (<code>:</code>) and another pair of column and row. Columns are given in hexavigesimal system (A=1, B=2…, Z=26, AA=27, AB=28…) and rows are given by numbers, starting from 1.</p>
 </section>
+<section id="file-path" class="level3">
+<h3 class="anchored" data-anchor-id="file-path">File path</h3>
+<p>The <strong>file path</strong> locator format with name <code>file</code> is used to reference a file or directory in a directory tree. The locator value must be a POSIX path, being a string optionally beginning with a slash (<code>/</code>), followed by zero or more file names, separated by slash. A file name is a non-empty sequence of Unicode code points excluding the slash (<code>U+002F</code>) and the null byte (<code>U+0000</code>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depending in the document model, file names may be defined as binary string instead of Unicode strings. In most cases UTF-8 encoding can be assumed to map Unicode code points to bytes but (TODO: this requires more careful examination).</p>
+</div>
+</div>
+</section>
 </section>
 <section id="references" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> References</h1>
@@ -659,73 +695,73 @@ Note
 <section id="json-schemas" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="json-schemas">JSON Schemas</h2>
 <p>Error records can be validated with the non-normative JSON Schema <a href="schema.json"><code>schema.json</code></a> in the specification repository. Rules not covered by the JSON Schema include:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$schema"</span><span class="fu">:</span> <span class="st">"http://json-schema.org/draft-07/schema#"</span><span class="fu">,</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$defs"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error message"</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"identifier of an error type"</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"enum"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"error"</span><span class="ot">,</span> <span class="st">"warning"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"default"</span><span class="fu">:</span> <span class="st">"error"</span><span class="fu">,</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error level ('error' or 'warning')"</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"locator"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"format"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"^[a-z][a-z0-9-]*$"</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"value"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/position"</span> <span class="fu">},</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/message"</span> <span class="fu">},</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/types"</span> <span class="fu">},</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/level"</span> <span class="fu">}</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"format"</span><span class="ot">,</span> <span class="st">"locator"</span><span class="ot">]</span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"positions"</span><span class="fu">,</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"anyOf"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/locator"</span> <span class="fu">}</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"^[a-z0-9-]+$"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"additionalProperties"</span><span class="fu">:</span> <span class="kw">false</span></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/message"</span> <span class="fu">},</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/types"</span> <span class="fu">},</span></span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/level"</span> <span class="fu">},</span></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/position"</span> <span class="fu">}</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"message"</span><span class="ot">]</span></span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$schema"</span><span class="fu">:</span> <span class="st">"http://json-schema.org/draft-07/schema#"</span><span class="fu">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$defs"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error message"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"identifier of an error type"</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"enum"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"error"</span><span class="ot">,</span> <span class="st">"warning"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"default"</span><span class="fu">:</span> <span class="st">"error"</span><span class="fu">,</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error level ('error' or 'warning')"</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"locator"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"format"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"^[a-z][a-z0-9-]*$"</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"value"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/position"</span> <span class="fu">},</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/message"</span> <span class="fu">},</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/types"</span> <span class="fu">},</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/level"</span> <span class="fu">}</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"format"</span><span class="ot">,</span> <span class="st">"locator"</span><span class="ot">]</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"positions"</span><span class="fu">,</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"anyOf"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/locator"</span> <span class="fu">}</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"^[a-z0-9-]+$"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"additionalProperties"</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/message"</span> <span class="fu">},</span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/types"</span> <span class="fu">},</span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/level"</span> <span class="fu">},</span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/position"</span> <span class="fu">}</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"message"</span><span class="ot">]</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="changes" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="changes">Changes</h2>

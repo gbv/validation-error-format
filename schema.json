@@ -17,9 +17,9 @@
     },
     "level": {
       "type": "string",
-      "enum": ["error", "warning"],
+      "enum": ["error", "warning", "info"],
       "default": "error",
-      "description": "error level ('error' or 'warning')"
+      "description": "error level"
     },
     "locator": {
       "type": "object",
@@ -39,7 +39,7 @@
       "required": ["format", "locator"]
     },
     "position": {
-      "description": "positions",
+      "description": "error position",
       "anyOf": [
         {
           "type": "array",
@@ -48,7 +48,7 @@
         {
           "type": "object",
           "patternProperties": {
-            "^[a-z0-9-]+$": {
+            "^[a-z][a-z0-9-]*$": {
               "type": "string"
             }
           },

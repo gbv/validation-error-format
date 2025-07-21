@@ -29,10 +29,10 @@ Locators of a position can also given as array, each with `dimension` and `addre
   "level": "error",
   "types": [ "http://example.org/error-types/invalid-character" ],
   "position": [
-    { "dimension": "char", "address: "8" },
+    { "dimension": "char", "address": "8" },
     { "dimension": "line": "address": "2" },
     { "dimension": "linecol": "address": "2:3" }
-  }
+  ]
 }
 ~~~
 

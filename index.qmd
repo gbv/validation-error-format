@@ -307,7 +307,7 @@ For instance a `line` locator assumes a model of lines and a `region` locator as
 The set of normative locator formats has not been finally specified yet. The final version of this specification may need to define a registry of locator formats. The following locator formats will likely be included:
 -->
 
-See @sec-additional-dimensions for more dimensions.
+See [appendix](#sec-additional-dimensions) for more dimensions to be discussed.
 
 ### Sequential document models
 
@@ -324,12 +324,12 @@ In Unicode strings, this locator format refers to code points instead of visual 
 #### Line number
 
 :::{.callout-warning}
-Possibly requires some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029...
+Possibly requires some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029... other formats do not.
 :::
 
 #### Line and Column
 
-[Line number] and [character position] within the line, separated by colon `:` ...
+[Line number] and [character number] within the line, separated by colon `:`.
 
 ### Tabular document models
 
@@ -398,7 +398,7 @@ TODO: Subset of XPath, see <https://www.w3.org/TR/xpath20/#id-path-expressions> 
 
 ## JSON Schemas {.unnumbered}
 
-Error records can be validated with the non-normative JSON Schema [`schema.json`](schema.json) in the specification repository. Rules not covered by the JSON Schema include:
+Error records can be validated with the following non-normative, non-extensive JSON Schema ([`schema.json`](schema.json) in the specification repository):
 
 ```json
 {{< include schema.json >}}
@@ -415,7 +415,7 @@ name        | locator format   | document models
 `rfc7111`   | [RFC 7111](https://tools.ietf.org/html/rfc7111) | tabular date
 `id`        | Unicode string | data models that refer to elements with an identifier
 
-`rfc5147`, in contrast to `char` and `line`, also supports ranges. `rfc7111`, in contrast to `cell`, also supports ranges and multi-selection.
+Dimension `rfc5147`, in contrast to `char` and `line`, also supports ranges. `rfc7111`, in contrast to `cell`, also supports ranges and multi-selection.
 
 [fq]: https://github.com/wader/fq?tab=readme-ov-file#fq
 

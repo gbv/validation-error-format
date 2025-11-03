@@ -264,6 +264,13 @@ A **locator map** is a JSON object that maps names of [**dimensions**](#sec-dime
 
 A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `dimension` and `address` of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.
 
+```{#lst-locator-map .json lst-cap="Equivalent array of locators"}
+[
+  { "dimension": "line", "address": "7" },
+  { "dimension": "char", "address": "42" }
+]
+```
+
 Applications MAY restrict their support of Data Validation Error Format to positions with locator maps. In this case nested errors and positions with multiple locators per dimension are not supported.
 
 # Dimensions {#sec-dimensions}

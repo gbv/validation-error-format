@@ -1,7 +1,6 @@
 ---
 title: Data Validation Error Format
 subtitle: Version 0.1.0
-date: 2025-07-10
 #doi: 10.5281/zenodo......
 authors:
 - name: Jakob Voß
@@ -24,7 +23,7 @@ The specification of **Data Validation Error Format** has two goals:
 Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.
 
 :::{.callout-caution}
-The format is strictly limited to errors and error positions. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include details about validation such as test cases, schema rules, and individual constraints. Errors can be linked to additional information with error types but the semantics of these types is out of the scope of this specification.
+The format is strictly limited to **errors** and **error positions**. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include details about validation such as test cases, schema rules, and individual constraints. Errors can be linked to additional information with error types but the semantics of these types is out of the scope of this specification.
 :::
 
 ## Overview
@@ -156,10 +155,12 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHOULD", "SHOULD NOT", "RECOMMEND
 
 Only section @sec-errors to @sec-dimensions, excluding examples and notes, and the [list of normative references](#normative-references) are normative parts of this specification.
 
-Specific support of Data Validation Error Format by an application depends on two options. Both MUST be documented by applications:
+Specific support of Data Validation Error Format by an application depends on:
 
-1. Support of either the full format or only [**positions**](#positions) in condense form being [**locator maps**](#locator-map)
-2. The set of supported [**dimensions**](#sec-dimensions)
+1. the set of supported [**dimensions**](#sec-dimensions), and
+2. whether [**positions**](#positions) are supported in full ([**locators**](#locators)) and condense for([**locator maps**](#locator-map)) or only the latter.
+
+Both MUST be documented by applications.
 
 # Errors {#sec-errors}
 
@@ -192,8 +193,7 @@ An error can have a **position**. A position is given
 Every locator map can be transformed to an equivalent array of locators. The reverse transformation is only possible if there is at most one locator per dimension and no locator has nested errors.
 
 ::: {.callout-note}
-Locators of the same positions should refer to roughly the "same" part of a document or at least have a common intersection.
-This requirement is difficult to formalize because locators refer to different document models, so it is no normative part of this specification yet.
+Locators of the same positions should refer to roughly the "same" part of a document or at least have a common intersection. This requirement is difficult to formalize because locators refer to different document models, so it is no normative part of this specification.
 :::
 
 [locator format]: #locator-formats
@@ -275,7 +275,7 @@ Applications MAY restrict their support of Data Validation Error Format to posit
 
 # Dimensions {#sec-dimensions}
 
-A **dimension** is a defined method to address parts of a document. Each dimension has:
+A **dimension** is a defined method to address elements of a document. Each dimension has:
 
 - a unique **name**, being a string that start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
 
@@ -283,18 +283,21 @@ A **dimension** is a defined method to address parts of a document. Each dimensi
 
 - a **document model** matching the **locator format**.
 
+Some dimensions imply a document model on addressed elements. For instance a [line number] addresses a character string and a [JSON Pointer] addresses a JSON value.
+
 Applications SHOULD support the following dimensions:
 
-name            | locator format        | document model
----------------:|-----------------------|----------------------
-`offset`        | [offset number]       | sequence of elements
-`char`          | [character number]    | sequence of characters or code points
-`cell`          | [cell reference]      | tabular data
-`file`          | [file path]           | directory tree
-`line`          | [line number]         | sequence of lines
-`linecol`       | [line and column]     | sequence of characters with line breaks
-`jsonpointer`   | [JSON Pointer]        | JSON
-`xpath`         | [XML Path Expression] | XML or compatible hierarchies
+name            | locator format          | document model                          | element model
+:---------------|-------------------------|-----------------------------------------|------------------
+`offset`        | [offset number]         | sequence of elements                    | -
+`char`          | [character number]      | character string                        | character
+`line`          | [line number]           | sequence of character strings           | character string
+`linecol`       | [line and column]       | sequence of character strings           | character
+`cell`          | [cell reference]        | tabular data                            | -
+`cells`         | [cell range]            | tabular data                            | tabular data
+`file`          | [file path]             | directory tree                          | -
+`jsonpointer`   | [JSON Pointer]          | JSON value                              | JSON value
+`xpath`         | [XML Path Expression]   | XML or compatible hierarchies           | XML or character string
 
 <!--
 A **validator** is an executable function that transforms a **document** into a (possibly empty) set of **errors**.
@@ -308,6 +311,12 @@ The set of normative locator formats has not been finally specified yet. The fin
 -->
 
 See [appendix](#sec-additional-dimensions) for more dimensions to be discussed.
+
+:::{.callout-warning}
+Dimensions are a subset of query languages. A dimension value locates to *one* element from a document. A query language (e.g. JSONPath, full XPath...) often locates a set of elements.
+:::
+
+warning
 
 ### Sequential document models
 
@@ -329,13 +338,21 @@ Possibly requires some more detailled specification. For instance line number de
 
 #### Line and Column
 
-[Line number] and [character number] within the line, separated by colon `:`.
+The **line and column** locator format with name `linecol` is used to reference a character in a sequence of character strings. The locator value consists of a [line number] and a [character number] within the line, separated by colon (`:`).
 
 ### Tabular document models
 
+:::{.callout-info}
+Tabular data is known from spreadsheet software and CSV files. The tabular document model does *not* include table headers.
+:::
+
 #### Cell reference
 
-The **cell reference** locator format with name `cell` is used to reference a cell or a range of cells in a table as known from spreadsheet software. The locator value consists of a pair of column and row, optionally followed by colon (`:`) and another pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
+The **cell reference** locator format with name `cell` is used to reference a single cell in tabular data. The locator value consists of a pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
+
+#### Cell range
+
+The **cell range** locator format with name `cells` is used to reference a range of connected cells in tabular data. The locator value consists of a cell reference, optionally followed by colon (`:`) and another cell reference.
 
 ### Hierarchical document models
 
@@ -349,9 +366,9 @@ Depending in the document model, file names may be defined as binary string inst
 
 #### JSON Pointer
 
-...
+The **JSON Pointer** locator format with name `jsonpointer` is used to reference a JSON value within a JSON value. The locator value and its semantics are defined in [RFC 6901].
 
-See <https://datatracker.ietf.org/doc/html/rfc6901>
+[RFC 6901]: https://datatracker.ietf.org/doc/html/rfc6901
 
 #### XML Path Expression
 
@@ -393,6 +410,7 @@ TODO: Subset of XPath, see <https://www.w3.org/TR/xpath20/#id-path-expressions> 
 
 - [JSON Schema](https://json-schema.org/) schema language
 - [XPath] XML Path Language
+- [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) defines an extensible error format with fields `type` (`types` in this format), `status`, `title`, `detail` (`message` in this format), `instance` (`position` but as one URI). The example given in the specification is similar to this format.
 
 # Appendices {.unnumbered}
 
@@ -410,10 +428,11 @@ The following [dimensions](#sec-dimensions) are not normative part of the specif
 
 name        | locator format   | document models
 ------------|------------------|------------------
-`fq`        | format and path  | all binary formats supported by [fq] (see @lst-fq)
 `rfc5147`   | [RFC 5147](https://tools.ietf.org/html/rfc5147) | characters and lines
-`rfc7111`   | [RFC 7111](https://tools.ietf.org/html/rfc7111) | tabular date
+`rfc7111`   | [RFC 7111](https://tools.ietf.org/html/rfc7111) | tabular data
 `id`        | Unicode string | data models that refer to elements with an identifier
+`fq`        | format and path  | all binary formats supported by [fq] (see @lst-fq)
+`files`     | File patterns | directory tree
 
 Dimension `rfc5147`, in contrast to `char` and `line`, also supports ranges. `rfc7111`, in contrast to `cell`, also supports ranges and multi-selection.
 

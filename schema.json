@@ -1,51 +1,38 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "$defs": {
+  "properties": {
     "message": {
+      "description": "error message",
       "type": "string",
-      "minLength": 1,
-      "description": "error message"
+      "minLength": 1
     },
     "types": {
       "type": "array",
       "items": {
+        "description": "identifier of an error type",
         "type": "string",
-        "minLength": 1,
-        "description": "identifier of an error type"
+        "minLength": 1
       }
     },
-    "level": {
+    "level": { 
+      "description": "error level",
       "type": "string",
       "enum": ["error", "warning", "info"],
-      "default": "error",
-      "description": "error level"
-    },
-    "locator": {
-      "type": "object",
-      "properties": {
-        "format": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$"
-        },
-        "value": {
-          "type": "string"
-        },
-        "position": { "$ref": "#/$defs/position" },
-        "message": { "$ref": "#/$defs/message" },
-        "types": { "$ref": "#/$defs/types" },
-        "level": { "$ref": "#/$defs/level" }
-      },
-      "required": ["format", "locator"]
+      "default": "error"
     },
     "position": {
       "description": "error position",
       "anyOf": [
         {
+          "description": "locators",
           "type": "array",
-          "items": { "$ref": "#/$defs/locator" }
+          "items": {
+            "$ref": "#/$defs/locator" 
+          }
         },
         {
+          "description": "locator map",
           "type": "object",
           "patternProperties": {
             "^[a-z][a-z0-9-]*$": {
@@ -55,13 +42,50 @@
           "additionalProperties": false
         }
       ]
+    },
+    "id": {
+      "description": "error instance identifier",
+      "type": "string"
     }
   },
-  "properties": {
-    "message": { "$ref": "#/$defs/message" },
-    "types": { "$ref": "#/$defs/types" },
-    "level": { "$ref": "#/$defs/level" },
-    "position": { "$ref": "#/$defs/position" }
+  "$defs": {
+    "locator": {
+      "type": "object",
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "address": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#"
+          }
+        }
+      },
+      "required": ["dimension", "address"]
+    }
   },
-  "required": ["message"]
+  "errormap": {
+    "type": "object",
+    "patternProperties": {
+      "^[a-z][a-z0-9-]*$": {
+        "type": "object",
+        "description": "dimension",
+        "patternProperties": {
+          "^.*$": {
+            "type": "array",
+            "item": {
+              "$ref": "#"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  }
 }

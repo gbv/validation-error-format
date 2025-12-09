@@ -166,7 +166,7 @@ Both MUST be documented by applications.
 
 An **Error** is a JSON object with: 
 
-- mandatory field `message` with an **error message**, being a non-empty string.
+- RECOMMENDED field `message` with an **error message**, being a non-empty string.
   Applications MAY use a default value for error messages.
 
 - optional field `types` with an array of **error types**, each being a non-empty string.
@@ -316,8 +316,6 @@ See [appendix](#sec-additional-dimensions) for more dimensions to be discussed.
 Dimensions are a subset of query languages. A dimension value locates to *one* element from a document. A query language (e.g. JSONPath, full XPath...) often locates a set of elements.
 :::
 
-warning
-
 ### Sequential document models
 
 #### Offset number
@@ -459,6 +457,27 @@ The following locator formats or standards are yet to be evaluated for its use a
 - [PICA Path](https://format.gbv.de/query/picapath)
 - [MARCspec](https://format.gbv.de/query/marcspec)
 - ...
+
+## Report format
+
+The validation error format could be extened with a **validation report format** that wraps and/or links to validation errors with metadata such as:
+
+- timestamp when validation has `started` and `finished` or `aborted`
+- number or processed documents
+- statistics such as number of errors
+
+Errors may also be indexed by dimension and address, e.g.
+
+~~~json
+{
+  "errormap": {
+    "line": {
+      "7": [ ...errors in line 7 ]
+    }
+  }
+}
+~~~
+
 
 ## Changes {.unnumbered}
 

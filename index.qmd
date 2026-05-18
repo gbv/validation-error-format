@@ -297,7 +297,7 @@ name            | locator format          | document model                      
 `cells`         | [cell range]            | tabular data                            | tabular data
 `file`          | [file path]             | directory tree                          | -
 `jsonpointer`   | [JSON Pointer]          | JSON value                              | JSON value
-`xpath`         | [XML Path Expression]   | XML or compatible hierarchies           | XML or character string
+`xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML
 
 <!--
 A **validator** is an executable function that transforms a **document** into a (possibly empty) set of **errors**.
@@ -368,21 +368,34 @@ The **JSON Pointer** locator format with name `jsonpointer` is used to reference
 
 [RFC 6901]: https://datatracker.ietf.org/doc/html/rfc6901
 
-#### XML Path Expression
+#### XML Element Locator
 
-TODO: Subset of XPath, see <https://www.w3.org/TR/xpath20/#id-path-expressions> (must start with `/`, no filter expressions, no reverse steps, no predicates except numbers.
+The **XML Element Locator** formatator follows the following grammar in ABNF syntax ([RFC 5234]) with rule [QName] defined in Namespaces in XML 1.0 specification:
 
-### Graph document models
+~~~
+XMLElementLocator = "/" / 1*( "/" NodeTest )
+NodeTest          = [ "@" ] QName [ Position ]
+Position          = "[" %31-%39 *DIGIT "]"
+DIGIT             =  %x30-39  ; 0...9
+~~~
 
-...
+Applications MAY append the string `[1]` to an XML Element Locator if it does not end with a `Position` to ensure that a single element is referenced.
+
+::: {.callout-note}
+XML Element Locator is a proper subset of (X)Path Expressions from [XPath] specifications.
+:::
+
+[QName]: https://www.w3.org/TR/REC-xml-names/#NT-QName
 
 # References
 
 [XPath]: https://www.w3.org/TR/xpath/
+[XPath 1.0]: https://www.w3.org/TR/xpath-10/
 
 ## Normative References
 
 [RFC 2119]: https://tools.ietf.org/html/rfc2119
+[RFC 5234]: https://tools.ietf.org/html/rfc5234
 [RFC 8174]: https://tools.ietf.org/html/rfc8174
 [RFC 8259]: https://tools.ietf.org/html/rfc8259
 
@@ -397,17 +410,29 @@ TODO: Subset of XPath, see <https://www.w3.org/TR/xpath20/#id-path-expressions> 
 - Bray, T.: _The JavaScript Object Notation (JSON) Data Interchange Format_.
   RFC 8259, December 2017. <https://tools.ietf.org/html/rfc8259>
 
+- Bray, T. et. al.: _Namespaces in XML 1.0 (Third Edition)_.
+  W3C Recommendation, December 2009.
+  <https://www.w3.org/TR/REC-xml-names/>
+  
 - Bryan, P and Zyp, K. and Nottigham, M.: *JavaScript Object Notation (JSON) Pointer*.
   RFC 6901, April 2023. <https://tools.ietf.org/html/rfc6901>
 
+- D. Crocker and P. Overell: *Augmented BNF for Syntax Specifications: ABNF*.
+  RFC 5234, January 2008.
+  <https://www.rfc-editor.org/rfc/rfc5234>
+
 - Leiba, B.:  _Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words_.
-  BCP 14, RFC 8174, May 2017,
+  BCP 14, RFC 8174, May 2017.
   <http://www.rfc-editor.org/info/rfc8174>.
-  
+
 ## Informative references
 
 - [JSON Schema](https://json-schema.org/) schema language
-- [XPath] XML Path Language
+
+- J. Clark and S. DeRose: *XML Path Language (XPath) Version 1.0. 
+  W3C Recommendation, November 1999.
+  <https://www.w3.org/TR/xpath-10/>
+
 - [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) defines an extensible error format with fields `type` (`types` in this format), `status`, `title`, `detail` (`message` in this format), `instance` (`position` but as one URI). The example given in the specification is similar to this format.
 
 # Appendices {.unnumbered}

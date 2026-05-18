@@ -6,7 +6,7 @@ The current draft is made available at <https://gbv.github.io/validation-error-f
 
 ## tl;dr
 
-Errors have a `message`, optional `level`, `types`, and a `position`. The position can be given in with multiple locators, for instance by character position, line number, and line/column:
+Errors have a `message`, optional `level`, `types`, and a `position`. The **position** can be given in with multiple locators, for instance by character position, line number, and line/column:
 
 ~~~json
 {
@@ -36,9 +36,19 @@ Locators of a position can also given as array, each with `dimension` and `addre
 }
 ~~~
 
-Each dimension refers to a locator format, suitable for some document models, for instance XPath for XML, JSON Pointer for JSON, and row/column for tabular data.
+Each dimension refers to a **locator format**, suitable for some document models, for instance XPath for XML, JSON Pointer for JSON, and row/column for tabular data:
 
-Locators can contain nested errors within the addressed part of a document:
+~~~json
+{
+  "message": "Element requires attribute 'id'!",
+  "level": "error",
+  "position": {
+    "xpath": "/path/to/element[2]"
+  }
+}
+~~~
+
+Locators can contain **nested errors** within the addressed part of a document:
 
 ~~~json
 {

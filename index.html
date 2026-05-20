@@ -601,60 +601,66 @@ Example&nbsp;9: Equivalent array of locators
 </thead>
 <tbody>
 <tr class="odd">
+<td style="text-align: left;"><code>id</code></td>
+<td>identifier</td>
+<td>indexed set of elements</td>
+<td>-</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;"><code>offset</code></td>
 <td><a href="#offset-number">offset number</a></td>
 <td>sequence of elements</td>
 <td>-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>char</code></td>
 <td><a href="#character-number">character number</a></td>
 <td>character string</td>
 <td>character</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>line</code></td>
 <td><a href="#line-number">line number</a></td>
 <td>sequence of character strings</td>
 <td>character string</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>linecol</code></td>
 <td><a href="#line-and-column">line and column</a></td>
 <td>sequence of character strings</td>
 <td>character</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>cell</code></td>
 <td><a href="#cell-reference">cell reference</a></td>
 <td>tabular data</td>
 <td>-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>cells</code></td>
 <td><a href="#cell-range">cell range</a></td>
 <td>tabular data</td>
 <td>tabular data</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>rfc7111</code></td>
 <td><a href="#table-selection">table selection</a></td>
 <td>tabular data</td>
 <td>tabular data</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>file</code></td>
 <td><a href="#file-path">file path</a></td>
 <td>directory tree</td>
 <td>-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>jsonpointer</code></td>
 <td><a href="#json-pointer">JSON Pointer</a></td>
 <td>JSON value</td>
 <td>JSON value</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>xpath</code></td>
 <td><a href="#xml-element-locator">XML Element Locator</a></td>
 <td>XML or compatible hierarchies</td>
@@ -662,9 +668,7 @@ Example&nbsp;9: Equivalent array of locators
 </tr>
 </tbody>
 </table>
-<!--
-The set of normative locator formats has not been finally specified yet. The final version of this specification may need to define a registry of locator formats. The following locator formats will likely be included:
--->
+<p>The <strong>identifier</strong> locator format with name <code>id</code> and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refer to the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.</p>
 <p>See <a href="#sec-additional-dimensions">appendix</a> for more dimensions to be discussed.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -922,39 +926,7 @@ Note
 </section>
 <section id="sec-additional-dimensions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-additional-dimensions">Additional dimensions</h2>
-<p>The following <a href="#sec-dimensions">dimensions</a> are not normative part of the specification because they have not fully been specified yet:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>name</th>
-<th>locator format</th>
-<th>document models</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>rfc5147</code></td>
-<td><a href="https://tools.ietf.org/html/rfc5147">RFC 5147</a></td>
-<td>characters and lines</td>
-</tr>
-<tr class="even">
-<td><code>id</code></td>
-<td>Unicode string</td>
-<td>data models that refer to elements with an identifier</td>
-</tr>
-<tr class="odd">
-<td><code>fq</code></td>
-<td>format and path</td>
-<td>all binary formats supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> (see <a href="#lst-fq" class="quarto-xref">Example&nbsp;10</a>)</td>
-</tr>
-<tr class="even">
-<td><code>files</code></td>
-<td>File patterns</td>
-<td>directory tree</td>
-</tr>
-</tbody>
-</table>
-<p>Dimension <code>rfc5147</code>, in contrast to <code>char</code> and <code>line</code>, also supports ranges.</p>
+<p>The following locator formats or standards are yet to be evaluated for its use as dimension:</p>
 <div id="lst-fq" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -970,8 +942,9 @@ Example&nbsp;10: Error using fq to locate the internal timestamp of a file in a 
 </figcaption>
 </figure>
 </div>
-<p>The following locator formats or standards are yet to be evaluated for its use as dimension:</p>
 <ul>
+<li><a href="https://tools.ietf.org/html/rfc5147">RFC 5147</a> is not included because it mixes lines and characters, so the document model of the referenced element is not obvious. The handling of <a href="https://datatracker.ietf.org/doc/html/rfc5147#section-4.1">line endings in RFC 5147</a> also depends on context.</li>
+<li><code>fq</code> for all binary formats supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> (see <a href="#lst-fq" class="quarto-xref">Example&nbsp;10</a>)</li>
 <li><code>RangeAddress</code> of <a href="https://docs.oasis-open.org/office/OpenDocument/v1.4/OpenDocument-v1.4-part4-formula.html#References">References in OpenDocument</a></li>
 <li>IIIF (section in an image)</li>
 <li>RDF graphs (every subset of an RDF graph is another RDF graph)</li>

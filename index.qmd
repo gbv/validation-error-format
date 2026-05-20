@@ -358,10 +358,6 @@ The **cell range** locator format with name `cells` is used to reference a range
 
 The **file path** locator format with name `file` is used to reference a file or directory in a directory tree. The locator value must be a POSIX path, being a string optionally beginning with a slash (`/`), followed by zero or more file names, separated by slash. A file name is a non-empty sequence of Unicode code points excluding the slash (`U+002F`) and the null byte (`U+0000`).
 
-::: {.callout-note}
-Depending in the document model, file names may be defined as binary string instead of Unicode strings. In most cases UTF-8 encoding can be assumed to map Unicode code points to bytes but (TODO: this requires more careful examination). 
-:::
-
 #### JSON Pointer
 
 The **JSON Pointer** locator format with name `jsonpointer` is used to reference a JSON value within a JSON value. The locator value and its semantics are defined in [RFC 6901].
@@ -427,11 +423,13 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 
 ## Informative references
 
-- [JSON Schema](https://json-schema.org/) schema language
-
 - J. Clark and S. DeRose: *XML Path Language (XPath) Version 1.0. 
   W3C Recommendation, November 1999.
   <https://www.w3.org/TR/xpath-10/>
+
+- A. Wright, H. Andrews, B. Hutton, and G. Dennis: *JSON Schema Draft 2020-12*.
+  June 2022. <https://json-schema.org/draft/2020-12/json-schema-core.html>
+
 
 - [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) defines an extensible error format with fields `type` (`types` in this format), `status`, `title`, `detail` (`message` in this format), `instance` (`position` but as one URI). The example given in the specification is similar to this format.
 

@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <meta name="dcterms.date" content="2026-05-18">
+    <meta name="dcterms.date" content="2026-05-20">
 
     <title>Data Validation Error Format</title>
     <style>
@@ -170,10 +170,10 @@
 <meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2026-05-18">
-<meta name="citation_cover_date" content="2026-05-18">
+<meta name="citation_publication_date" content="2026-05-20">
+<meta name="citation_cover_date" content="2026-05-20">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-05-18">
+<meta name="citation_online_date" content="2026-05-20">
 <meta name="citation_language" content="en">
 </head>
 
@@ -216,7 +216,7 @@
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">May 18, 2026</p>
+              <p class="date">May 20, 2026</p>
             </div>
           </div>
           
@@ -820,19 +820,6 @@ Warning
 <section id="file-path" class="level4">
 <h4 class="anchored" data-anchor-id="file-path">File path</h4>
 <p>The <strong>file path</strong> locator format with name <code>file</code> is used to reference a file or directory in a directory tree. The locator value must be a POSIX path, being a string optionally beginning with a slash (<code>/</code>), followed by zero or more file names, separated by slash. A file name is a non-empty sequence of Unicode code points excluding the slash (<code>U+002F</code>) and the null byte (<code>U+0000</code>).</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Depending in the document model, file names may be defined as binary string instead of Unicode strings. In most cases UTF-8 encoding can be assumed to map Unicode code points to bytes but (TODO: this requires more careful examination).</p>
-</div>
-</div>
 </section>
 <section id="json-pointer" class="level4">
 <h4 class="anchored" data-anchor-id="json-pointer">JSON Pointer</h4>
@@ -879,8 +866,8 @@ Note
 <section id="informative-references" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="informative-references"><span class="header-section-number">5.2</span> Informative references</h2>
 <ul>
-<li><p><a href="https://json-schema.org/">JSON Schema</a> schema language</p></li>
 <li><p>J. Clark and S. DeRose: *XML Path Language (XPath) Version 1.0. W3C Recommendation, November 1999. <a href="https://www.w3.org/TR/xpath-10/" class="uri">https://www.w3.org/TR/xpath-10/</a></p></li>
+<li><p>A. Wright, H. Andrews, B. Hutton, and G. Dennis: <em>JSON Schema Draft 2020-12</em>. June 2022. <a href="https://json-schema.org/draft/2020-12/json-schema-core.html" class="uri">https://json-schema.org/draft/2020-12/json-schema-core.html</a></p></li>
 <li><p><a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a> defines an extensible error format with fields <code>type</code> (<code>types</code> in this format), <code>status</code>, <code>title</code>, <code>detail</code> (<code>message</code> in this format), <code>instance</code> (<code>position</code> but as one URI). The example given in the specification is similar to this format.</p></li>
 </ul>
 </section>

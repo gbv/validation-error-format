@@ -301,20 +301,13 @@ name            | locator format          | document model                      
 `xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML
 
 <!--
-A **validator** is an executable function that transforms a **document** into a (possibly empty) set of **errors**.
-The document is valid in this context if the set of errors is empty.
-
-^[Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters. Line numbers in Unicode are not trivial neither because multiple definitions of line breaks exist.]
-
-For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
-
 The set of normative locator formats has not been finally specified yet. The final version of this specification may need to define a registry of locator formats. The following locator formats will likely be included:
 -->
 
 See [appendix](#sec-additional-dimensions) for more dimensions to be discussed.
 
-:::{.callout-warning}
-Dimensions are a subset of query languages. A dimension value locates to *one* element from a document. A query language (e.g. JSONPath, full XPath...) often locates a set of elements.
+:::{.callout-note}
+Dimensions are a subset of query languages. A dimension value locates to *one* element from a document. A query language (e.g. JSONPath, full XPath...) can locate a set of elements.
 :::
 
 ### Sequential document models
@@ -329,10 +322,16 @@ The **character number** locator format with name `char` is used to reference a 
 
 In Unicode strings, this locator format refers to code points instead of visual characters.
 
+<!--
+Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters.
+-->
+
 #### Line number
 
-:::{.callout-warning}
-Possibly requires some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029... other formats do not.
+The **line number** locator format with name `line` is used to reference a line in a sequence of lines, each being a character string. The locator value is a positive integer encoded as string without leading zeroes. The first line has number one (locator value `1`).
+
+:::{.callout-note}
+The document model of line number is not a character string with line breaks but a sequence of character strings.  Splitting of character strings into lines is beyond the scope of this specification because multiple definitions of line break exist (U+0A optionally followed by U+0D, U+0D, U+0B, U+0C, U+85, U+2028, U+2029...).
 :::
 
 #### Line and Column
@@ -341,7 +340,7 @@ The **line and column** locator format with name `linecol` is used to reference 
 
 ### Tabular document models
 
-:::{.callout-info}
+:::{.callout-note}
 Tabular data is known from spreadsheet software and CSV files. The tabular document model does *not* include table headers.
 :::
 
@@ -368,8 +367,8 @@ Position       = %31-%39 *DIGIT
 DIGIT          = %x30-39
 ~~~
 
-:::{.callout-info}
-Syntax and semantics of table selection are a subset of [RFC 7111] but full support of RFC 7111 is not required for Data Validation Error Format.
+:::{.callout-note}
+Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier.
 :::
 
 ### Hierarchical document models

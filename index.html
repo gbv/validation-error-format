@@ -663,27 +663,20 @@ Example&nbsp;9: Equivalent array of locators
 </tbody>
 </table>
 <!--
-A **validator** is an executable function that transforms a **document** into a (possibly empty) set of **errors**.
-The document is valid in this context if the set of errors is empty.
-
-^[Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters. Line numbers in Unicode are not trivial neither because multiple definitions of line breaks exist.]
-
-For instance a `line` locator assumes a model of lines and a `region` locator assumes an image. The encoding of this model, for instance a text file or an image file, is out of the scope of the locator language.
-
 The set of normative locator formats has not been finally specified yet. The final version of this specification may need to define a registry of locator formats. The following locator formats will likely be included:
 -->
 <p>See <a href="#sec-additional-dimensions">appendix</a> for more dimensions to be discussed.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dimensions are a subset of query languages. A dimension value locates to <em>one</em> element from a document. A query language (e.g.&nbsp;JSONPath, full XPath…) often locates a set of elements.</p>
+<p>Dimensions are a subset of query languages. A dimension value locates to <em>one</em> element from a document. A query language (e.g.&nbsp;JSONPath, full XPath…) can locate a set of elements.</p>
 </div>
 </div>
 <section id="sequential-document-models" class="level3">
@@ -696,20 +689,24 @@ Warning
 <h4 class="anchored" data-anchor-id="character-number">Character number</h4>
 <p>The <strong>character number</strong> locator format with name <code>char</code> is used to reference a character in a sequence of characters from a character set. The locator value is a positive integer encoded as string without leading zeroes. The first character has number one (locator value <code>1</code>).</p>
 <p>In Unicode strings, this locator format refers to code points instead of visual characters.</p>
+<!--
+Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters.
+-->
 </section>
 <section id="line-number" class="level4">
 <h4 class="anchored" data-anchor-id="line-number">Line number</h4>
-<div class="callout callout-style-default callout-warning callout-titled">
+<p>The <strong>line number</strong> locator format with name <code>line</code> is used to reference a line in a sequence of lines, each being a character string. The locator value is a positive integer encoded as string without leading zeroes. The first line has number one (locator value <code>1</code>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Possibly requires some more detailled specification. For instance line number depend on a common definition of line breaks, some formats include U+0B, U+0C, U+85, U+2028, U+2029… other formats do not.</p>
+<p>The document model of line number is not a character string with line breaks but a sequence of character strings. Splitting of character strings into lines is beyond the scope of this specification because multiple definitions of line break exist (U+0A optionally followed by U+0D, U+0D, U+0B, U+0C, U+85, U+2028, U+2029…).</p>
 </div>
 </div>
 </section>
@@ -720,8 +717,18 @@ Warning
 </section>
 <section id="tabular-document-models" class="level3">
 <h3 class="anchored" data-anchor-id="tabular-document-models">Tabular document models</h3>
-<div class="callout-info">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Tabular data is known from spreadsheet software and CSV files. The tabular document model does <em>not</em> include table headers.</p>
+</div>
 </div>
 <section id="cell-reference" class="level4">
 <h4 class="anchored" data-anchor-id="cell-reference">Cell reference</h4>
@@ -742,8 +749,18 @@ CellPosition   = RowPosition "," ColPosition
 ColPosition    = %31-%39 *DIGIT
 Position       = %31-%39 *DIGIT
 DIGIT          = %x30-39</code></pre>
-<div class="callout-info">
-<p>Syntax and semantics of table selection are a subset of <a href="https://tools.ietf.org/html/rfc7111">RFC 7111</a> but full support of RFC 7111 is not required for Data Validation Error Format.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Tabular selection locator is a proper subset of <a href="https://tools.ietf.org/html/rfc7111">RFC 7111</a> URI Fragment Identifier.</p>
+</div>
 </div>
 </section>
 </section>

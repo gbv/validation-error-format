@@ -822,7 +822,7 @@ Warning
 </section>
 <section id="table-selection" class="level4">
 <h4 class="anchored" data-anchor-id="table-selection">Table selection</h4>
-<p>The <strong>table selection</strong> locator format with name <code>rfc7111</code> is used to reference a selection of connected cells in tabular data. It can reference <a href="#cell-references">cell references</a>, <a href="#cell-ranges">cell ranges</a>, full rows and full columns. The locator format follows the following grammar in ABNF syntax (<a href="https://tools.ietf.org/html/rfc5234">RFC 5234</a>) with case-sensitive string support ([RFC 7405]):</p>
+<p>The <strong>table selection</strong> locator format with name <code>rfc7111</code> is used to reference a selection of connected cells in tabular data. It can reference <a href="#cell-references">cell references</a>, <a href="#cell-ranges">cell ranges</a>, full rows and full columns. The locator format follows the following grammar in ABNF syntax (<a href="https://tools.ietf.org/html/rfc5234">RFC 5234</a>) with case-sensitive string support (<a href="https://tools.ietf.org/html/rfc7405">RFC 7405</a>):</p>
 <pre><code>TableSelection = Cells / Rows / Columns
 Cells          = %s"cell=" CellPosition [ "-" CellPosition ]
 Rows           = %s"row=" RowPosition [ "-" RowPosition ]
@@ -880,7 +880,8 @@ Note
 <li><p>Bray, T.: <em>The JavaScript Object Notation (JSON) Data Interchange Format</em>. RFC 8259, December 2017. <a href="https://tools.ietf.org/html/rfc8259" class="uri">https://tools.ietf.org/html/rfc8259</a></p></li>
 <li><p>Bray, T. et. al.: <em>Namespaces in XML 1.0 (Third Edition)</em>. W3C Recommendation, December 2009. <a href="https://www.w3.org/TR/REC-xml-names/" class="uri">https://www.w3.org/TR/REC-xml-names/</a></p></li>
 <li><p>Bryan, P and Zyp, K. and Nottigham, M.: <em>JavaScript Object Notation (JSON) Pointer</em>. RFC 6901, April 2023. <a href="https://tools.ietf.org/html/rfc6901" class="uri">https://tools.ietf.org/html/rfc6901</a></p></li>
-<li><p>D. Crocker and P. Overell: <em>Augmented BNF for Syntax Specifications: ABNF</em>. RFC 5234, January 2008. <a href="https://www.rfc-editor.org/rfc/rfc5234" class="uri">https://www.rfc-editor.org/rfc/rfc5234</a></p></li>
+<li><p>Crocker, D. and Overell, P.: <em>Augmented BNF for Syntax Specifications: ABNF</em>. RFC 5234, January 2008. <a href="https://www.rfc-editor.org/rfc/rfc5234" class="uri">https://www.rfc-editor.org/rfc/rfc5234</a></p></li>
+<li><p>Kyzivat, P.: <em>Case-Sensitive String Support in ABNF</em>. RFC 7405, December 2014. <a href="https://tools.ietf.org/html/rfc7405" class="uri">https://tools.ietf.org/html/rfc7405</a></p></li>
 <li><p>Leiba, B.: <em>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</em>. BCP 14, RFC 8174, May 2017. <a href="http://www.rfc-editor.org/info/rfc8174" class="uri">http://www.rfc-editor.org/info/rfc8174</a>.</p></li>
 </ul>
 </section>

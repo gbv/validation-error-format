@@ -423,11 +423,13 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 
 ## Informative references
 
-- [JSON Schema](https://json-schema.org/) schema language
-
 - J. Clark and S. DeRose: *XML Path Language (XPath) Version 1.0. 
   W3C Recommendation, November 1999.
   <https://www.w3.org/TR/xpath-10/>
+
+- A. Wright, H. Andrews, B. Hutton, and G. Dennis: *JSON Schema Draft 2020-12*.
+  June 2022. <https://json-schema.org/draft/2020-12/json-schema-core.html>
+
 
 - [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) defines an extensible error format with fields `type` (`types` in this format), `status`, `title`, `detail` (`message` in this format), `instance` (`position` but as one URI). The example given in the specification is similar to this format.
 

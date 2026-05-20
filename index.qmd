@@ -295,6 +295,7 @@ name            | locator format          | document model                      
 `linecol`       | [line and column]       | sequence of character strings           | character
 `cell`          | [cell reference]        | tabular data                            | -
 `cells`         | [cell range]            | tabular data                            | tabular data
+`rfc7111`       | [table selection]       | tabular data                            | tabular data
 `file`          | [file path]             | directory tree                          | -
 `jsonpointer`   | [JSON Pointer]          | JSON value                              | JSON value
 `xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML
@@ -346,11 +347,30 @@ Tabular data is known from spreadsheet software and CSV files. The tabular docum
 
 #### Cell reference
 
-The **cell reference** locator format with name `cell` is used to reference a single cell in tabular data. The locator value consists of a pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
+The **cell reference** locator format with name `cell` is used to reference an individual cell in tabular data. The locator value consists of a pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
 
 #### Cell range
 
-The **cell range** locator format with name `cells` is used to reference a range of connected cells in tabular data. The locator value consists of a cell reference, optionally followed by colon (`:`) and another cell reference.
+The **cell range** locator format with name `cells` is used to reference a selection of connected cells in tabular data. The locator value consists of a cell reference, optionally followed by colon (`:`) and another cell reference.
+
+#### Table selection
+
+The **table selection** locator format with name `rfc7111` is used to reference a selection of connected cells in tabular data. It can reference [cell references](#cell-references), [cell ranges](#cell-ranges), full rows and full columns. The locator format follows the following grammar in ABNF syntax ([RFC 5234]) with case-sensitive string support ([RFC 7405]):
+
+~~~
+TableSelection = Cells / Rows / Columns
+Cells          = %s"cell=" CellPosition [ "-" CellPosition ]
+Rows           = %s"row=" RowPosition [ "-" RowPosition ]
+Columns        = %s"col=" ColPosition [ "-" ColPosition ]
+CellPosition   = RowPosition "," ColPosition
+ColPosition    = %31-%39 *DIGIT
+Position       = %31-%39 *DIGIT
+DIGIT          = %x30-39
+~~~
+
+:::{.callout-info}
+Syntax and semantics of table selection are a subset of [RFC 7111] but full support of RFC 7111 is not required for Data Validation Error Format.
+:::
 
 ### Hierarchical document models
 
@@ -366,13 +386,13 @@ The **JSON Pointer** locator format with name `jsonpointer` is used to reference
 
 #### XML Element Locator
 
-The **XML Element Locator** formatator follows the following grammar in ABNF syntax ([RFC 5234]) with rule [QName] defined in Namespaces in XML 1.0 specification:
+The **XML Element Locator** format follows the following grammar in ABNF syntax ([RFC 5234]) with rule [QName] defined in Namespaces in XML 1.0 specification:
 
 ~~~
 XMLElementLocator = "/" / 1*( "/" NodeTest )
-NodeTest          = [ "@" ] QName [ Position ]
-Position          = "[" %31-%39 *DIGIT "]"
-DIGIT             =  %x30-39  ; 0...9
+NodeTest          = [ "@" ] QName [ "[ Position "]" ]
+Position          = %31-%39 *DIGIT
+DIGIT             = %x30-39  ; 0...9
 ~~~
 
 Applications MAY append the string `[1]` to an XML Element Locator if it does not end with a `Position` to ensure that a single element is referenced.
@@ -423,9 +443,12 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 
 ## Informative references
 
-- J. Clark and S. DeRose: *XML Path Language (XPath) Version 1.0. 
+- J. Clark and S. DeRose: *XML Path Language (XPath) Version 1.0.*
   W3C Recommendation, November 1999.
   <https://www.w3.org/TR/xpath-10/>
+
+- M. Hausenblas, E. Wilde, and J. Tennison: *URI Fragment Identifiers for the text/csv Media Type.*
+  RFC 7111, January 2014. <https://tools.ietf.org/html/rfc7111>
 
 - A. Wright, H. Andrews, B. Hutton, and G. Dennis: *JSON Schema Draft 2020-12*.
   June 2022. <https://json-schema.org/draft/2020-12/json-schema-core.html>
@@ -450,12 +473,11 @@ The following [dimensions](#sec-dimensions) are not normative part of the specif
 name        | locator format   | document models
 ------------|------------------|------------------
 `rfc5147`   | [RFC 5147](https://tools.ietf.org/html/rfc5147) | characters and lines
-`rfc7111`   | [RFC 7111](https://tools.ietf.org/html/rfc7111) | tabular data
 `id`        | Unicode string | data models that refer to elements with an identifier
 `fq`        | format and path  | all binary formats supported by [fq] (see @lst-fq)
 `files`     | File patterns | directory tree
 
-Dimension `rfc5147`, in contrast to `char` and `line`, also supports ranges. `rfc7111`, in contrast to `cell`, also supports ranges and multi-selection.
+Dimension `rfc5147`, in contrast to `char` and `line`, also supports ranges. 
 
 [fq]: https://github.com/wader/fq?tab=readme-ov-file#fq
 

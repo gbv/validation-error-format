@@ -13,7 +13,7 @@ abstract: |
 
 # Introduction
 
-Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports.^[A notable exception are formats from software development used in unit testing such as [JUnit XML](https://github.com/testmoapp/junitxml) and [Test Anything Protocol](https://testanything.org/).]
+Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports (except for unit testing formats such as [JUnit XML](https://github.com/testmoapp/junitxml) and [Test Anything Protocol](https://testanything.org/) with narrow use cases in software development).
 
 The specification of **Data Validation Error Format** has two goals:
 
@@ -25,6 +25,8 @@ Last but not least the format should help to better separate validation and pres
 :::{.callout-caution}
 The format is strictly limited to **errors** and **error positions**. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include details about validation such as test cases, schema rules, and individual constraints. Errors can be linked to additional information with error types but the semantics of these types is out of the scope of this specification.
 :::
+
+This document is managed in a revision control system at <https://github.com/gbv/validation-error-format>, including an [issue tracker](https://github.com/gbv/validation-error-format/issues).
 
 ## Overview
 
@@ -128,9 +130,7 @@ A similar document could be invalid on byte level. The following table illustrat
 +----------------+--------+--------+-----------------+--------+--------+--------+--------+--------+--------+
 
 
-
 ::: {#lst-3 lst-cap="Invalid JSON on multiple levels"}
-
 
 ```{.json}
 [
@@ -170,13 +170,14 @@ An **Error** is a JSON object with:
   Applications MAY use a default value for error messages.
 
 - optional field `types` with an array of **error types**, each being a non-empty string.
-  Error types can be used for grouping errors and they SHOULD be URIs. Repetitions of
-  identical strings in the same array MUST be ignored.
+  Error types can be used for grouping errors. Error types SHOULD be either local identifiers
+  with same syntax as the name of a [dimension] or URIs ([RFC 3986]). 
 
 - optional field `level` with an **error level**, being one of the strings `error`, `warning`, or `info`.
-  Application MUST NOT differentiate between error level `error` and no error level.
+  Application MUST use default value `error` if this field is not given.
 
-- optional field `position` with a [**position**](#positions). Applications MUST NOT differentiate between empty position and no position.
+- optional field `position` with a [**position**](#positions).
+  Applications MUST NOT differentiate between no position and an empty position (an empty array or an empty JSON object).
 
 ::: {.callout-note}
 Language and localization of error messages is out of the scope of this specification.
@@ -262,7 +263,7 @@ A **locator map** is a JSON object that maps names of [**dimensions**](#sec-dime
 { "line": "7", "char": "42" }
 ```
 
-A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field `dimension` and `address` of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.
+A locator map can be transformed to an equivalent array of [locators](#locators) with key and value of the JSON object entries mapped to field `dimension` and `address` of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.
 
 ```{#lst-locator-map .json lst-cap="Equivalent array of locators"}
 [
@@ -277,7 +278,7 @@ Applications MAY restrict their support of Data Validation Error Format to posit
 
 A **dimension** is a defined method to address elements of a document. Each dimension has:
 
-- a unique **name**, being a string that start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters, digits `0` to `9` and/or `-`.
+- a unique **name**, being a string that start with lowercase letter `a` to `z`, optionally followed by a sequence of lowercase letters and digits `0` to `9`.
 
 - a **locator format**, being a formal language of Unicode strings to encode references to parts of a document. The sets of strings of the language are called **addresses**.
 
@@ -285,7 +286,7 @@ A **dimension** is a defined method to address elements of a document. Each dime
 
 Some dimensions imply a document model on addressed elements. For instance a [line number] addresses a character string and a [JSON Pointer] addresses a JSON value.
 
-Applications SHOULD support the following dimensions:
+Applications SHOULD support the following dimensions. The [appendix](#sec-additional-dimensions) contains a non-normative note on additional dimensions not fully specified yet.
 
 name            | locator format          | document model                          | element model
 :---------------|-------------------------|-----------------------------------------|------------------
@@ -302,8 +303,6 @@ name            | locator format          | document model                      
 `xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML
 
 The **identifier** locator format with name `id` and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refer to the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.
-
-See [appendix](#sec-additional-dimensions) for more dimensions to be discussed.
 
 :::{.callout-note}
 Dimensions are a subset of query languages. A dimension value locates to *one* element from a document. A query language (e.g. JSONPath, full XPath...) can locate a set of elements.
@@ -355,7 +354,7 @@ The **cell range** locator format with name `cells` is used to reference a selec
 
 The **table selection** locator format with name `rfc7111` is used to reference a selection of connected cells in tabular data. It can reference [cell references](#cell-references), [cell ranges](#cell-ranges), full rows and full columns. The locator format follows the following grammar in ABNF syntax ([RFC 5234]) with case-sensitive string support ([RFC 7405]):
 
-~~~
+```{.abnf}
 TableSelection = Cells / Rows / Columns
 Cells          = %s"cell=" CellPosition [ "-" CellPosition ]
 Rows           = %s"row=" RowPosition [ "-" RowPosition ]
@@ -364,7 +363,7 @@ CellPosition   = RowPosition "," ColPosition
 ColPosition    = %31-%39 *DIGIT
 Position       = %31-%39 *DIGIT
 DIGIT          = %x30-39
-~~~
+```
 
 :::{.callout-note}
 Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier.
@@ -386,12 +385,12 @@ The **JSON Pointer** locator format with name `jsonpointer` is used to reference
 
 The **XML Element Locator** format follows the following grammar in ABNF syntax ([RFC 5234]) with rule [QName] defined in Namespaces in XML 1.0 specification:
 
-~~~
+```{.abnf}
 XMLElementLocator = "/" / 1*( "/" NodeTest )
 NodeTest          = [ "@" ] QName [ "[ Position "]" ]
 Position          = %31-%39 *DIGIT
 DIGIT             = %x30-39  ; 0...9
-~~~
+```
 
 Applications MAY append the string `[1]` to an XML Element Locator if it does not end with a `Position` to ensure that a single element is referenced.
 
@@ -456,9 +455,6 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 - A. Wright, H. Andrews, B. Hutton, and G. Dennis: *JSON Schema Draft 2020-12*.
   June 2022. <https://json-schema.org/draft/2020-12/json-schema-core.html>
 
-
-- [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) defines an extensible error format with fields `type` (`types` in this format), `status`, `title`, `detail` (`message` in this format), `instance` (`position` but as one URI). The example given in the specification is similar to this format.
-
 # Appendices {.unnumbered}
 
 ## JSON Schemas {.unnumbered}
@@ -471,58 +467,26 @@ Error records can be validated with the following non-normative, non-extensive J
 
 ## Additional dimensions {#sec-additional-dimensions .unnumbered}
 
-The following locator formats or standards are yet to be evaluated for its use as dimension:
+The following locator formats or standards are being considered for addition as [dimensions](#dimensions):
 
-[fq]: https://github.com/wader/fq?tab=readme-ov-file#fq
+### fq
 
-```{#lst-fq .json lst-cap="Error using fq to locate the internal timestamp of a file in a .gz archive"}
+The [fq] tool supports analysis of many [binary formats](https://github.com/wader/fq/blob/master/doc/formats.md) so it could be used to locate elements of binary data models. The locator value would be the format, followed by a colon, followed by a path expression:
+
+```.json
 {
-  "message": "Timestamp must not be in the future!",
+  "message": "Timestamp of .gz archive must not be in the future",
   "position": {
     "fq": "gzip:.members[0].mtime"
   }
 }
-```
-
-- [RFC 5147](https://tools.ietf.org/html/rfc5147) is not included because it mixes lines and characters, so the document model of the referenced element is not obvious. The handling of [line endings in RFC 5147](https://datatracker.ietf.org/doc/html/rfc5147#section-4.1) also depends on context.
-- `fq` for all binary formats supported by [fq] (see @lst-fq)
-- `RangeAddress` of [References in OpenDocument](https://docs.oasis-open.org/office/OpenDocument/v1.4/OpenDocument-v1.4-part4-formula.html#References)
-- IIIF (section in an image)
-- RDF graphs (every subset of an RDF graph is another RDF graph)
-- SHACL [focus node](https://www.w3.org/TR/shacl/#focusNodes) and [result path](https://www.w3.org/TR/shacl/#results-path) serialized in a subset of RDF Turtle
-- Subset of SQL SELECT statements
-- PDF highlighted text annotations
-- Some variant of [Property Graph Exchange Format (PG)](https://pg-format.github.io/) and/or CYPHER Query for property graphs
-- [PICA Path](https://format.gbv.de/query/picapath)
-- [MARCspec](https://format.gbv.de/query/marcspec)
-- ...
-
-## Report format
-
-The validation error format could be extened with a **validation report format** that wraps and/or links to validation errors with metadata such as:
-
-- timestamp when validation has `started` and `finished` or `aborted`
-- number or processed documents
-- statistics such as number of errors
-
-Errors may also be indexed by dimension and address, e.g.
-
-~~~json
 {
-  "errormap": {
-    "line": {
-      "7": [ ...errors in line 7 ]
-    }
+  "message": "Image width of PNG file is too large",
+  "position": {
+    "fq": "png:.chunks[0].width"
   }
 }
-~~~
+```
 
-
-## Changes {.unnumbered}
-
-This document is managed in a revision control system at <https://github.com/gbv/validation-error-format>, including an [issue tracker](https://github.com/gbv/validation-error-format/issues).
-
-- **Version 0.1.0**
-
-  Work in progress.
+[fq]: https://github.com/wader/fq?tab=readme-ov-file#fq
 

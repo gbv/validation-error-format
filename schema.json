@@ -35,7 +35,7 @@
           "description": "locator map",
           "type": "object",
           "patternProperties": {
-            "^[a-z][a-z0-9-]*$": {
+            "^[a-z][a-z0-9]*$": {
               "type": "string"
             }
           },
@@ -54,7 +54,7 @@
       "properties": {
         "dimension": {
           "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$"
+          "pattern": "^[a-z][a-z0-9]*$"
         },
         "address": {
           "type": "string"
@@ -68,24 +68,5 @@
       },
       "required": ["dimension", "address"]
     }
-  },
-  "errormap": {
-    "type": "object",
-    "patternProperties": {
-      "^[a-z][a-z0-9-]*$": {
-        "type": "object",
-        "description": "dimension",
-        "patternProperties": {
-          "^.*$": {
-            "type": "array",
-            "item": {
-              "$ref": "#"
-            }
-          }
-        },
-        "additionalProperties": false
-      }
-    },
-    "additionalProperties": false
   }
 }

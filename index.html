@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-05-20">
+<meta name="dcterms.date" content="2026-05-21">
 
 <title>Data Validation Error Format</title>
 <style>
@@ -83,10 +83,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2026-05-20">
-<meta name="citation_cover_date" content="2026-05-20">
+<meta name="citation_publication_date" content="2026-05-21">
+<meta name="citation_cover_date" content="2026-05-21">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-05-20">
+<meta name="citation_online_date" content="2026-05-21">
 <meta name="citation_language" content="en">
 </head>
 
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">May 20, 2026</p>
+              <p class="date">May 21, 2026</p>
             </div>
           </div>
           
@@ -175,9 +175,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#appendices" id="toc-appendices" class="nav-link" data-scroll-target="#appendices">Appendices</a>
   <ul class="collapse">
   <li><a href="#json-schemas" id="toc-json-schemas" class="nav-link" data-scroll-target="#json-schemas">JSON Schemas</a></li>
-  <li><a href="#sec-additional-dimensions" id="toc-sec-additional-dimensions" class="nav-link" data-scroll-target="#sec-additional-dimensions">Additional dimensions</a></li>
-  <li><a href="#report-format" id="toc-report-format" class="nav-link" data-scroll-target="#report-format"><span class="header-section-number">5.3</span> Report format</a></li>
-  <li><a href="#changes" id="toc-changes" class="nav-link" data-scroll-target="#changes">Changes</a></li>
+  <li><a href="#sec-additional-dimensions" id="toc-sec-additional-dimensions" class="nav-link" data-scroll-target="#sec-additional-dimensions">Additional dimensions</a>
+  <ul class="collapse">
+  <li><a href="#fq" id="toc-fq" class="nav-link" data-scroll-target="#fq">fq</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -193,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports (except for unit testing formats such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a> and <a href="https://testanything.org/">Test Anything Protocol</a> with narrow use cases in software development).</p>
 <p>The specification of <strong>Data Validation Error Format</strong> has two goals:</p>
 <ul>
 <li>unify how validation errors are reported by different validators</li>
@@ -213,6 +214,7 @@ Caution
 <p>The format is strictly limited to <strong>errors</strong> and <strong>error positions</strong>. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include details about validation such as test cases, schema rules, and individual constraints. Errors can be linked to additional information with error types but the semantics of these types is out of the scope of this specification.</p>
 </div>
 </div>
+<p>This document is managed in a revision control system at <a href="https://github.com/gbv/validation-error-format" class="uri">https://github.com/gbv/validation-error-format</a>, including an <a href="https://github.com/gbv/validation-error-format/issues">issue tracker</a>.</p>
 <section id="overview" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.1</span> Overview</h2>
 <p><a href="#fig-validation" class="quarto-xref">Figure&nbsp;1</a> illustrates the validation process with core concepts used in this specification: a <strong>validator</strong> checks whether a <strong>document</strong> conforms to some requirements and returns a list of <strong>errors</strong> in return. Each error can refer to its location in the document via a <strong>position</strong>.</p>
@@ -441,9 +443,9 @@ Example&nbsp;4: Invalid JSON on multiple levels
 <p>An <strong>Error</strong> is a JSON object with:</p>
 <ul>
 <li><p>RECOMMENDED field <code>message</code> with an <strong>error message</strong>, being a non-empty string. Applications MAY use a default value for error messages.</p></li>
-<li><p>optional field <code>types</code> with an array of <strong>error types</strong>, each being a non-empty string. Error types can be used for grouping errors and they SHOULD be URIs. Repetitions of identical strings in the same array MUST be ignored.</p></li>
-<li><p>optional field <code>level</code> with an <strong>error level</strong>, being one of the strings <code>error</code>, <code>warning</code>, or <code>info</code>. Application MUST NOT differentiate between error level <code>error</code> and no error level.</p></li>
-<li><p>optional field <code>position</code> with a <a href="#positions"><strong>position</strong></a>. Applications MUST NOT differentiate between empty position and no position.</p></li>
+<li><p>optional field <code>types</code> with an array of <strong>error types</strong>, each being a non-empty string. Error types can be used for grouping errors. Error types SHOULD be either local identifiers with same syntax as the name of a [dimension] or URIs ([RFC 3986]).</p></li>
+<li><p>optional field <code>level</code> with an <strong>error level</strong>, being one of the strings <code>error</code>, <code>warning</code>, or <code>info</code>. Application MUST use default value <code>error</code> if this field is not given.</p></li>
+<li><p>optional field <code>position</code> with a <a href="#positions"><strong>position</strong></a>. Applications MUST NOT differentiate between no position and an empty position (an empty array or an empty JSON object).</p></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -563,7 +565,7 @@ Example&nbsp;8: A simple locator map indicating the position line 7, character 4
 </figcaption>
 </figure>
 </div>
-<p>A locator map is equivalent to an array of locators with key and value of the JSON object entries mapped to field <code>dimension</code> and <code>address</code> of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.</p>
+<p>A locator map can be transformed to an equivalent array of <a href="#locators">locators</a> with key and value of the JSON object entries mapped to field <code>dimension</code> and <code>address</code> of each locator. An array of locators can be reduced to a locator map by dropping all nested errors and selecting only the first locator of each locator format.</p>
 <div id="lst-locator-map" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -584,12 +586,12 @@ Example&nbsp;9: Equivalent array of locators
 <h1 data-number="4"><span class="header-section-number">4</span> Dimensions</h1>
 <p>A <strong>dimension</strong> is a defined method to address elements of a document. Each dimension has:</p>
 <ul>
-<li><p>a unique <strong>name</strong>, being a string that start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters, digits <code>0</code> to <code>9</code> and/or <code>-</code>.</p></li>
+<li><p>a unique <strong>name</strong>, being a string that start with lowercase letter <code>a</code> to <code>z</code>, optionally followed by a sequence of lowercase letters and digits <code>0</code> to <code>9</code>.</p></li>
 <li><p>a <strong>locator format</strong>, being a formal language of Unicode strings to encode references to parts of a document. The sets of strings of the language are called <strong>addresses</strong>.</p></li>
 <li><p>a <strong>document model</strong> matching the <strong>locator format</strong>.</p></li>
 </ul>
 <p>Some dimensions imply a document model on addressed elements. For instance a <a href="#line-number">line number</a> addresses a character string and a <a href="#json-pointer">JSON Pointer</a> addresses a JSON value.</p>
-<p>Applications SHOULD support the following dimensions:</p>
+<p>Applications SHOULD support the following dimensions. The <a href="#sec-additional-dimensions">appendix</a> contains a non-normative note on additional dimensions not fully specified yet.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -669,7 +671,6 @@ Example&nbsp;9: Equivalent array of locators
 </tbody>
 </table>
 <p>The <strong>identifier</strong> locator format with name <code>id</code> and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refer to the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.</p>
-<p>See <a href="#sec-additional-dimensions">appendix</a> for more dimensions to be discussed.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -745,7 +746,7 @@ Note
 <section id="table-selection" class="level4">
 <h4 class="anchored" data-anchor-id="table-selection">Table selection</h4>
 <p>The <strong>table selection</strong> locator format with name <code>rfc7111</code> is used to reference a selection of connected cells in tabular data. It can reference <a href="#cell-references">cell references</a>, <a href="#cell-ranges">cell ranges</a>, full rows and full columns. The locator format follows the following grammar in ABNF syntax (<a href="https://tools.ietf.org/html/rfc5234">RFC 5234</a>) with case-sensitive string support (<a href="https://tools.ietf.org/html/rfc7405">RFC 7405</a>):</p>
-<pre><code>TableSelection = Cells / Rows / Columns
+<pre class="abnf"><code>TableSelection = Cells / Rows / Columns
 Cells          = %s"cell=" CellPosition [ "-" CellPosition ]
 Rows           = %s"row=" RowPosition [ "-" RowPosition ]
 Columns        = %s"col=" ColPosition [ "-" ColPosition ]
@@ -781,7 +782,7 @@ Note
 <section id="xml-element-locator" class="level4">
 <h4 class="anchored" data-anchor-id="xml-element-locator">XML Element Locator</h4>
 <p>The <strong>XML Element Locator</strong> format follows the following grammar in ABNF syntax (<a href="https://tools.ietf.org/html/rfc5234">RFC 5234</a>) with rule <a href="https://www.w3.org/TR/REC-xml-names/#NT-QName">QName</a> defined in Namespaces in XML 1.0 specification:</p>
-<pre><code>XMLElementLocator = "/" / 1*( "/" NodeTest )
+<pre class="abnf"><code>XMLElementLocator = "/" / 1*( "/" NodeTest )
 NodeTest          = [ "@" ] QName [ "[ Position "]" ]
 Position          = %31-%39 *DIGIT
 DIGIT             = %x30-39  ; 0...9</code></pre>
@@ -823,7 +824,6 @@ Note
 <li><p>J. Clark and S. DeRose: <em>XML Path Language (XPath) Version 1.0.</em> W3C Recommendation, November 1999. <a href="https://www.w3.org/TR/xpath-10/" class="uri">https://www.w3.org/TR/xpath-10/</a></p></li>
 <li><p>M. Hausenblas, E. Wilde, and J. Tennison: <em>URI Fragment Identifiers for the text/csv Media Type.</em> RFC 7111, January 2014. <a href="https://tools.ietf.org/html/rfc7111" class="uri">https://tools.ietf.org/html/rfc7111</a></p></li>
 <li><p>A. Wright, H. Andrews, B. Hutton, and G. Dennis: <em>JSON Schema Draft 2020-12</em>. June 2022. <a href="https://json-schema.org/draft/2020-12/json-schema-core.html" class="uri">https://json-schema.org/draft/2020-12/json-schema-core.html</a></p></li>
-<li><p><a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a> defines an extensible error format with fields <code>type</code> (<code>types</code> in this format), <code>status</code>, <code>title</code>, <code>detail</code> (<code>message</code> in this format), <code>instance</code> (<code>position</code> but as one URI). The example given in the specification is similar to this format.</p></li>
 </ul>
 </section>
 </section>
@@ -869,7 +869,7 @@ Note
 <span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"locator map"</span><span class="fu">,</span></span>
 <span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
 <span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"^[a-z][a-z0-9-]*$"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"^[a-z][a-z0-9]*$"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
 <span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
 <span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
@@ -888,7 +888,7 @@ Note
 <span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"dimension"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"^[a-z][a-z0-9-]*$"</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"^[a-z][a-z0-9]*$"</span></span>
 <span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
 <span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"address"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
@@ -902,95 +902,32 @@ Note
 <span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
 <span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"dimension"</span><span class="ot">,</span> <span class="st">"address"</span><span class="ot">]</span></span>
 <span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errormap"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"^[a-z][a-z0-9-]*$"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"dimension"</span><span class="fu">,</span></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"^.*$"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"item"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#"</span></span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"additionalProperties"</span><span class="fu">:</span> <span class="kw">false</span></span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"additionalProperties"</span><span class="fu">:</span> <span class="kw">false</span></span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="sec-additional-dimensions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-additional-dimensions">Additional dimensions</h2>
-<p>The following locator formats or standards are yet to be evaluated for its use as dimension:</p>
-<div id="lst-fq" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
-<figure class="quarto-float quarto-float-lst figure">
-<div aria-describedby="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Timestamp must not be in the future!"</span><span class="fu">,</span></span>
+<p>The following locator formats or standards are being considered for addition as <a href="#dimensions">dimensions</a>:</p>
+<section id="fq" class="level3">
+<h3 class="anchored" data-anchor-id="fq">fq</h3>
+<p>The <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> tool supports analysis of many <a href="https://github.com/wader/fq/blob/master/doc/formats.md">binary formats</a> so it could be used to locate elements of binary data models. The locator value would be the format, followed by a colon, followed by a path expression:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode .json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Timestamp of .gz archive must not be in the future"</span><span class="fu">,</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"gzip:.members[0].mtime"</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-fq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Example&nbsp;10: Error using fq to locate the internal timestamp of a file in a .gz archive
-</figcaption>
-</figure>
-</div>
-<ul>
-<li><a href="https://tools.ietf.org/html/rfc5147">RFC 5147</a> is not included because it mixes lines and characters, so the document model of the referenced element is not obvious. The handling of <a href="https://datatracker.ietf.org/doc/html/rfc5147#section-4.1">line endings in RFC 5147</a> also depends on context.</li>
-<li><code>fq</code> for all binary formats supported by <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> (see <a href="#lst-fq" class="quarto-xref">Example&nbsp;10</a>)</li>
-<li><code>RangeAddress</code> of <a href="https://docs.oasis-open.org/office/OpenDocument/v1.4/OpenDocument-v1.4-part4-formula.html#References">References in OpenDocument</a></li>
-<li>IIIF (section in an image)</li>
-<li>RDF graphs (every subset of an RDF graph is another RDF graph)</li>
-<li>SHACL <a href="https://www.w3.org/TR/shacl/#focusNodes">focus node</a> and <a href="https://www.w3.org/TR/shacl/#results-path">result path</a> serialized in a subset of RDF Turtle</li>
-<li>Subset of SQL SELECT statements</li>
-<li>PDF highlighted text annotations</li>
-<li>Some variant of <a href="https://pg-format.github.io/">Property Graph Exchange Format (PG)</a> and/or CYPHER Query for property graphs</li>
-<li><a href="https://format.gbv.de/query/picapath">PICA Path</a></li>
-<li><a href="https://format.gbv.de/query/marcspec">MARCspec</a></li>
-<li>…</li>
-</ul>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Image width of PNG file is too large"</span><span class="fu">,</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"png:.chunks[0].width"</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="report-format" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="report-format"><span class="header-section-number">5.3</span> Report format</h2>
-<p>The validation error format could be extened with a <strong>validation report format</strong> that wraps and/or links to validation errors with metadata such as:</p>
-<ul>
-<li>timestamp when validation has <code>started</code> and <code>finished</code> or <code>aborted</code></li>
-<li>number or processed documents</li>
-<li>statistics such as number of errors</li>
-</ul>
-<p>Errors may also be indexed by dimension and address, e.g.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errormap"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"line"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"7"</span><span class="fu">:</span> <span class="ot">[</span> <span class="er">...errors</span> <span class="er">in</span> <span class="er">line</span> <span class="dv">7</span> <span class="ot">]</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="changes" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="changes">Changes</h2>
-<p>This document is managed in a revision control system at <a href="https://github.com/gbv/validation-error-format" class="uri">https://github.com/gbv/validation-error-format</a>, including an <a href="https://github.com/gbv/validation-error-format/issues">issue tracker</a>.</p>
-<ul>
-<li><p><strong>Version 0.1.0</strong></p>
-<p>Work in progress.</p></li>
-</ul>
 </section>
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>A notable exception are formats from software development used in unit testing such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a> and <a href="https://testanything.org/">Test Anything Protocol</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main>
+</main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

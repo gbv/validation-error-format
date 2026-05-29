@@ -500,4 +500,18 @@ The [fq] tool supports analysis of many [binary formats](https://github.com/wade
 
 [fq]: https://github.com/wader/fq?tab=readme-ov-file#fq
 
+### rdfterm
 
+The dimension with name `rdfterm` follows locator format `object` of [RDF 1.1. N-Triples Grammar](https://www.w3.org/TR/n-triples/#n-triples-grammar) to locate an RDF term in a RDF graph, both defined in as defined in [RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/).
+
+The locator format can also be used to locate the focus node of a [SHACL Validation Report](https://www.w3.org/TR/shacl/#validation-report).
+
+### turtle
+
+The dimension with name `turtle` follows RDF-Turtle syntax to locate a set of RDF Triples in a RDF graph.
+
+### triplepattern
+
+The dimension with name `triplepattern` follows of locator format subset of Property Path Pattern from [SPARQL 1.1 Query Language](https://www.w3.org/TR/sparql11-query/) to locate a set of RDF Triples in a RDF graph.
+
+The locator format can also be used to reference the focus node, path and value of a [SHACL Validation Report](https://www.w3.org/TR/shacl/#validation-report).

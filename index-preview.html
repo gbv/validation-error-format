@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
     <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.9.37">
+    <meta name="generator" content="quarto-1.9.38">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <meta name="dcterms.date" content="2026-05-21">
+    <meta name="dcterms.date" content="2026-05-29">
 
     <title>Data Validation Error Format</title>
     <style>
@@ -158,10 +158,10 @@
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-0f91f55e768280f2875a475a35161471.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-cf35b1e8b68dd0c452cd246239eb2ea9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2fd73ff45e19b77904b3a30a1ee3e451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-0e0ce6b95999be0a2f18a5f60a831a20.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
      <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">  
@@ -170,10 +170,10 @@
 <meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2026-05-21">
-<meta name="citation_cover_date" content="2026-05-21">
+<meta name="citation_publication_date" content="2026-05-29">
+<meta name="citation_cover_date" content="2026-05-29">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-05-21">
+<meta name="citation_online_date" content="2026-05-29">
 <meta name="citation_language" content="en">
 </head>
 
@@ -216,7 +216,7 @@
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">May 21, 2026</p>
+              <p class="date">May 29, 2026</p>
             </div>
           </div>
           
@@ -257,9 +257,25 @@
   </ul></li>
   <li><a href="#sec-dimensions" id="toc-sec-dimensions" class="nav-link" data-scroll-target="#sec-dimensions"><span class="header-section-number">4</span> Dimensions</a>
   <ul class="collapse">
-  <li><a href="#sequential-document-models" id="toc-sequential-document-models" class="nav-link" data-scroll-target="#sequential-document-models">Sequential document models</a></li>
-  <li><a href="#tabular-document-models" id="toc-tabular-document-models" class="nav-link" data-scroll-target="#tabular-document-models">Tabular document models</a></li>
-  <li><a href="#hierarchical-document-models" id="toc-hierarchical-document-models" class="nav-link" data-scroll-target="#hierarchical-document-models">Hierarchical document models</a></li>
+  <li><a href="#sequential-document-models" id="toc-sequential-document-models" class="nav-link" data-scroll-target="#sequential-document-models"><span class="header-section-number">4.1</span> Sequential document models</a>
+  <ul class="collapse">
+  <li><a href="#offset-number" id="toc-offset-number" class="nav-link" data-scroll-target="#offset-number">Offset number</a></li>
+  <li><a href="#character-number" id="toc-character-number" class="nav-link" data-scroll-target="#character-number">Character number</a></li>
+  <li><a href="#line-number" id="toc-line-number" class="nav-link" data-scroll-target="#line-number">Line number</a></li>
+  <li><a href="#line-and-column" id="toc-line-and-column" class="nav-link" data-scroll-target="#line-and-column">Line and Column</a></li>
+  </ul></li>
+  <li><a href="#tabular-document-models" id="toc-tabular-document-models" class="nav-link" data-scroll-target="#tabular-document-models"><span class="header-section-number">4.2</span> Tabular document models</a>
+  <ul class="collapse">
+  <li><a href="#cell-reference" id="toc-cell-reference" class="nav-link" data-scroll-target="#cell-reference">Cell reference</a></li>
+  <li><a href="#cell-range" id="toc-cell-range" class="nav-link" data-scroll-target="#cell-range">Cell range</a></li>
+  <li><a href="#table-selection" id="toc-table-selection" class="nav-link" data-scroll-target="#table-selection">Table selection</a></li>
+  </ul></li>
+  <li><a href="#hierarchical-document-models" id="toc-hierarchical-document-models" class="nav-link" data-scroll-target="#hierarchical-document-models"><span class="header-section-number">4.3</span> Hierarchical document models</a>
+  <ul class="collapse">
+  <li><a href="#file-path" id="toc-file-path" class="nav-link" data-scroll-target="#file-path">File path</a></li>
+  <li><a href="#json-pointer" id="toc-json-pointer" class="nav-link" data-scroll-target="#json-pointer">JSON Pointer</a></li>
+  <li><a href="#xml-element-locator" id="toc-xml-element-locator" class="nav-link" data-scroll-target="#xml-element-locator">XML Element Locator</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a>
   <ul class="collapse">
@@ -272,6 +288,9 @@
   <li><a href="#sec-additional-dimensions" id="toc-sec-additional-dimensions" class="nav-link" data-scroll-target="#sec-additional-dimensions">Additional dimensions</a>
   <ul class="collapse">
   <li><a href="#fq" id="toc-fq" class="nav-link" data-scroll-target="#fq">fq</a></li>
+  <li><a href="#rdfterm" id="toc-rdfterm" class="nav-link" data-scroll-target="#rdfterm">rdfterm</a></li>
+  <li><a href="#turtle" id="toc-turtle" class="nav-link" data-scroll-target="#turtle">turtle</a></li>
+  <li><a href="#triplepattern" id="toc-triplepattern" class="nav-link" data-scroll-target="#triplepattern">triplepattern</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -283,11 +302,11 @@
 
        <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports (except for unit testing formats such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a> and <a href="https://testanything.org/">Test Anything Protocol</a> with narrow use cases in software development).</p>
+<p>Data validation is a crucial part of management of data quality and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. Existing standards for error reporting such as such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a> and <a href="https://testanything.org/">Test Anything Protocol</a> have narrow use cases in software development.</p>
 <p>The specification of <strong>Data Validation Error Format</strong> has two goals:</p>
 <ul>
 <li>unify how validation errors are reported by different validators</li>
-<li>address positions of errors in validated documents</li>
+<li>address positions of errors in validated documents, independent from document formats</li>
 </ul>
 <p>Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
@@ -345,7 +364,7 @@ Note
 <p>Eventually all documents are given as digital objects, encoded as sequence of bytes. Encodings using a sequence of characters are also called textual data formats, in contrast to binary data formats.</p>
 </div>
 </div>
-<p>An error position is given in form of one or more <strong>locators</strong>, each having a <strong>dimension</strong> and an <strong>address</strong>. Each dimension refers to a <strong>locator format</strong> for a set of document models. For instance <a href="#json-pointer">JSON Pointer</a> refers to JSON, character and line numbers refer to character strings with defined line breaks, and offsets refer to sequences of elements (<a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>). Other examples of locator formats include <a href="https://www.w3.org/TR/xpath/">XPath</a> for XML, and row/column for tabular data.</p>
+<p>An <a href="#sec-positions">error position</a> is given in form of one or more <strong>locators</strong>, each having a <a href="#sec-dimensions"><strong>dimension</strong></a> and an <strong>address</strong>. Each dimension refers to a <strong>locator format</strong> for a set of document models. For instance <a href="#json-pointer">JSON Pointer</a> refers to JSON, character and line numbers refer to character strings with defined line breaks, and offsets refer to sequences of elements (<a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>). Other examples of locator formats include <a href="https://www.w3.org/TR/xpath/">XPath</a> for XML, and row/column for tabular data.</p>
 <p>Locators can also contain <strong>nested errors</strong> to address a more specific position within another position and to support error positions in nested documents such as archive files.</p>
 <div id="fig-encodings-and-locators" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -395,7 +414,7 @@ Figure&nbsp;2: Example of encodings and locator formats
 <div aria-describedby="lst-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Expected string, got number at element /åå"</span><span class="fu">,</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"jsonpointer"</span><span class="fu">:</span> <span class="st">"/åå"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="dv">1</span> <span class="fu">}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"jsonpointer"</span><span class="fu">:</span> <span class="st">"/åå"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"1"</span> <span class="fu">}</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-lst" id="lst-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -415,7 +434,7 @@ Example&nbsp;1: Error in a JSON document
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Expected string, got number at element /åå"</span><span class="fu">,</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"jsonpointer"</span><span class="fu">:</span> <span class="st">"/åå"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"jsonpointer"</span><span class="fu">:</span> <span class="st">"/åå"</span><span class="fu">,</span> <span class="dt">"char"</span><span class="fu">:</span> <span class="st">"7"</span><span class="fu">,</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"1"</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
@@ -522,7 +541,7 @@ Example&nbsp;4: Invalid JSON on multiple levels
 <p>Specific support of Data Validation Error Format by an application depends on:</p>
 <ol type="1">
 <li>the set of supported <a href="#sec-dimensions"><strong>dimensions</strong></a>, and</li>
-<li>whether <a href="#positions"><strong>positions</strong></a> are supported in full (<a href="#locators"><strong>locators</strong></a>) and condense for(<a href="#locator-map"><strong>locator maps</strong></a>) or only the latter.</li>
+<li>whether <a href="#positions"><strong>positions</strong></a> are supported in both full (<a href="#locators"><strong>locators</strong></a>) and condense form (<a href="#locator-map"><strong>locator maps</strong></a>), or only the latter.</li>
 </ol>
 <p>Both MUST be documented by applications.</p>
 </section>
@@ -531,8 +550,8 @@ Example&nbsp;4: Invalid JSON on multiple levels
 <h1 data-number="2"><span class="header-section-number">2</span> Errors</h1>
 <p>An <strong>Error</strong> is a JSON object with:</p>
 <ul>
-<li><p>RECOMMENDED field <code>message</code> with an <strong>error message</strong>, being a non-empty string. Applications MAY use a default value for error messages.</p></li>
-<li><p>optional field <code>types</code> with an array of <strong>error types</strong>, each being a non-empty string. Error types can be used for grouping errors. Error types SHOULD be either local identifiers with same syntax as the name of a [dimension] or URIs ([RFC 3986]).</p></li>
+<li><p>optional (but RECOMMENDED) field <code>message</code> with an <strong>error message</strong>, being a non-empty string. Applications MAY use a default value for error messages.</p></li>
+<li><p>optional field <code>types</code> with an array of <strong>error types</strong>, each being a non-empty string. Error types can be used for grouping errors or to reference a cause or constraint being violated with the error. Error types SHOULD be either URIs (<a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>) or local identifiers with same syntax as the name of a <a href="#dimensions">dimension</a> or</p></li>
 <li><p>optional field <code>level</code> with an <strong>error level</strong>, being one of the strings <code>error</code>, <code>warning</code>, or <code>info</code>. Application MUST use default value <code>error</code> if this field is not given.</p></li>
 <li><p>optional field <code>position</code> with a <a href="#positions"><strong>position</strong></a>. Applications MUST NOT differentiate between no position and an empty position (an empty array or an empty JSON object).</p></li>
 </ul>
@@ -643,7 +662,7 @@ Example&nbsp;7: An error with position given in two forms, one with a nested err
 </section>
 <section id="locator-maps" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="locator-maps"><span class="header-section-number">3.2</span> Locator maps</h2>
-<p>A <strong>locator map</strong> is a JSON object that maps names of <a href="#sec-dimensions"><strong>dimensions</strong></a> to <strong>addresses</strong>.</p>
+<p>A <strong>locator map</strong> is a JSON object that maps names of <a href="#sec-dimensions"><strong>dimensions</strong></a> to <a href="#sec-dimensions"><strong>addresses</strong></a>.</p>
 <div id="lst-locator-map" class="json listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <div aria-describedby="lst-locator-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -773,22 +792,22 @@ Note
 <p>Dimensions are a subset of query languages. A dimension value locates to <em>one</em> element from a document. A query language (e.g.&nbsp;JSONPath, full XPath…) can locate a set of elements.</p>
 </div>
 </div>
-<section id="sequential-document-models" class="level3">
-<h3 class="anchored" data-anchor-id="sequential-document-models">Sequential document models</h3>
-<section id="offset-number" class="level4">
-<h4 class="anchored" data-anchor-id="offset-number">Offset number</h4>
+<section id="sequential-document-models" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sequential-document-models"><span class="header-section-number">4.1</span> Sequential document models</h2>
+<section id="offset-number" class="level3">
+<h3 class="anchored" data-anchor-id="offset-number">Offset number</h3>
 <p>The <strong>offset number</strong> locator format with name <code>number</code> is used to reference an element in a sequence of elements. The locator value is non-negative integer encoded as string without leading zeroes. The first element has number zero (locator value <code>0</code>).</p>
 </section>
-<section id="character-number" class="level4">
-<h4 class="anchored" data-anchor-id="character-number">Character number</h4>
+<section id="character-number" class="level3">
+<h3 class="anchored" data-anchor-id="character-number">Character number</h3>
 <p>The <strong>character number</strong> locator format with name <code>char</code> is used to reference a character in a sequence of characters from a character set. The locator value is a positive integer encoded as string without leading zeroes. The first character has number one (locator value <code>1</code>).</p>
 <p>In Unicode strings, this locator format refers to code points instead of visual characters.</p>
 <!--
 Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters.
 -->
 </section>
-<section id="line-number" class="level4">
-<h4 class="anchored" data-anchor-id="line-number">Line number</h4>
+<section id="line-number" class="level3">
+<h3 class="anchored" data-anchor-id="line-number">Line number</h3>
 <p>The <strong>line number</strong> locator format with name <code>line</code> is used to reference a line in a sequence of lines, each being a character string. The locator value is a positive integer encoded as string without leading zeroes. The first line has number one (locator value <code>1</code>).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -804,13 +823,13 @@ Note
 </div>
 </div>
 </section>
-<section id="line-and-column" class="level4">
-<h4 class="anchored" data-anchor-id="line-and-column">Line and Column</h4>
+<section id="line-and-column" class="level3">
+<h3 class="anchored" data-anchor-id="line-and-column">Line and Column</h3>
 <p>The <strong>line and column</strong> locator format with name <code>linecol</code> is used to reference a character in a sequence of character strings. The locator value consists of a <a href="#line-number">line number</a> and a <a href="#character-number">character number</a> within the line, separated by colon (<code>:</code>).</p>
 </section>
 </section>
-<section id="tabular-document-models" class="level3">
-<h3 class="anchored" data-anchor-id="tabular-document-models">Tabular document models</h3>
+<section id="tabular-document-models" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="tabular-document-models"><span class="header-section-number">4.2</span> Tabular document models</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -821,19 +840,24 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Tabular data is known from spreadsheet software and CSV files. The tabular document model does <em>not</em> include table headers.</p>
+<p>Tabular data is known from spreadsheet software and CSV files. This document model does <em>not</em> include table headers! A table with header column and unique column names can better be mapped to a <a href="#hierarchical-document-models">hierarchical model</a> or modelled as sequence of indexed sets. For instance an error in column <code>title</code> of the third row of a table (not counting the header row) could have the following <a href="#locators">locator</a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"offset"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"3"</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"id"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"title"</span> <span class="fu">}</span> <span class="ot">]</span> <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<section id="cell-reference" class="level4">
-<h4 class="anchored" data-anchor-id="cell-reference">Cell reference</h4>
+<section id="cell-reference" class="level3">
+<h3 class="anchored" data-anchor-id="cell-reference">Cell reference</h3>
 <p>The <strong>cell reference</strong> locator format with name <code>cell</code> is used to reference an individual cell in tabular data. The locator value consists of a pair of column and row. Columns are given in hexavigesimal system (A=1, B=2…, Z=26, AA=27, AB=28…) and rows are given by numbers, starting from 1.</p>
 </section>
-<section id="cell-range" class="level4">
-<h4 class="anchored" data-anchor-id="cell-range">Cell range</h4>
+<section id="cell-range" class="level3">
+<h3 class="anchored" data-anchor-id="cell-range">Cell range</h3>
 <p>The <strong>cell range</strong> locator format with name <code>cells</code> is used to reference a selection of connected cells in tabular data. The locator value consists of a cell reference, optionally followed by colon (<code>:</code>) and another cell reference.</p>
 </section>
-<section id="table-selection" class="level4">
-<h4 class="anchored" data-anchor-id="table-selection">Table selection</h4>
+<section id="table-selection" class="level3">
+<h3 class="anchored" data-anchor-id="table-selection">Table selection</h3>
 <p>The <strong>table selection</strong> locator format with name <code>rfc7111</code> is used to reference a selection of connected cells in tabular data. It can reference <a href="#cell-references">cell references</a>, <a href="#cell-ranges">cell ranges</a>, full rows and full columns. The locator format follows the following grammar in ABNF syntax (<a href="https://tools.ietf.org/html/rfc5234">RFC 5234</a>) with case-sensitive string support (<a href="https://tools.ietf.org/html/rfc7405">RFC 7405</a>):</p>
 <pre class="abnf"><code>TableSelection = Cells / Rows / Columns
 Cells          = %s"cell=" CellPosition [ "-" CellPosition ]
@@ -858,18 +882,18 @@ Note
 </div>
 </section>
 </section>
-<section id="hierarchical-document-models" class="level3">
-<h3 class="anchored" data-anchor-id="hierarchical-document-models">Hierarchical document models</h3>
-<section id="file-path" class="level4">
-<h4 class="anchored" data-anchor-id="file-path">File path</h4>
+<section id="hierarchical-document-models" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="hierarchical-document-models"><span class="header-section-number">4.3</span> Hierarchical document models</h2>
+<section id="file-path" class="level3">
+<h3 class="anchored" data-anchor-id="file-path">File path</h3>
 <p>The <strong>file path</strong> locator format with name <code>file</code> is used to reference a file or directory in a directory tree. The locator value must be a POSIX path, being a string optionally beginning with a slash (<code>/</code>), followed by zero or more file names, separated by slash. A file name is a non-empty sequence of Unicode code points excluding the slash (<code>U+002F</code>) and the null byte (<code>U+0000</code>).</p>
 </section>
-<section id="json-pointer" class="level4">
-<h4 class="anchored" data-anchor-id="json-pointer">JSON Pointer</h4>
+<section id="json-pointer" class="level3">
+<h3 class="anchored" data-anchor-id="json-pointer">JSON Pointer</h3>
 <p>The <strong>JSON Pointer</strong> locator format with name <code>jsonpointer</code> is used to reference a JSON value within a JSON value. The locator value and its semantics are defined in <a href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a>.</p>
 </section>
-<section id="xml-element-locator" class="level4">
-<h4 class="anchored" data-anchor-id="xml-element-locator">XML Element Locator</h4>
+<section id="xml-element-locator" class="level3">
+<h3 class="anchored" data-anchor-id="xml-element-locator">XML Element Locator</h3>
 <p>The <strong>XML Element Locator</strong> format follows the following grammar in ABNF syntax (<a href="https://tools.ietf.org/html/rfc5234">RFC 5234</a>) with rule <a href="https://www.w3.org/TR/REC-xml-names/#NT-QName">QName</a> defined in Namespaces in XML 1.0 specification:</p>
 <pre class="abnf"><code>XMLElementLocator = "/" / 1*( "/" NodeTest )
 NodeTest          = [ "@" ] QName [ "[ Position "]" ]
@@ -921,78 +945,78 @@ Note
 <section id="json-schemas" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="json-schemas">JSON Schemas</h2>
 <p>Error records can be validated with the following non-normative, non-extensive JSON Schema (<a href="schema.json"><code>schema.json</code></a> in the specification repository):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$schema"</span><span class="fu">:</span> <span class="st">"http://json-schema.org/draft-07/schema#"</span><span class="fu">,</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error message"</span><span class="fu">,</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"identifier of an error type"</span><span class="fu">,</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> </span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error level"</span><span class="fu">,</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"enum"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"error"</span><span class="ot">,</span> <span class="st">"warning"</span><span class="ot">,</span> <span class="st">"info"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"default"</span><span class="fu">:</span> <span class="st">"error"</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error position"</span><span class="fu">,</span></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"anyOf"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"locators"</span><span class="fu">,</span></span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/locator"</span> </span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"locator map"</span><span class="fu">,</span></span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"^[a-z][a-z0-9]*$"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"additionalProperties"</span><span class="fu">:</span> <span class="kw">false</span></span>
-<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error instance identifier"</span><span class="fu">,</span></span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$defs"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"locator"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"dimension"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"^[a-z][a-z0-9]*$"</span></span>
-<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"address"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"errors"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#"</span></span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"dimension"</span><span class="ot">,</span> <span class="st">"address"</span><span class="ot">]</span></span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$schema"</span><span class="fu">:</span> <span class="st">"http://json-schema.org/draft-07/schema#"</span><span class="fu">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error message"</span><span class="fu">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"types"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"identifier of an error type"</span><span class="fu">,</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"minLength"</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"level"</span><span class="fu">:</span> <span class="fu">{</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error level"</span><span class="fu">,</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"enum"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"error"</span><span class="ot">,</span> <span class="st">"warning"</span><span class="ot">,</span> <span class="st">"info"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"default"</span><span class="fu">:</span> <span class="st">"error"</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error position"</span><span class="fu">,</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"anyOf"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"locators"</span><span class="fu">,</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#/$defs/locator"</span> </span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"locator map"</span><span class="fu">,</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"patternProperties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"^[a-z][a-z0-9]*$"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"additionalProperties"</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"error instance identifier"</span><span class="fu">,</span></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"$defs"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"locator"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"dimension"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span><span class="fu">,</span></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"^[a-z][a-z0-9]*$"</span></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"address"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"errors"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"array"</span><span class="fu">,</span></span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"items"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"$ref"</span><span class="fu">:</span> <span class="st">"#"</span></span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"dimension"</span><span class="ot">,</span> <span class="st">"address"</span><span class="ot">]</span></span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="sec-additional-dimensions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-additional-dimensions">Additional dimensions</h2>
@@ -1000,18 +1024,32 @@ Note
 <section id="fq" class="level3">
 <h3 class="anchored" data-anchor-id="fq">fq</h3>
 <p>The <a href="https://github.com/wader/fq?tab=readme-ov-file#fq">fq</a> tool supports analysis of many <a href="https://github.com/wader/fq/blob/master/doc/formats.md">binary formats</a> so it could be used to locate elements of binary data models. The locator value would be the format, followed by a colon, followed by a path expression:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode .json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Timestamp of .gz archive must not be in the future"</span><span class="fu">,</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"gzip:.members[0].mtime"</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Image width of PNG file is too large"</span><span class="fu">,</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"png:.chunks[0].width"</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode .json code-with-copy"><code class="sourceCode json"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Timestamp of .gz archive must not be in the future"</span><span class="fu">,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"gzip:.members[0].mtime"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Image width of PNG file is too large"</span><span class="fu">,</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"png:.chunks[0].width"</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="rdfterm" class="level3">
+<h3 class="anchored" data-anchor-id="rdfterm">rdfterm</h3>
+<p>The dimension with name <code>rdfterm</code> follows locator format <code>object</code> of <a href="https://www.w3.org/TR/n-triples/#n-triples-grammar">RDF 1.1. N-Triples Grammar</a> to locate an RDF term in a RDF graph, both defined in as defined in <a href="https://www.w3.org/TR/rdf11-concepts/">RDF 1.1 Concepts and Abstract Syntax</a>.</p>
+<p>The locator format can also be used to locate the focus node of a <a href="https://www.w3.org/TR/shacl/#validation-report">SHACL Validation Report</a>.</p>
+</section>
+<section id="turtle" class="level3">
+<h3 class="anchored" data-anchor-id="turtle">turtle</h3>
+<p>The dimension with name <code>turtle</code> follows RDF-Turtle syntax to locate a set of RDF Triples in a RDF graph.</p>
+</section>
+<section id="triplepattern" class="level3">
+<h3 class="anchored" data-anchor-id="triplepattern">triplepattern</h3>
+<p>The dimension with name <code>triplepattern</code> follows of locator format subset of Property Path Pattern from <a href="https://www.w3.org/TR/sparql11-query/">SPARQL 1.1 Query Language</a> to locate a set of RDF Triples in a RDF graph.</p>
+<p>The locator format can also be used to reference the focus node, path and value of a <a href="https://www.w3.org/TR/shacl/#validation-report">SHACL Validation Report</a>.</p>
 </section>
 </section>
 </section>

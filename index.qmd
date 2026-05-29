@@ -13,12 +13,12 @@ abstract: |
 
 # Introduction
 
-Data validation is a crucial part of management of data qualitiy and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. No common standard exist to express error reports (except for unit testing formats such as [JUnit XML](https://github.com/testmoapp/junitxml) and [Test Anything Protocol](https://testanything.org/) with narrow use cases in software development).
+Data validation is a crucial part of management of data quality and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. Existing standards for error reporting such as such as [JUnit XML](https://github.com/testmoapp/junitxml) and [Test Anything Protocol](https://testanything.org/) have narrow use cases in software development.
 
 The specification of **Data Validation Error Format** has two goals:
 
 - unify how validation errors are reported by different validators
-- address positions of errors in validated documents
+- address positions of errors in validated documents, independent from document formats
 
 Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.
 
@@ -49,7 +49,7 @@ Every document conforms to a **document model**. For instance JSON documents con
 Eventually all documents are given as digital objects, encoded as sequence of bytes. Encodings using a sequence of characters are also called textual data formats, in contrast to binary data formats.
 :::
 
-An error position is given in form of one or more **locators**, each having a **dimension** and an **address**. Each dimension refers to a **locator format** for a set of document models. For instance [JSON Pointer] refers to JSON, character and line numbers refer to character strings with defined line breaks, and offsets refer to sequences of elements (@fig-encodings-and-locators). Other examples of locator formats include [XPath] for XML, and row/column for tabular data.
+An [error position](#sec-positions) is given in form of one or more **locators**, each having a [**dimension**](#sec-dimensions) and an **address**. Each dimension refers to a **locator format** for a set of document models. For instance [JSON Pointer] refers to JSON, character and line numbers refer to character strings with defined line breaks, and offsets refer to sequences of elements (@fig-encodings-and-locators). Other examples of locator formats include [XPath] for XML, and row/column for tabular data.
 
 Locators can also contain **nested errors** to address a more specific position within another position and to support error positions in nested documents such as archive files.
 
@@ -86,7 +86,7 @@ Documents can be invalid on many levels. For example the string `{"åå":5}` is 
 ```{#lst-1 .json lst-cap="Error in a JSON document"}
 {
   "message": "Expected string, got number at element /åå",
-  "position": { "jsonpointer": "/åå", "char": "7", "line": 1 }
+  "position": { "jsonpointer": "/åå", "char": "7", "line": "1" }
 }
 ```
 
@@ -101,7 +101,7 @@ The string could also be part of a larger, newline-delimited JSON document. In t
     "errors": [ {
       "message": "Expected string, got number at element /åå",
       "position": {
-        "jsonpointer": "/åå", "char": "7", "line": 1
+        "jsonpointer": "/åå", "char": "7", "line": "1"
       }
     } ]
   } ]
@@ -158,7 +158,7 @@ Only section @sec-errors to @sec-dimensions, excluding examples and notes, and t
 Specific support of Data Validation Error Format by an application depends on:
 
 1. the set of supported [**dimensions**](#sec-dimensions), and
-2. whether [**positions**](#positions) are supported in full ([**locators**](#locators)) and condense for([**locator maps**](#locator-map)) or only the latter.
+2. whether [**positions**](#positions) are supported in both full ([**locators**](#locators)) and condense form ([**locator maps**](#locator-map)), or only the latter.
 
 Both MUST be documented by applications.
 
@@ -166,12 +166,13 @@ Both MUST be documented by applications.
 
 An **Error** is a JSON object with: 
 
-- RECOMMENDED field `message` with an **error message**, being a non-empty string.
+- optional (but RECOMMENDED) field `message` with an **error message**, being a non-empty string.
   Applications MAY use a default value for error messages.
 
 - optional field `types` with an array of **error types**, each being a non-empty string.
-  Error types can be used for grouping errors. Error types SHOULD be either local identifiers
-  with same syntax as the name of a [dimension] or URIs ([RFC 3986]). 
+  Error types can be used for grouping errors or to reference a cause or constraint being violated
+  with the error. Error types SHOULD be either URIs ([RFC 3986]) or local identifiers
+  with same syntax as the name of a [dimension](#dimensions) or 
 
 - optional field `level` with an **error level**, being one of the strings `error`, `warning`, or `info`.
   Application MUST use default value `error` if this field is not given.
@@ -257,7 +258,7 @@ Nested errors allow to reference locations within nested documents (@lst-nested-
 
 ## Locator maps
 
-A **locator map** is a JSON object that maps names of [**dimensions**](#sec-dimensions) to **addresses**.
+A **locator map** is a JSON object that maps names of [**dimensions**](#sec-dimensions) to [**addresses**](#sec-dimensions).
 
 ```{#lst-locator-map .json lst-cap="A simple locator map indicating the position line 7, character 42"}
 { "line": "7", "char": "42" }
@@ -308,13 +309,13 @@ The **identifier** locator format with name `id` and locator values being arbitr
 Dimensions are a subset of query languages. A dimension value locates to *one* element from a document. A query language (e.g. JSONPath, full XPath...) can locate a set of elements.
 :::
 
-### Sequential document models
+## Sequential document models
 
-#### Offset number
+### Offset number
 
 The **offset number** locator format with name `number` is used to reference an element in a sequence of elements. The locator value is non-negative integer encoded as string without leading zeroes. The first element has number zero (locator value `0`).
 
-#### Character number
+### Character number
 
 The **character number** locator format with name `char` is used to reference a character in a sequence of characters from a character set. The locator value is a positive integer encoded as string without leading zeroes. The first character has number one (locator value `1`).
 
@@ -324,7 +325,7 @@ In Unicode strings, this locator format refers to code points instead of visual 
 Unicode strings are sequences as well but its not obvious whether the elements are code points, code units or characters.
 -->
 
-#### Line number
+### Line number
 
 The **line number** locator format with name `line` is used to reference a line in a sequence of lines, each being a character string. The locator value is a positive integer encoded as string without leading zeroes. The first line has number one (locator value `1`).
 
@@ -332,25 +333,33 @@ The **line number** locator format with name `line` is used to reference a line 
 The document model of line number is not a character string with line breaks but a sequence of character strings.  Splitting of character strings into lines is beyond the scope of this specification because multiple definitions of line break exist (U+0A optionally followed by U+0D, U+0D, U+0B, U+0C, U+85, U+2028, U+2029...).
 :::
 
-#### Line and Column
+### Line and Column
 
 The **line and column** locator format with name `linecol` is used to reference a character in a sequence of character strings. The locator value consists of a [line number] and a [character number] within the line, separated by colon (`:`).
 
-### Tabular document models
+## Tabular document models
 
 :::{.callout-note}
-Tabular data is known from spreadsheet software and CSV files. The tabular document model does *not* include table headers.
+Tabular data is known from spreadsheet software and CSV files. This document model does *not* include table headers! A table with header column and unique column names can better be mapped to a [hierarchical model](#hierarchical-document-models) or modelled as sequence of indexed sets. For instance an error in column `title` of the third row of a table (not counting the header row) could have the following [locator](#locators):
+
+```json
+{
+  "dimension": "offset", "address": "3",
+  "errors": [ { "position": [ 
+    { "dimension": "id", "address": "title" } ] } ]
+}
+```
 :::
 
-#### Cell reference
+### Cell reference
 
 The **cell reference** locator format with name `cell` is used to reference an individual cell in tabular data. The locator value consists of a pair of column and row. Columns are given in hexavigesimal system (A=1, B=2..., Z=26, AA=27, AB=28...) and rows are given by numbers, starting from 1.
 
-#### Cell range
+### Cell range
 
 The **cell range** locator format with name `cells` is used to reference a selection of connected cells in tabular data. The locator value consists of a cell reference, optionally followed by colon (`:`) and another cell reference.
 
-#### Table selection
+### Table selection
 
 The **table selection** locator format with name `rfc7111` is used to reference a selection of connected cells in tabular data. It can reference [cell references](#cell-references), [cell ranges](#cell-ranges), full rows and full columns. The locator format follows the following grammar in ABNF syntax ([RFC 5234]) with case-sensitive string support ([RFC 7405]):
 
@@ -369,19 +378,19 @@ DIGIT          = %x30-39
 Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier.
 :::
 
-### Hierarchical document models
+## Hierarchical document models
 
-#### File path
+### File path
 
 The **file path** locator format with name `file` is used to reference a file or directory in a directory tree. The locator value must be a POSIX path, being a string optionally beginning with a slash (`/`), followed by zero or more file names, separated by slash. A file name is a non-empty sequence of Unicode code points excluding the slash (`U+002F`) and the null byte (`U+0000`).
 
-#### JSON Pointer
+### JSON Pointer
 
 The **JSON Pointer** locator format with name `jsonpointer` is used to reference a JSON value within a JSON value. The locator value and its semantics are defined in [RFC 6901].
 
 [RFC 6901]: https://datatracker.ietf.org/doc/html/rfc6901
 
-#### XML Element Locator
+### XML Element Locator
 
 The **XML Element Locator** format follows the following grammar in ABNF syntax ([RFC 5234]) with rule [QName] defined in Namespaces in XML 1.0 specification:
 
@@ -408,6 +417,7 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 ## Normative References
 
 [RFC 2119]: https://tools.ietf.org/html/rfc2119
+[RFC 3986]: https://tools.ietf.org/html/rfc3986
 [RFC 5234]: https://tools.ietf.org/html/rfc5234
 [RFC 7405]: https://tools.ietf.org/html/rfc7405
 [RFC 7111]: https://tools.ietf.org/html/rfc7111
@@ -489,4 +499,5 @@ The [fq] tool supports analysis of many [binary formats](https://github.com/wade
 ```
 
 [fq]: https://github.com/wader/fq?tab=readme-ov-file#fq
+
 

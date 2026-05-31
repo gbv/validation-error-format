@@ -14,14 +14,26 @@ repo-url: https://github.com/gbv/validation-error-format
 resources:
   - schema.json
 
+callout-appearance: simple
+number-sections: true
+number-depth: 2
+notebook-links: false
+crossref:
+  lst-prefix: "Example"
+  lst-title: "Example"
+lst-cap-location: bottom
+
 format:
   html:
     highlight-style: kate
-    notebook-links: false
-    number-sections: true
-    number-depth: 2
     css: style.css
-    crossref:
-      lst-prefix: "Example"
-      lst-title: "Example"
-    lst-cap-location: bottom
+#  pdf:
+#    toc: false
+#    code-tools:
+#      source: false
+#    sansfont: Linux Biolinum O
+#    mainfont: Linux Biolinum O
+#    keeptex: true
+
+execute:
+  freeze: true

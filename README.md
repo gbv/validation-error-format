@@ -75,6 +75,10 @@ Locators can contain **nested errors** within the addressed part of a document:
 }
 ~~~
 
+## Building the specification document
+
+Requires `quarto`.
+
 ## Implementations
 
 See [directory `examples`](examples) for an example implementation of an XML validator supporting this error format.

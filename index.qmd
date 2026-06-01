@@ -1,6 +1,6 @@
 ---
 title: Data Validation Error Format
-subtitle: Version 0.1.0
+subtitle: Version 0.9.0
 #doi: 10.5281/zenodo......
 authors:
 - name: Jakob Voß
@@ -232,6 +232,8 @@ A locator references an element of a document. A **Locator** is a JSON object wi
 
 - the locator MUST have a field `address` with the **address**, being a string conforming to the **locator format** identified by the name of the **dimension**.
 
+- the locator MAY have a field `value` with the referenced element encoded in some reasonable form (typically as JSON string). The value MUST be derived from the document, dimension, and address. Applications MAY replace the field with another value derived from document, dimension, and address.
+
 - the locator MAY have a field `errors` with an array of [**errors**](#errors) within the located element (**nested errors**).
 
 ```{#lst-locator .json lst-cap="A simple locator"}
@@ -304,7 +306,7 @@ name            | locator format          | document model                      
 `rfc7111`       | [table selection]       | tabular data                            | tabular data
 `file`          | [file path]             | directory tree                          | -
 `jsonpointer`   | [JSON Pointer]          | JSON value                              | JSON value
-`xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML
+`xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML element or attribute
 
 The **identifier** locator format with name `id` and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refererence the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.
 
@@ -378,7 +380,7 @@ DIGIT          = %x30-39
 ```
 
 :::{.callout-note}
-Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier, excluding [multi-selections].
+Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier, excluding multi-selections.
 :::
 
 ## Hierarchical document models

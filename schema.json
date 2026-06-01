@@ -59,7 +59,7 @@
         "address": {
           "type": "string"
         },
-        "value:" { },
+        "value": { },
         "errors": {
           "type": "array",
           "items": {

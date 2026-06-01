@@ -9,7 +9,12 @@ figcaption {
 .listing > figure > figcaption {
   text-align: left;
 }
-.callout.callout-style-default .callout-body, 
-.callout.callout-style-default > div.callout-header {
+.callout.callout-style-simple .callout-body {
   font-size: 1rem;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }

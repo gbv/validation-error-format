@@ -8,19 +8,19 @@ authors:
   affiliations:
    - name: Verbundzentrale des GBV (VZG)
 abstract: |
- This document specifies a data format to report validation errors of digital objects.
+ This document specifies a data format to report validation errors of digital objects with error positions independent from specifid document models.
 ---
 
 # Introduction
 
-> All data is wrong, but some data is wrong on multiple levels.
+> _All data is wrong, but some data is wrong on multiple levels._
 
 Data validation is a crucial part of management of data quality and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. Existing standards for error reporting such as such as [JUnit XML](https://github.com/testmoapp/junitxml) and [Test Anything Protocol](https://testanything.org/) have narrow use cases in software development.
 
 The specification of **Data Validation Error Format** has two goals:
 
-- unify how validation errors are reported by different validators
-- reference positions of errors in validated documents, independent from document formats
+- unify how validation errors are reported by different applications
+- reference positions of errors in validated documents, independent from document models
 
 Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.
 
@@ -200,7 +200,7 @@ The position of an error is given
 
 Every locator map can be transformed to an equivalent array of locators. The reverse transformation is only possible if no locator has [nested errors](#locators) and there is not more then one locator per dimension.
 
-A position with multiple locator of the same dimension does nor imply multiple errors but it references multiple elements involved in the same error (for instance a mismatch between two elements). 
+A position with multiple locator of the same dimension does nor imply multiple errors but it references multiple elements involved in the same error (for instance a mismatch between two elements). Locators of different dimensions in the same position SHOULD refer to the the same elements or have a common intersection.
 
 [locator format]: #locator-formats
 [locator map]:: #locator-maps
@@ -223,8 +223,6 @@ A locator map can be transformed to an equivalent array of [locators](#locators)
 ```
 
 Applications MAY restrict their support of Data Validation Error Format to positions in condense form being  locator maps.
-
-<!-- In this case nested errors and positions with multiple locators per dimension are not supported. -->
 
 ## Locators
 
@@ -279,10 +277,6 @@ Nested errors allow to reference locations within elements of a document. Positi
   } ]
 }
 ```
-
-::: {.callout-note}
-Locators of the same positions should refer to roughly the "same" part of a document or at least have a common intersection. This requirement is difficult to formalize because locators refer to different document models, so it is no normative part of this specification.
-:::
 
 # Dimensions
 
@@ -384,7 +378,7 @@ DIGIT          = %x30-39
 ```
 
 :::{.callout-note}
-Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier.
+Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier, excluding [multi-selections].
 :::
 
 ## Hierarchical document models
@@ -413,7 +407,7 @@ DIGIT             = %x30-39  ; 0...9
 Applications MUST NOT use one XML Element Locators to reference multiple XML elements. For this reason applications MAY always append the string `[1]` to an XML Element Locator if it does not end with a `Position`.
 
 ::: {.callout-note}
-XML Element Locator is a proper subset of (X)Path Expressions from [XPath] specifications.
+XML Element Locator is a proper subset of (X)Path Expressions from [XPath] specifications, limited to reference individual XML elements or attributes.
 :::
 
 [QName]: https://www.w3.org/TR/REC-xml-names/#NT-QName

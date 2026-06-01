@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <meta name="dcterms.date" content="2026-05-31">
+    <meta name="dcterms.date" content="2026-06-01">
 
     <title>Data Validation Error Format</title>
     <style>
@@ -167,13 +167,13 @@
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">  
         <link rel="stylesheet" href="style.css">
       <meta name="citation_title" content="Data Validation Error Format">
-<meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects.
+<meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects with error positions independent from specifid document models.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2026-05-31">
-<meta name="citation_cover_date" content="2026-05-31">
+<meta name="citation_publication_date" content="2026-06-01">
+<meta name="citation_cover_date" content="2026-06-01">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-05-31">
+<meta name="citation_online_date" content="2026-06-01">
 <meta name="citation_language" content="en">
 </head>
 
@@ -216,7 +216,7 @@
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">May 31, 2026</p>
+              <p class="date">June 1, 2026</p>
             </div>
           </div>
           
@@ -230,7 +230,7 @@
     <div>
       <div class="abstract">
         <div class="block-title">Abstract</div>
-        <p>This document specifies a data format to report validation errors of digital objects.</p>
+        <p>This document specifies a data format to report validation errors of digital objects with error positions independent from specifid document models.</p>
       </div>
     </div>
 
@@ -303,26 +303,23 @@
        <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <blockquote class="blockquote">
-<p>All data is wrong, but some data is wrong on multiple levels.</p>
+<p><em>All data is wrong, but some data is wrong on multiple levels.</em></p>
 </blockquote>
 <p>Data validation is a crucial part of management of data quality and interoperability. Validation is applied in many ways and contexts, for instance input forms and editors with visual feedback or schema languages with formal error reports. The diversity of use cases imply a variety of error results. Existing standards for error reporting such as such as <a href="https://github.com/testmoapp/junitxml">JUnit XML</a> and <a href="https://testanything.org/">Test Anything Protocol</a> have narrow use cases in software development.</p>
 <p>The specification of <strong>Data Validation Error Format</strong> has two goals:</p>
 <ul>
-<li>unify how validation errors are reported by different validators</li>
-<li>reference positions of errors in validated documents, independent from document formats</li>
+<li>unify how validation errors are reported by different applications</li>
+<li>reference positions of errors in validated documents, independent from document models</li>
 </ul>
 <p>Last but not least the format should help to better separate validation and presentation of validation results, so both can be solved by different applications.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-caution">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Caution
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>The format is strictly limited to <strong>errors</strong> and <strong>error positions</strong>. Neither does it include other kinds of analysis results such as statistics and summaries of documents, nor does in include details about validation such as test cases, schema rules, and individual constraints. Errors can be linked to additional information with error types but the semantics of these types is out of the scope of this specification.</p>
+</div>
 </div>
 </div>
 <p>This document is managed in a revision control system at <a href="https://github.com/gbv/validation-error-format" class="uri">https://github.com/gbv/validation-error-format</a>, including an <a href="https://github.com/gbv/validation-error-format/issues">issue tracker</a>.</p>
@@ -354,17 +351,14 @@ Figure&nbsp;1: Validation process
 </figure>
 </div>
 <p>Every document conforms to a <strong>document model</strong>. For instance JSON documents conforms to the JSON model, and character strings conforms to the model “sequence of characters from a known character set”. Document models come with <strong>encodings</strong> how to express documents in form of documents on a lower level. For instance JSON documents can be encoded with JSON syntax as Unicode strings and Unicode strings can be encoded with UTF-8 as sequences of bytes (solid arrows in <a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>).</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Eventually all documents are given as digital objects, encoded as sequence of bytes. Encodings using a sequence of characters are also called textual data formats, in contrast to binary data formats.</p>
+</div>
 </div>
 </div>
 <p>An <a href="#positions">error position</a> is given in form of one or more <strong>locators</strong>, each having a <a href="#dimensions"><strong>dimension</strong></a> and an <strong>address</strong>. Each dimension refers to a <strong>locator format</strong> for a set of document models. For instance <a href="#json-pointer">JSON Pointer</a> refers to JSON, character and line numbers refer to character strings with defined line breaks, and offsets refer to sequences of elements (<a href="#fig-encodings-and-locators" class="quarto-xref">Figure&nbsp;2</a>). Other examples of locator formats include <a href="https://www.w3.org/TR/xpath/">XPath</a> for XML, and row/column for <a href="#tabular-document-models">tabular data</a>.</p>
@@ -561,17 +555,14 @@ Both MUST be documented by applications.
 <li><p>an error MAY have field <code>position</code> with a <a href="#positions"><strong>position</strong></a>. Applications MUST NOT differentiate between no position and an empty position (an empty array or an empty JSON object).</p></li>
 </ul>
 <p>Applications MUST use individual errors for individual positions of the kind of observation represented by the error. For instance a malformed character ocurring two times in a document results in two errors.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>By this definition the error <code>{}</code> is allowed and equivalent to <code>{"level":"error"}</code>.</p>
+</div>
 </div>
 </div>
 </section>
@@ -583,7 +574,7 @@ Note
 <li><p>or in <strong>full form</strong> as JSON array of <a href="#locators"><strong>locators</strong></a>.</p></li>
 </ul>
 <p>Every locator map can be transformed to an equivalent array of locators. The reverse transformation is only possible if no locator has <a href="#locators">nested errors</a> and there is not more then one locator per dimension.</p>
-<p>A position with multiple locator of the same dimension does nor imply multiple errors but it references multiple elements involved in the same error (for instance a mismatch between two elements).</p>
+<p>A position with multiple locator of the same dimension does nor imply multiple errors but it references multiple elements involved in the same error (for instance a mismatch between two elements). Locators of different dimensions in the same position SHOULD refer to the the same elements or have a common intersection.</p>
 <section id="locator-maps" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="locator-maps"><span class="header-section-number">3.1</span> Locator maps</h2>
 <p>A <strong>locator map</strong> is a JSON object that maps names of <a href="#dimensions"><strong>dimensions</strong></a> to <a href="#dimensions"><strong>addresses</strong></a>.</p>
@@ -612,7 +603,6 @@ Example&nbsp;6: Equivalent array of locators
 </figure>
 </div>
 <p>Applications MAY restrict their support of Data Validation Error Format to positions in condense form being locator maps.</p>
-<!-- In this case nested errors and positions with multiple locators per dimension are not supported. -->
 </section>
 <section id="locators" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="locators"><span class="header-section-number">3.2</span> Locators</h2>
@@ -682,19 +672,6 @@ Example&nbsp;8: An error in line 2 of file <code>example.txt</code> in archive <
 Example&nbsp;9: An error with position given in two forms, one with a nested error
 </figcaption>
 </figure>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Locators of the same positions should refer to roughly the “same” part of a document or at least have a common intersection. This requirement is difficult to formalize because locators refer to different document models, so it is no normative part of this specification.</p>
-</div>
 </div>
 </section>
 </section>
@@ -787,17 +764,14 @@ Note
 </tbody>
 </table>
 <p>The <strong>identifier</strong> locator format with name <code>id</code> and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refererence the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Dimensions are a subset of query languages. A dimension value refererences one element from a document. A query language (e.g.&nbsp;JSONPath, full XPath…) can locate a set of elements.</p>
+</div>
 </div>
 </div>
 <section id="sequential-document-models" class="level2" data-number="4.1">
@@ -817,17 +791,14 @@ Unicode strings are sequences as well but its not obvious whether the elements a
 <section id="line-number" class="level3">
 <h3 class="anchored" data-anchor-id="line-number">Line number</h3>
 <p>The <strong>line number</strong> locator format with name <code>line</code> is used to reference a line in a sequence of lines, each being a character string. The locator value is a positive integer encoded as string without leading zeroes. The first line has number one (locator value <code>1</code>).</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>The document model of line number is not a character string with line breaks but a sequence of character strings. Splitting of character strings into lines is beyond the scope of this specification because multiple definitions of line break exist (U+0A optionally followed by U+0D, U+0D, U+0B, U+0C, U+85, U+2028, U+2029…).</p>
+</div>
 </div>
 </div>
 </section>
@@ -838,22 +809,19 @@ Note
 </section>
 <section id="tabular-document-models" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="tabular-document-models"><span class="header-section-number">4.2</span> Tabular document models</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <p>Tabular data is known from spreadsheet software and CSV files. This document model does <em>not</em> include table headers! A table with header column and unique column names can better be mapped to a <a href="#hierarchical-document-models">hierarchical model</a> or modelled as sequence of indexed sets. For instance an error in column <code>title</code> of the third row of a table (not counting the header row) could have the following <a href="#locators">locator</a>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"offset"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"3"</span><span class="fu">,</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> </span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"id"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"title"</span> <span class="fu">}</span> <span class="ot">]</span> <span class="fu">}</span> <span class="ot">]</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </div>
 </div>
 <section id="cell-reference" class="level3">
@@ -875,17 +843,14 @@ CellPosition   = RowPosition "," ColPosition
 ColPosition    = %31-%39 *DIGIT
 Position       = %31-%39 *DIGIT
 DIGIT          = %x30-39</code></pre>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+<div class="callout-body-container">
+<p>Tabular selection locator is a proper subset of <a href="https://tools.ietf.org/html/rfc7111">RFC 7111</a> URI Fragment Identifier, excluding [multi-selections].</p>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Tabular selection locator is a proper subset of <a href="https://tools.ietf.org/html/rfc7111">RFC 7111</a> URI Fragment Identifier.</p>
 </div>
 </div>
 </section>
@@ -908,17 +873,14 @@ NodeTest          = [ "@" ] QName [ "[ Position "]" ]
 Position          = %31-%39 *DIGIT
 DIGIT             = %x30-39  ; 0...9</code></pre>
 <p>Applications MUST NOT use one XML Element Locators to reference multiple XML elements. For this reason applications MAY always append the string <code>[1]</code> to an XML Element Locator if it does not end with a <code>Position</code>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+<div class="callout-body-container">
+<p>XML Element Locator is a proper subset of (X)Path Expressions from <a href="https://www.w3.org/TR/xpath/">XPath</a> specifications, limited to reference individual XML elements or attributes.</p>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>XML Element Locator is a proper subset of (X)Path Expressions from <a href="https://www.w3.org/TR/xpath/">XPath</a> specifications.</p>
 </div>
 </div>
 </section>

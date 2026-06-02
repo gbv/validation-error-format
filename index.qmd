@@ -161,7 +161,7 @@ Only section [2](#errors) to [5](#reports), excluding examples and notes, and th
 
 # Errors
 
-An **Error** is a JSON object with the following constraints: 
+An **error** is a JSON object with the following constraints: 
 
 - an error SHOULD have a field `message` with an **error message**, being a non-empty string.
   Applications MAY use a default value for error messages. Language and localization of error
@@ -182,6 +182,8 @@ Applications MUST use individual errors for individual positions of the kind of 
 ::: {.callout-note}
 By this definition the error `{}` is allowed and equivalent to `{"level":"error"}`.
 :::
+
+A **nested error** is an error that is listed as part of a [locator] in its field `errors` or `reports`.
 
 # Positions
 
@@ -227,7 +229,7 @@ A locator references an element of a document. A **Locator** is a JSON object wi
 
 - the locator MAY have a field `value` with the referenced element encoded in some reasonable form (typically as JSON string). The value MUST be derived from the document, dimension, and address. Applications MAY replace the field with another value derived from document, dimension, and address.
 
-- the locator MAY have either a field `errors` with an array of [**errors**](#errors) within the located element or a field `reports` with an array of [**reports**](#reports) for the located element. Both contain **nested errors**.
+- the locator MAY have either a field `errors` with an array of [**errors**](#errors) within the located element or a field `reports` with an array of [**reports**](#reports) for the located element. Errors in field `errors` of a locator or as part of a report are called **nested errors**.
 
 ```{#lst-locator .json lst-cap="A simple locator"}
 { "dimension": "line", "address": "7" }
@@ -268,6 +270,54 @@ Nested errors allow to reference locations within elements of a document. Positi
     "errors": [ {
       "message": "Invalid character 3",
       "position": { "char": "3" }
+    } ]
+  } ]
+}
+```
+
+# Reports
+
+Reports summarize errors of same type with additional metadata. A **Report** is a JSON object with the following constraints:
+
+- the report MAY have field `types` with an array of [error types](#errors)
+
+- the report SHOULD have field `errors` with an array of zero or more [errors](#errors), optionally followed by the value `null` to indicate an incomplete list.
+
+- the report SHOULD have field `totalErrors` with a non-negative integer number. The number MUST be equal to the length of array `errors` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`.
+
+- the report MAY have field `compliances` with an array of [positions], optionally followed by the value `null` to indicate an incomplete list. Positions in field `compliances` MUST NOT contain nested errors.
+
+- the report MAY have field `totalCompliances` with a non-negative integer number. The number MUST be equal to the length of array `compliances` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`. Applications MUST compliances
+
+- the report MAY have field `totalFindings` with a non-negative integer number. The number MUST be equal to the sum of `totalCompliances` and `totalErrors`, if both are given. 
+
+- the report SHOULD have field `complete` with a boolean value. The value MUST be `false` if any of the arrays `errors` and `compliances` contains `null` as last element.
+
+- the report MAY have field `duration` with a non-negative number giving the time in seconds it took to create the report.
+
+The number of `totalFindings` MUST be equal to the sum of `totalErrors` and `totalCompliances`, if both are given
+
+
+Applications MUST process [errors] listed in field `errors` as following:
+
+- every error type of the report is added to field `types` of the error unless it is already exist in the array
+
+
+```{#lst-10 .json lst-cap="An error with nested errors in a report"}
+{
+  "message": "File records.xml contains invalid records",
+  "position": [ { 
+    "dimension": "file",
+    "address": "records.xml",
+    "reports": [ {
+      "types": [ "record-must-be-valid" ],
+      "errors": [
+        { "position": { "xpath": "/records/record[2]" } }
+      ],
+      "compliances": [
+        { "xpath": "/records/record[1]" },
+        { "xpath": "/records/record[3]" }
+      ]
     } ]
   } ]
 }
@@ -407,53 +457,6 @@ XML Locator is a proper subset of (X)Path Expressions from [XPath] specification
 :::
 
 [QName]: https://www.w3.org/TR/REC-xml-names/#NT-QName
-
-# Reports
-
-Reports summarize errors of same type with additional metadata. A **Report** is a JSON object with the following constraints:
-
-- the report MAY have field `types` with an array of [error types](#errors)
-
-- the report SHOULD have field `errors` with an array of zero or more [errors](#errors), optionally followed by the value `null` to indicate an incomplete list.
-
-- the report SHOULD have field `totalErrors` with a non-negative integer number. The number MUST be equal to the length of array `errors` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`.
-
-- the report MAY have field `compliances` with an array of [positions], optionally followed by the value `null` to indicate an incomplete list. Compliances list positions
-
-- the report MAY have field `totalCompliances` with a non-negative integer number. The number MUST be equal to the length of array `compliances` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`. Applications MUST compliances
-
-- the report MAY have field `totalFindings` with a non-negative integer number. The number MUST be equal to the sum of `totalCompliances` and `totalErrors`, if both are given. 
-
-- the report SHOULD have field `complete` with a boolean value. The value MUST be `false` if any of the arrays `errors` and `compliances` contains `null` as last element.
-
-- the report MAY have field `duration` with a non-negative number giving the time in seconds it took to create the report.
-
-The number of `totalFindings` MUST be equal to the sum of `totalErrors` and `totalCompliances`, if both are given
-
-Applications MUST process [errors] listed in field `errors` as following:
-
-- every error type of the report is added to field `types` of the error unless it is already exist in the array
-
-
-```{#lst-10 .json lst-cap="An error with an nested error report"}
-{
-  "message": "File records.xml contains invalid records"
-  "position": [ { 
-    "dimension": "file",
-    "address": "records.xml",
-    "reports": [ {
-      "types": [ "record-must-be-valid" ],
-      "errors": [
-        "position": { "xpath": "/records/record[2]" }
-      ]
-      "compliances": [
-        { "xpath": "/records/record[1]" },
-        { "xpath": "/records/record[3]" }
-      ]
-    } ]
-  } ]
-}
-```
 
 # References
 

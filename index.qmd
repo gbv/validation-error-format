@@ -155,16 +155,9 @@ A similar document could be invalid on byte level. The following table illustrat
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 ([RFC 2119] and [RFC 8174]) when, and only when, they appear in all capitals, as shown here.
 
-Only section [2](#errors) to [4](#dimensions), excluding examples and notes, and the [list of normative references](#normative-references) are normative parts of this specification.
+Formal grammars in this specification are given in EBNF notation as defined in Extensible Markup Language (XML) 1.1 [section 6](https://www.w3.org/TR/xml11/#sec-notation).
 
-<!--
-Specific support of Data Validation Error Format by an application depends on:
-
-1. the set of supported [**dimensions**](#dimensions), and
-2. whether [**positions**](#positions) are supported only in condense form ([**locator maps**](#locator-map)), or also in full form (array of [**locators**](#locators)) 
-
-Both MUST be documented by applications.
--->
+Only section [2](#errors) to [5](#reports), excluding examples and notes, and the [list of normative references](#normative-references) are normative parts of this specification.
 
 # Errors
 
@@ -234,7 +227,7 @@ A locator references an element of a document. A **Locator** is a JSON object wi
 
 - the locator MAY have a field `value` with the referenced element encoded in some reasonable form (typically as JSON string). The value MUST be derived from the document, dimension, and address. Applications MAY replace the field with another value derived from document, dimension, and address.
 
-- the locator MAY have a field `errors` with an array of [**errors**](#errors) within the located element (**nested errors**).
+- the locator MAY have either a field `errors` with an array of [**errors**](#errors) within the located element or a field `reports` with an array of [**reports**](#reports) for the located element. Both contain **nested errors**.
 
 ```{#lst-locator .json lst-cap="A simple locator"}
 { "dimension": "line", "address": "7" }
@@ -306,7 +299,7 @@ name            | locator format          | document model                      
 `rfc7111`       | [table selection]       | tabular data                            | tabular data
 `file`          | [file path]             | directory tree                          | -
 `jsonpointer`   | [JSON Pointer]          | JSON value                              | JSON value
-`xpath`         | [XML Element Locator]   | XML or compatible hierarchies           | XML element or attribute
+`xpath`         | [XML Locator]   | XML or compatible hierarchies           | XML element or attribute
 
 The **identifier** locator format with name `id` and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refererence the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.
 
@@ -366,21 +359,21 @@ The **cell range** locator format with name `cells` is used to reference a selec
 
 ### Table selection
 
-The **table selection** locator format with name `rfc7111` is used to reference a selection of connected cells in tabular data. It can reference [cell references](#cell-references), [cell ranges](#cell-ranges), full rows and full columns. The locator format follows the following grammar in ABNF syntax ([RFC 5234]) with case-sensitive string support ([RFC 7405]):
+The **table selection** locator format with name `rfc7111` is used to reference a selection of connected cells in tabular data. It can reference [cell references](#cell-references), [cell ranges](#cell-ranges), full rows and full columns. The locator format follows the following grammar:
 
-```{.abnf}
-TableSelection = Cells / Rows / Columns
-Cells          = %s"cell=" CellPosition [ "-" CellPosition ]
-Rows           = %s"row=" RowPosition [ "-" RowPosition ]
-Columns        = %s"col=" ColPosition [ "-" ColPosition ]
-CellPosition   = RowPosition "," ColPosition
-ColPosition    = %31-%39 *DIGIT
-Position       = %31-%39 *DIGIT
-DIGIT          = %x30-39
+```{.ebnf}
+TableSelection  ::=  Cells | Rows | Columns
+Cells           ::=  "cell=" CellPosition ( "-" CellPosition )?
+Rows            ::=  "row=" RowPosition ( "-" RowPosition )?
+Columns         ::=  "col=" ColPosition ( "-" ColPosition )?
+CellPosition    ::=  RowPosition "," ColPosition
+ColPosition     ::=  PositiveInteger
+RowPosition     ::=  PositiveInteger
+PositiveInteger ::=  [1-9] [0-9]*
 ```
 
 :::{.callout-note}
-Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier, excluding multi-selections.
+Tabular selection locator is a proper subset of [RFC 7111] URI Fragment Identifier, excluding multi-selections, so every elememt referenced by a table selected is tabular data for its part.
 :::
 
 ## Hierarchical document models
@@ -395,24 +388,72 @@ The **JSON Pointer** locator format with name `jsonpointer` is used to reference
 
 [RFC 6901]: https://datatracker.ietf.org/doc/html/rfc6901
 
-### XML Element Locator
+### XML Locator
 
-The **XML Element Locator** format follows the following grammar in ABNF syntax ([RFC 5234]) with rule [QName] defined in Namespaces in XML 1.0 specification:
+The **XML Locator** format follows the following grammar with rule [QName] defined in Namespaces in XML 1.0 specification:
 
-```{.abnf}
-XMLElementLocator = "/" / 1*( "/" NodeTest )
-NodeTest          = [ "@" ] QName [ "[ Position "]" ]
-Position          = %31-%39 *DIGIT
-DIGIT             = %x30-39  ; 0...9
+```{.ebnf}
+XMLLocator       ::=  ( "/" NodeTest )+ ( "/" AttributeTest )?
+NodeTest         ::=  QName Position?
+AttributeTest    ::=  "@" QName
+Position         ::=  "[ PositiveInteger "]"
+PositiveInteger  ::=  [1-9] [0-9]*
 ```
 
-Applications MUST NOT use one XML Element Locators to reference multiple XML elements. For this reason applications MAY always append the string `[1]` to an XML Element Locator if it does not end with a `Position`.
+Applications MUST NOT use one XML Locator to reference multiple XML elements. For this reason applications MAY always append the string `[1]` to an XML Locator if it does not end with a `Position` or `AttributeTest`.
 
 ::: {.callout-note}
-XML Element Locator is a proper subset of (X)Path Expressions from [XPath] specifications, limited to reference individual XML elements or attributes.
+XML Locator is a proper subset of (X)Path Expressions from [XPath] specifications, limited to reference individual XML elements or attributes.
 :::
 
 [QName]: https://www.w3.org/TR/REC-xml-names/#NT-QName
+
+# Reports
+
+Reports summarize errors of same type with additional metadata. A **Report** is a JSON object with the following constraints:
+
+- the report MAY have field `types` with an array of [error types](#errors)
+
+- the report SHOULD have field `errors` with an array of zero or more [errors](#errors), optionally followed by the value `null` to indicate an incomplete list.
+
+- the report SHOULD have field `totalErrors` with a non-negative integer number. The number MUST be equal to the length of array `errors` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`.
+
+- the report MAY have field `compliances` with an array of [positions], optionally followed by the value `null` to indicate an incomplete list. Compliances list positions
+
+- the report MAY have field `totalCompliances` with a non-negative integer number. The number MUST be equal to the length of array `compliances` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`. Applications MUST compliances
+
+- the report MAY have field `totalFindings` with a non-negative integer number. The number MUST be equal to the sum of `totalCompliances` and `totalErrors`, if both are given. 
+
+- the report SHOULD have field `complete` with a boolean value. The value MUST be `false` if any of the arrays `errors` and `compliances` contains `null` as last element.
+
+- the report MAY have field `duration` with a non-negative number giving the time in seconds it took to create the report.
+
+The number of `totalFindings` MUST be equal to the sum of `totalErrors` and `totalCompliances`, if both are given
+
+Applications MUST process [errors] listed in field `errors` as following:
+
+- every error type of the report is added to field `types` of the error unless it is already exist in the array
+
+
+```{#lst-10 .json lst-cap="An error with an nested error report"}
+{
+  "message": "File records.xml contains invalid records"
+  "position": [ { 
+    "dimension": "file",
+    "address": "records.xml",
+    "reports": [ {
+      "types": [ "record-must-be-valid" ],
+      "errors": [
+        "position": { "xpath": "/records/record[2]" }
+      ]
+      "compliances": [
+        { "xpath": "/records/record[1]" },
+        { "xpath": "/records/record[3]" }
+      ]
+    } ]
+  } ]
+}
+```
 
 # References
 
@@ -423,7 +464,6 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 
 [RFC 2119]: https://tools.ietf.org/html/rfc2119
 [RFC 3986]: https://tools.ietf.org/html/rfc3986
-[RFC 5234]: https://tools.ietf.org/html/rfc5234
 [RFC 7405]: https://tools.ietf.org/html/rfc7405
 [RFC 7111]: https://tools.ietf.org/html/rfc7111
 [RFC 8174]: https://tools.ietf.org/html/rfc8174
@@ -440,19 +480,15 @@ XML Element Locator is a proper subset of (X)Path Expressions from [XPath] speci
 - Bray, T.: _The JavaScript Object Notation (JSON) Data Interchange Format_.
   RFC 8259, December 2017. <https://tools.ietf.org/html/rfc8259>
 
+- Bray, T. et al: _Extensible Markup Language (XML) 1.1 (Second Edition)_.
+  W3C Recommendation. August 2006. W3C Recommendation. <https://www.w3.org/TR/xml11/>
+
 - Bray, T. et. al.: _Namespaces in XML 1.0 (Third Edition)_.
   W3C Recommendation, December 2009.
   <https://www.w3.org/TR/REC-xml-names/>
   
 - Bryan, P and Zyp, K. and Nottigham, M.: *JavaScript Object Notation (JSON) Pointer*.
   RFC 6901, April 2023. <https://tools.ietf.org/html/rfc6901>
-
-- Crocker, D. and Overell, P.: *Augmented BNF for Syntax Specifications: ABNF*.
-  RFC 5234, January 2008.
-  <https://www.rfc-editor.org/rfc/rfc5234>
-
-- Kyzivat, P.: *Case-Sensitive String Support in ABNF*.
-  RFC 7405, December 2014. <https://tools.ietf.org/html/rfc7405>
 
 - Leiba, B.:  _Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words_.
   BCP 14, RFC 8174, May 2017.

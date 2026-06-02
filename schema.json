@@ -7,6 +7,24 @@
       "type": "string",
       "minLength": 1
     },
+    "types": { "$ref": "#/$defs/types" },
+    "level": { 
+      "description": "error level",
+      "type": "string",
+      "enum": ["error", "warning", "info"],
+      "default": "error"
+    },
+    "position": { "$ref": "#/$defs/position" },
+    "id": {
+      "description": "error instance identifier",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "errors": { 
+      "type": "array",
+      "items": { "$ref": "#" }
+    },
     "types": {
       "type": "array",
       "items": {
@@ -14,12 +32,6 @@
         "type": "string",
         "minLength": 1
       }
-    },
-    "level": { 
-      "description": "error level",
-      "type": "string",
-      "enum": ["error", "warning", "info"],
-      "default": "error"
     },
     "position": {
       "description": "error position",
@@ -43,31 +55,59 @@
         }
       ]
     },
-    "id": {
-      "description": "error instance identifier",
-      "type": "string"
-    }
-  },
-  "$defs": {
     "locator": {
       "type": "object",
-      "properties": {
-        "dimension": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9]*$"
-        },
-        "address": {
-          "type": "string"
-        },
-        "value": { },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "#"
+      "allOf": [
+        {
+          "properties": {
+            "dimension": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*$"
+            },
+            "address": { "type": "string" },
+            "value": { }
           }
-        }
+        }, {
+          "oneOf": [
+            {
+              "properties": {
+                "errors": { "$ref": "#/$defs/errors" }
+              },
+              "properties": {
+                "reports": { 
+                  "type": "array",
+                  "items": { "$ref": "#/$defs/reports" }
+                }
+              }
+            }
+          ]
+        } ]
       },
       "required": ["dimension", "address"]
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "types": { "$ref": "#/$defs/types" },
+        "errors": { 
+          "type": "array",
+          "items": { "anyOf": [
+              { "$ref": "#" },
+              { "value": null } ]
+          },
+        "totalErrors": { "type": "integer", "minimum": 0 },
+        "compliances": { 
+          "type": "array",
+          "items": { "anyOf": [
+              { "$ref": "#/$defs/position" },
+              { "value": null } ]
+          }
+        },
+        "totalCompliances": { "type": "integer", "minimum": 0 },
+        "totalFindings": { "type": "integer", "minimum": 0 },
+        "complete": { "type": "boolean" },
+        "duration": { "type": "number", "minimum": 0 }
+      }
     }
   }
 }

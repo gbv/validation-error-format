@@ -1,0 +1,6 @@
+{
+  "message": "Timestamp of .gz archive must not be in the future",
+  "position": {
+    "fq": "gzip:.members[0].mtime"
+  }
+}

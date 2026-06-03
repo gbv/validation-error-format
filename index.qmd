@@ -83,44 +83,25 @@ Example of encodings and locator formats
 
 ## Examples
 
-Documents can be invalid on many levels. For example the string `{"åå":5}` is valid JSON but it might be invalid if element `åå` is expected to hold a string instead of a number (@lst-1). The error can be located with JSON Pointer in the JSON document and with character and line number:
+Documents can be invalid on many levels. For example the string `{"åå":5}` is valid JSON but it might be invalid if element `åå` is expected to hold a string instead of a number (@lst-example-1). The error can be located with JSON Pointer in the JSON document and with character and line number:
 
-```{#lst-1 .json lst-cap="Error in a JSON document"}
-{
-  "message": "Expected string, got number at element /åå",
-  "position": { "jsonpointer": "/åå", "char": "7", "line": "1" }
-}
+```{#lst-example-1 .json lst-cap="Error in a JSON document"}
+{{< include examples/example-1.json >}}
 ```
 
-The string could also be part of a larger, newline-delimited JSON document. In this case it makes sense to use a nested error (@lst-4):
+The string could also be part of a larger, newline-delimited JSON document. In this case it makes sense to use a nested error (@lst-example-4):
 
-```{#lst-4 .json lst-cap="Error in a newline-delimited JSON document"}
-{
-  "message": "Invalid document at line 7",
-  "position": [ {
-    "dimension": "line",
-    "address": "7",
-    "errors": [ {
-      "message": "Expected string, got number at element /åå",
-      "position": {
-        "jsonpointer": "/åå", "char": "7", "line": "1"
-      }
-    } ]
-  } ]
-}
+```{#lst-example-4 .json lst-cap="Error in a newline-delimited JSON document"}
+{{< include examples/example-4.json >}}
 ```
 
+The document could also be invalid at JSON syntax level, for example if the closing `}` is missing (@lst-example-2):
 
-The document could also be invalid at JSON syntax level, for example if the closing `}` is missing (@lst-2):
-
-```{#lst-2 .json lst-cap="Error in JSON syntax"}
-{
-  "message": "Unexpected end of JSON input at character 8",
-  "position": { "line": "1", "char": "8"  }
-}
+```{#lst-example-2 .json lst-cap="Error in JSON syntax"}
+{{< include examples/example-2.json >}}
 ```
 
-A similar document could be invalid on byte level. The following table illustrates the document from @lst-1 with ninth byte replaced by a value not allowed in UTF-8. It is common practice to replace such bytes with the Unicode replacement character `U+FFFD` but the resulting Unicode string is invalid JSON syntax still (@lst-3). The example also illustrates another locator format `linecol` to give a character position by line and column.
+A similar document could be invalid on byte level. The following table illustrates the document from @lst-example-1 with ninth byte replaced by a value not allowed in UTF-8. It is common practice to replace such bytes with the Unicode replacement character `U+FFFD` but the resulting Unicode string is invalid JSON syntax still (@lst-3). The example also illustrates another locator format `linecol` to give a character position by line and column.
 
 +---------------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+:------:+
 | **Byte**       |`7b`    |`22`    |`c3`    |`a5`    |`c3`    |`a5`    |`22`    |`3a`    |`c0`    |`7d`    |
@@ -235,44 +216,14 @@ A locator references an element of a document. A **Locator** is a JSON object wi
 { "dimension": "line", "address": "7" }
 ```
 
-Nested errors allow to reference locations within elements of a document. Positions of nested errors MUST be relative to the element referenced by their parent locator (@lst-nested-example and @lst-nested-example-2):
+Nested errors allow to reference locations within elements of a document. Positions of nested errors MUST be relative to the element referenced by their parent locator (@lst-nested-example-1 and @lst-nested-example-2):
 
-```{#lst-nested-example .json lst-cap="An error in line 2 of file `example.txt` in archive `archive.zip`"}
-{
-  "message": "Invalid value in line 2 in file example.txt in file archive.zip",
-  "position": [ {
-    "dimension": "file",
-    "address": "archive.zip",
-    "errors": [ {
-      "message": "Invalid value in line 2 in file example.txt",
-      "position": [ {
-        "dimension": "file",
-        "address": "example.txt",
-        "errors": [ { 
-          "message": "Invalid value in line 2",
-          "position": { "line": "2" }
-        } ]
-      } ]
-    } ]
-  } ]
-}
+```{#lst-nested-example-1 .json lst-cap="An error in line 2 of file `example.txt` in archive `archive.zip`"}
+{{< include examples/nested-example-1.json >}}
 ```
 
 ```{#lst-nested-example-2 .json lst-cap="An error with position given in two forms, one with a nested error"}
-{
-  "message": "Invalid character in line 7, column 3",
-  "position": [ {
-    "dimension": "linecol",
-    "address": "7:3"
-  }, {
-    "dimension": "line",
-    "address": "7",
-    "errors": [ {
-      "message": "Invalid character 3",
-      "position": { "char": "3" }
-    } ]
-  } ]
-}
+{{< include examples/nested-example-2.json >}}
 ```
 
 # Reports
@@ -289,7 +240,7 @@ Reports summarize errors of same type with additional metadata. A **Report** is 
 
 - the report MAY have field `totalCompliances` with a non-negative integer number. The number MUST be equal to the length of array `compliances` if the array does not contain value `null` and it MUST be equal or larger then then length of the array if it does contain `null`. Applications MUST compliances
 
-- the report MAY have field `totalFindings` with a non-negative integer number. The number MUST be equal to the sum of `totalCompliances` and `totalErrors`, if both are given. 
+- the report MAY have field `totalFindings` with a non-negative integer number. The number MUST be equal to the sum of `totalCompliances` and `totalErrors`, if both are given.
 
 - the report SHOULD have field `complete` with a boolean value. The value MUST be `false` if any of the arrays `errors` and `compliances` contains `null` as last element.
 
@@ -303,24 +254,8 @@ Applications MUST process [errors] listed in field `errors` as following:
 - every error type of the report is added to field `types` of the error unless it is already exist in the array
 
 
-```{#lst-10 .json lst-cap="An error with nested errors in a report"}
-{
-  "message": "File records.xml contains invalid records",
-  "position": [ { 
-    "dimension": "file",
-    "address": "records.xml",
-    "reports": [ {
-      "types": [ "record-must-be-valid" ],
-      "errors": [
-        { "position": { "xpath": "/records/record[2]" } }
-      ],
-      "compliances": [
-        { "xpath": "/records/record[1]" },
-        { "xpath": "/records/record[3]" }
-      ]
-    } ]
-  } ]
-}
+```{#lst-10 .json lst-cap="A locator for a file with a report"}
+{{< include examples/report-1.json >}}
 ```
 
 # Dimensions
@@ -528,18 +463,8 @@ The following locator formats or standards are being considered for addition as 
 The [fq] tool supports analysis of many [binary formats](https://github.com/wader/fq/blob/master/doc/formats.md) so it could be used to locate elements of binary data models. The locator value would be the format, followed by a colon, followed by a path expression:
 
 ```.json
-{
-  "message": "Timestamp of .gz archive must not be in the future",
-  "position": {
-    "fq": "gzip:.members[0].mtime"
-  }
-}
-{
-  "message": "Image width of PNG file is too large",
-  "position": {
-    "fq": "png:.chunks[0].width"
-  }
-}
+{{< include examples/fq-1.json >}}
+{{< include examples/fq-2.json >}}
 ```
 
 [fq]: https://github.com/wader/fq?tab=readme-ov-file#fq

@@ -1,0 +1,16 @@
+{
+  "dimension": "file",
+  "address": "records.xml",
+  "reports": [
+    {
+      "types": [ "record-must-be-valid" ],
+      "errors": [
+        { "position": { "xpath": "/records/record[2]" } }
+      ],
+      "compliances": [
+        { "xpath": "/records/record[1]" },
+        { "xpath": "/records/record[3]" }
+      ]
+    } 
+  ]
+}

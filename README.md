@@ -81,5 +81,5 @@ Requires `quarto`.
 
 ## Implementations
 
-See [directory `examples`](examples) for an example implementation of an XML validator supporting this error format.
+See [directory `demo`](demo) for an example implementation of an XML validator supporting this error format.
 

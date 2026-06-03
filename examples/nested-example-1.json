@@ -1,0 +1,18 @@
+{
+  "message": "Invalid value in line 2 in file example.txt in file archive.zip",
+  "position": [ {
+    "dimension": "file",
+    "address": "archive.zip",
+    "errors": [ {
+      "message": "Invalid value in line 2 in file example.txt",
+      "position": [ {
+        "dimension": "file",
+        "address": "example.txt",
+        "errors": [ { 
+          "message": "Invalid value in line 2",
+          "position": { "line": "2" }
+        } ]
+      } ]
+    } ]
+  } ]
+}

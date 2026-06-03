@@ -1,0 +1,14 @@
+{
+  "message": "Invalid character in line 7, column 3",
+  "position": [ {
+    "dimension": "linecol",
+    "address": "7:3"
+  }, {
+    "dimension": "line",
+    "address": "7",
+    "errors": [ {
+      "message": "Invalid character 3",
+      "position": { "char": "3" }
+    } ]
+  } ]
+}

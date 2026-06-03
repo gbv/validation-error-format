@@ -1,0 +1,4 @@
+{
+  "message": "Expected string, got number at element /åå",
+  "position": { "jsonpointer": "/åå", "char": "7", "line": "1" }
+}

@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "ajv": "ajv",
+    "validate": "ajv validate -s schema.json -d"
+  },
+  "dependencies": {
+    "ajv-cli": "^5.0.0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "message": "Image width of PNG file is too large",
+  "position": {
+    "fq": "png:.chunks[0].width"
+  }
+}

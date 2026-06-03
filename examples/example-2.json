@@ -1,0 +1,4 @@
+{
+  "message": "Unexpected end of JSON input at character 8",
+  "position": { "line": "1", "char": "8"  }
+}

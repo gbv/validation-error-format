@@ -76,13 +76,12 @@
               "properties": {
                 "reports": { 
                   "type": "array",
-                  "items": { "$ref": "#/$defs/reports" }
+                  "items": { "$ref": "#/$defs/report" }
                 }
               }
             }
           ]
-        } ]
-      },
+        } ],
       "required": ["dimension", "address"]
     },
     "report": {
@@ -91,16 +90,21 @@
         "types": { "$ref": "#/$defs/types" },
         "errors": { 
           "type": "array",
-          "items": { "anyOf": [
+          "items": {
+            "anyOf": [
               { "$ref": "#" },
-              { "value": null } ]
-          },
+              { "const": null }
+            ]
+          }
+        },
         "totalErrors": { "type": "integer", "minimum": 0 },
         "compliances": { 
           "type": "array",
-          "items": { "anyOf": [
+          "items": { 
+            "anyOf": [
               { "$ref": "#/$defs/position" },
-              { "value": null } ]
+              { "const": null }
+            ]
           }
         },
         "totalCompliances": { "type": "integer", "minimum": 0 },

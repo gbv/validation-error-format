@@ -32,18 +32,11 @@ This document is managed in a revision control system at <https://github.com/gbv
 
 ## Overview
 
-@fig-validation illustrates the validation process with core concepts used in this specification: a **validator** checks whether a **document** conforms to some requirements and returns a list of **errors** in return. Each error can refer to its location in the document via a **position**.
+@fig-validation illustrates the validation process and core concepts of this specification: a **validator** checks whether a **document** conforms to some requirements and returns either a list of **[errors](#error)** or a **[report](#report)** including such list in return. Each error can reference elements of the document via a **[position](#position)** having [locators](#locators). A locator may contain nested errors or reports (not shown in the figure) with nested errors within the referenced element.
 
-::: {#fig-validation}
+![Validation process and result](overview.svg){#fig-validation}
 
-```{mermaid fig-align=left}
-graph LR
-   document --- validator --> errors
-   errors -. positions .-> document
-   validator(validator)
-```
-Validation process
-:::
+## Background
 
 Every document conforms to a **document model**. For instance JSON documents conforms to the JSON model, and character strings conforms to the model "sequence of characters from a known character set". Document models come with **encodings** how to express documents in form of documents on a lower level. For instance JSON documents can be encoded with JSON syntax as Unicode strings and Unicode strings can be encoded with UTF-8 as sequences of bytes (solid arrows in @fig-encodings-and-locators).
 
@@ -53,7 +46,7 @@ Eventually all documents are given as digital objects, encoded as sequence of by
 
 An [error position](#positions) is given in form of one or more **locators**, each having a [**dimension**](#dimensions) and an **address**. Each dimension refers to a **locator format** for a set of document models. For instance [JSON Pointer] refers to JSON, character and line numbers refer to character strings with defined line breaks, and offsets refer to sequences of elements (@fig-encodings-and-locators). Other examples of locator formats include [XPath] for XML, and row/column for [tabular data](#tabular-document-models).
 
-Locators can also contain **nested errors** to reference a more specific position within another position and to support error positions in nested documents such as archive files.
+Locators can contain **nested errors** or reports to reference more specific errors on a lower level of description, for instance to files in an archive or individual records in a file.
 
 ::: {#fig-encodings-and-locators}
 

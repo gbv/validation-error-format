@@ -437,11 +437,19 @@ XML Locator is a proper subset of (X)Path Expressions from [XPath] specification
 - A. Wright, H. Andrews, B. Hutton, and G. Dennis: *JSON Schema Draft 2020-12*.
   June 2022. <https://json-schema.org/draft/2020-12/json-schema-core.html>
 
-# Appendices {.unnumbered}
+# Changelog {-}
 
-## JSON Schemas {.unnumbered}
+This is still a draft.
 
-Error records can be validated with the following non-normative, non-extensive JSON Schema ([`schema.json`](schema.json) in the specification repository):
+Version 1.0.0 will introduce error reports based on results of project AQinDa.
+
+Version 0.1.0 was written and made public in June 2025 after the format had been used since Feburary 2022.
+
+# Appendices {-}
+
+## JSON Schema {-}
+
+Error records can be validated with the following non-normative JSON Schema ([`schema.json`](schema.json) in the specification repository):
 
 ```json
 {{< include schema.json >}}

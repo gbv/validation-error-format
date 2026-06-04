@@ -2,23 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "message": {
-      "description": "error message",
-      "type": "string",
-      "minLength": 1
-    },
+    "message": { "type": "string", "minLength": 1 },
     "types": { "$ref": "#/$defs/types" },
     "level": { 
-      "description": "error level",
       "type": "string",
       "enum": ["error", "warning", "info"],
       "default": "error"
     },
-    "position": { "$ref": "#/$defs/position" },
-    "id": {
-      "description": "error instance identifier",
-      "type": "string"
-    }
+    "position": { "$ref": "#/$defs/position" }
   },
   "$defs": {
     "errors": { 
@@ -28,23 +19,19 @@
     "types": {
       "type": "array",
       "items": {
-        "description": "identifier of an error type",
         "type": "string",
         "minLength": 1
       }
     },
     "position": {
-      "description": "error position",
       "anyOf": [
         {
-          "description": "locators",
           "type": "array",
           "items": {
             "$ref": "#/$defs/locator" 
           }
         },
         {
-          "description": "locator map",
           "type": "object",
           "patternProperties": {
             "^[a-z][a-z0-9]*$": {

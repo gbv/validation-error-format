@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-06-03">
+<meta name="dcterms.date" content="2026-06-04">
 
 <title>Data Validation Error Format</title>
 <style>
@@ -86,10 +86,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="citation_abstract" content="This document specifies a data format to report validation errors of digital objects with error positions independent from specifid document models.
 ">
 <meta name="citation_author" content="Jakob Voß">
-<meta name="citation_publication_date" content="2026-06-03">
-<meta name="citation_cover_date" content="2026-06-03">
+<meta name="citation_publication_date" content="2026-06-04">
+<meta name="citation_cover_date" content="2026-06-04">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-06-03">
+<meta name="citation_online_date" content="2026-06-04">
 <meta name="citation_language" content="en">
 </head>
 
@@ -125,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">June 3, 2026</p>
+              <p class="date">June 4, 2026</p>
             </div>
           </div>
           
@@ -580,12 +580,12 @@ Example&nbsp;9: An error with position given in two forms, one with a nested err
 <p>Reports summarize errors of same type with additional metadata. A <strong>Report</strong> is a JSON object with the following constraints:</p>
 <ul>
 <li><p>the report MAY have field <code>types</code> with an array of <a href="#errors">error types</a></p></li>
-<li><p>the report SHOULD have field <code>errors</code> with an array of zero or more <a href="#errors">errors</a>, optionally followed by the value <code>null</code> to indicate an incomplete list.</p></li>
+<li><p>the report MUST have field <code>errors</code> with an array of zero or more <a href="#errors">errors</a>, optionally followed by the value <code>null</code> to indicate an incomplete list.</p></li>
 <li><p>the report SHOULD have field <code>totalErrors</code> with a non-negative integer number. The number MUST be equal to the length of array <code>errors</code> if the array does not contain value <code>null</code> and it MUST be equal or larger then then length of the array if it does contain <code>null</code>.</p></li>
 <li><p>the report MAY have field <code>compliances</code> with an array of <a href="#positions">positions</a>, optionally followed by the value <code>null</code> to indicate an incomplete list. Positions in field <code>compliances</code> MUST NOT contain nested errors.</p></li>
 <li><p>the report MAY have field <code>totalCompliances</code> with a non-negative integer number. The number MUST be equal to the length of array <code>compliances</code> if the array does not contain value <code>null</code> and it MUST be equal or larger then then length of the array if it does contain <code>null</code>. Applications MUST compliances</p></li>
 <li><p>the report MAY have field <code>totalFindings</code> with a non-negative integer number. The number MUST be equal to the sum of <code>totalCompliances</code> and <code>totalErrors</code>, if both are given.</p></li>
-<li><p>the report SHOULD have field <code>complete</code> with a boolean value. The value MUST be <code>false</code> if any of the arrays <code>errors</code> and <code>compliances</code> contains <code>null</code> as last element.</p></li>
+<li><p>the report SHOULD have field <code>complete</code> with a boolean value indicating whether the document was fully processed.</p></li>
 <li><p>the report MAY have field <code>duration</code> with a non-negative number giving the time in seconds it took to create the report.</p></li>
 </ul>
 <p>The number of <code>totalFindings</code> MUST be equal to the sum of <code>totalErrors</code> and <code>totalCompliances</code>, if both are given</p>
@@ -972,10 +972,11 @@ PositiveInteger  ::=  [1-9] [0-9]*</code></pre>
 <span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"totalFindings"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"integer"</span><span class="fu">,</span> <span class="dt">"minimum"</span><span class="fu">:</span> <span class="dv">0</span> <span class="fu">},</span></span>
 <span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"complete"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"boolean"</span> <span class="fu">},</span></span>
 <span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"duration"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"number"</span><span class="fu">,</span> <span class="dt">"minimum"</span><span class="fu">:</span> <span class="dv">0</span> <span class="fu">}</span></span>
-<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"required"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"errors"</span><span class="ot">]</span></span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="sec-additional-dimensions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-additional-dimensions">Additional dimensions</h2>

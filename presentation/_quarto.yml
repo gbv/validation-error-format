@@ -1,0 +1,11 @@
+project:
+  output-dir: docs
+
+title: Errors in Documents
+subtitle: Towards a format for reporting and locating validation errors
+author: Jakob Voß
+
+format:
+  revealjs:
+    code-line-numbers: false
+    incremental: true

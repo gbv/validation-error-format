@@ -111,7 +111,8 @@
         "totalFindings": { "type": "integer", "minimum": 0 },
         "complete": { "type": "boolean" },
         "duration": { "type": "number", "minimum": 0 }
-      }
+      },
+      "required": ["errors"]
     }
   }
 }

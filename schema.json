@@ -31,15 +31,7 @@
             "$ref": "#/$defs/locator" 
           }
         },
-        {
-          "type": "object",
-          "patternProperties": {
-            "^[a-z][a-z0-9]*$": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        }
+        { "$ref": "#/$defs/namedMap" }
       ]
     },
     "locator": {
@@ -52,7 +44,7 @@
               "pattern": "^[a-z][a-z0-9]*$"
             },
             "address": { "type": "string" },
-            "value": { }
+            "value": { "$ref": "#/$defs/namedMap" }
           }
         }, {
           "oneOf": [
@@ -79,6 +71,15 @@
           { "const": null }
         ]
       }
+    },
+    "namedMap": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z][a-z0-9]*$": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     },
     "report": {
       "type": "object",

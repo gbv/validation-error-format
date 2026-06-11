@@ -201,7 +201,7 @@ A locator references an element of a document. A **Locator** is a JSON object wi
 
 - the locator MUST have a field `address` with the **address**, being a string conforming to the **locator format** identified by the name of the **dimension**.
 
-- the locator MAY have a field `value` with the referenced element encoded in some reasonable form (typically as JSON string). The value MUST be derived from the document, dimension, and address. Applications MAY replace the field with another value derived from document, dimension, and address.
+- the locator MAY have a field `value` with the referenced element encoded as JSON object that maps data formats to serializations in some reasonable form (typically as JSON string). The value MUST be derived from the document, dimension, and address. Applications MAY replace the field with another value derived from document, dimension, and address.
 
 - the locator MAY have either a field `errors` with an array of [**errors**](#errors) within the located element or a field `reports` with an array of [**reports**](#reports) for the located element. Errors in field `errors` of a locator or as part of a report are called **nested errors**.
 
@@ -278,7 +278,7 @@ name            | locator format          | document model                      
 `rfc7111`       | [table selection]       | tabular data                            | tabular data
 `file`          | [file path]             | directory tree                          | -
 `jsonpointer`   | [JSON Pointer]          | JSON value                              | JSON value
-`xpath`         | [XML Locator]   | XML or compatible hierarchies           | XML element or attribute
+`xpath`         | [XML Locator]           | XML or compatible hierarchies           | XML element or attribute
 
 The **identifier** locator format with name `id` and locator values being arbitrary Unicode strings subsumes every other locator format because locators of same value refererence the same element. It can be used for any kind of formalized reference to elements of a document, but its main use case are record identifiers, unique names and similar identifier systems.
 

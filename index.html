@@ -72,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-cf35b1e8b68dd0c452cd246239eb2ea9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c07b2023d1ce389724911301a6ac35eb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-0e0ce6b95999be0a2f18a5f60a831a20.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -585,11 +585,12 @@ Example&nbsp;9: An error with position given in two forms, one with a nested err
 <li><p>the report SHOULD have field <code>totalErrors</code> with a non-negative integer number. The number MUST be equal to the length of array <code>errors</code> if the array does not contain value <code>null</code> and it MUST be equal or larger then then length of the array if it does contain <code>null</code>.</p></li>
 <li><p>the report MAY have field <code>compliances</code> with an array of <a href="#positions">positions</a>, optionally followed by the value <code>null</code> to indicate an incomplete list. Positions in field <code>compliances</code> MUST NOT contain nested errors.</p></li>
 <li><p>the report MAY have field <code>totalCompliances</code> with a non-negative integer number. The number MUST be equal to the length of array <code>compliances</code> if the array does not contain value <code>null</code> and it MUST be equal or larger then then length of the array if it does contain <code>null</code>. Applications MUST compliances</p></li>
-<li><p>the report MAY have field <code>totalFindings</code> with a non-negative integer number. The number MUST be equal to the sum of <code>totalCompliances</code> and <code>totalErrors</code>, if both are given.</p></li>
+<li><p>the report MAY have field <code>skipped</code> with an array of <a href="#positions">positions</a>, optionally followed by the value <code>null</code> to indicate an incomplete list. Positions in field <code>skipped</code> MUST NOT contain nested errors.</p></li>
+<li><p>the report MAY have field <code>totalSkipped</code> with a non-negative integer number. The number MUST be equal to the length of array <code>skipped</code> if the array does not contain value <code>null</code> and it MUST be equal or larger then then length of the array if it does contain <code>null</code>. Applications MUST compliances</p></li>
+<li><p>the report MAY have field <code>totalFindings</code> with a non-negative integer number. The number MUST be equal to the sum of <code>totalCompliances</code>, <code>totalErrors</code>, and <code>totalSkipped</code> if all of the these fields are given.</p></li>
 <li><p>the report SHOULD have field <code>complete</code> with a boolean value indicating whether the document was fully processed.</p></li>
 <li><p>the report MAY have field <code>duration</code> with a non-negative number giving the time in seconds it took to create the report.</p></li>
 </ul>
-<p>The number of <code>totalFindings</code> MUST be equal to the sum of <code>totalErrors</code> and <code>totalCompliances</code>, if both are given</p>
 <p>Applications MUST process <a href="#errors">errors</a> listed in field <code>errors</code> as following:</p>
 <ul>
 <li>every error type of the report is added to field <code>types</code> of the error unless it is already exist in the array</li>

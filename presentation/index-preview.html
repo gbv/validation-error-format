@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <meta name="dcterms.date" content="2026-06-04">
+    <meta name="dcterms.date" content="2026-06-11">
 
     <title>index</title>
     <style>
@@ -161,7 +161,7 @@
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-cf35b1e8b68dd0c452cd246239eb2ea9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0e0ce6b95999be0a2f18a5f60a831a20.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c07b2023d1ce389724911301a6ac35eb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -208,8 +208,10 @@
   <li><a href="#levels-of-description" id="toc-levels-of-description" class="nav-link" data-scroll-target="#levels-of-description">Levels of description</a></li>
   <li><a href="#some-dimensions" id="toc-some-dimensions" class="nav-link" data-scroll-target="#some-dimensions">Some dimensions</a></li>
   </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#open-issues" id="toc-open-issues" class="nav-link" data-scroll-target="#open-issues">Open Issues</a>
   <ul class="collapse">
+  <li><a href="#support-skipped-analysis" id="toc-support-skipped-analysis" class="nav-link" data-scroll-target="#support-skipped-analysis">Support skipped analysis?</a></li>
   <li><a href="#writing-a-specification" id="toc-writing-a-specification" class="nav-link" data-scroll-target="#writing-a-specification">Writing a specification</a></li>
   <li><a href="#final-name" id="toc-final-name" class="nav-link" data-scroll-target="#final-name">Final Name</a></li>
   </ul></li>
@@ -223,6 +225,12 @@
 </blockquote>
 <section id="background" class="level1">
 <h1>Background</h1>
+<hr>
+<p><a href="constrainify.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="constrainify.png" class="img-fluid"></a></p>
+<hr>
+<p><a href="qa-catalogue.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="qa-catalogue.png" class="img-fluid"></a></p>
+<hr>
+<p><a href="junit-report.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="junit-report.png" class="img-fluid"></a></p>
 <section id="motivation" class="level2">
 <h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
 <ul>
@@ -264,22 +272,19 @@
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Syntax error at line 3"</span><span class="fu">,</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"3"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid record element"</span><span class="fu">,</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"3"</span> <span class="fu">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid record element"</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span> <span class="fu">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Image width of PNG file is too large"</span><span class="fu">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"png:.chunks[0].width"</span> <span class="fu">}</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Image width of PNG file is too large"</span><span class="fu">,</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fq"</span><span class="fu">:</span> <span class="st">"png:.chunks[0].width"</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"level"</span><span class="fu">:</span><span class="st">"error"</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="requirements" class="level2">
 <h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
@@ -293,7 +298,7 @@
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="../overview.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Core Elements of the Format"><img src="../overview.svg" class="img-fluid figure-img" alt="Core Elements of the Format"></a></p>
+<p><a href="../overview.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Core Elements of the Format"><img src="../overview.svg" class="img-fluid figure-img" alt="Core Elements of the Format"></a></p>
 <figcaption>Core Elements of the Format</figcaption>
 </figure>
 </div>
@@ -302,12 +307,10 @@
 <h2 class="anchored" data-anchor-id="error">Error</h2>
 <ul>
 <li><code>message</code> - for humans, could be generated automatically</li>
-<li><code>level</code> - severity (<code>error</code>, <code>warning</code>, or <code>info</code>)</li>
+<li><code>level</code> - severity (<code>error</code>: default, <code>warning</code>, or <code>info</code>)</li>
 <li><code>types</code> - kinds of error</li>
 <li><code>position</code> - where the error occurred in a document</li>
 </ul>
-<p>All fields are optional, <code>level</code> is implied!</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">"level"</span><span class="fu">:</span><span class="st">"error"</span><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="report" class="level2">
 <h2 class="anchored" data-anchor-id="report">Report</h2>
@@ -324,34 +327,34 @@
 <section id="minimal-report" class="level2">
 <h2 class="anchored" data-anchor-id="minimal-report">Minimal Report</h2>
 <p>All fields are optional, except <code>errors</code></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="example-report" class="level2">
 <h2 class="anchored" data-anchor-id="example-report">Example Report</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"types"</span><span class="fu">:</span> <span class="ot">[</span> <span class="st">"record-must-be-valid"</span> <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[2]"</span> <span class="fu">}</span> <span class="fu">}</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"compliances"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span> <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[3]"</span> <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">null</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"types"</span><span class="fu">:</span> <span class="ot">[</span> <span class="st">"record-must-be-valid"</span> <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[2]"</span> <span class="fu">}</span> <span class="fu">}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"compliances"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[3]"</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">null</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="position" class="level2">
 <h2 class="anchored" data-anchor-id="position">Position</h2>
 <p>Array of <strong>locators</strong>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"xpath"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span> <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"42"</span> <span class="fu">}</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"xpath"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span> <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"line"</span><span class="fu">,</span> <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"42"</span> <span class="fu">}</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Condense Form:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span><span class="fu">,</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"42"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"xpath"</span><span class="fu">:</span> <span class="st">"/records/record[1]"</span><span class="fu">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"42"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="locator" class="level2">
 <h2 class="anchored" data-anchor-id="locator">Locator</h2>
@@ -365,21 +368,21 @@
 </section>
 <section id="example-nested-errors-in-a-locator" class="level2">
 <h2 class="anchored" data-anchor-id="example-nested-errors-in-a-locator">Example: Nested Errors in a Locator</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"archive.zip"</span><span class="fu">,</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 in file example.txt"</span><span class="fu">,</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"example.txt"</span><span class="fu">,</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid element in line 2"</span><span class="fu">,</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"2"</span> <span class="fu">}</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span> <span class="ot">]</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"archive.zip"</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid value in line 2 in file example.txt"</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"position"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"dimension"</span><span class="fu">:</span> <span class="st">"file"</span><span class="fu">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"address"</span><span class="fu">:</span> <span class="st">"example.txt"</span><span class="fu">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"errors"</span><span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Invalid element in line 2"</span><span class="fu">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"position"</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">"line"</span><span class="fu">:</span> <span class="st">"2"</span> <span class="fu">}</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span> <span class="ot">]</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="levels-of-description" class="level2">
 <h2 class="anchored" data-anchor-id="levels-of-description">Levels of description</h2>
@@ -465,8 +468,23 @@
 </table>
 </section>
 </section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<ul>
+<li>Report</li>
+<li>Error</li>
+<li>Position</li>
+<li>Locators with Dimensions</li>
+</ul>
+</section>
 <section id="open-issues" class="level1">
 <h1>Open Issues</h1>
+<section id="support-skipped-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="support-skipped-analysis">Support skipped analysis?</h2>
+<ul>
+<li>Findings = compliances + errors + skipped?</li>
+</ul>
+</section>
 <section id="writing-a-specification" class="level2">
 <h2 class="anchored" data-anchor-id="writing-a-specification">Writing a specification</h2>
 <ul>

@@ -71,6 +71,15 @@
         } ],
       "required": ["dimension", "address"]
     },
+    "positions": { 
+      "type": "array",
+      "items": { 
+        "anyOf": [
+          { "$ref": "#/$defs/position" },
+          { "const": null }
+        ]
+      }
+    },
     "report": {
       "type": "object",
       "properties": {
@@ -84,17 +93,11 @@
             ]
           }
         },
+        "compliances": { "$ref": "#/$defs/positions" },
+        "skipped": { "$ref": "#/$defs/positions" },
         "totalErrors": { "type": "integer", "minimum": 0 },
-        "compliances": { 
-          "type": "array",
-          "items": { 
-            "anyOf": [
-              { "$ref": "#/$defs/position" },
-              { "const": null }
-            ]
-          }
-        },
         "totalCompliances": { "type": "integer", "minimum": 0 },
+        "totalSkipped": { "type": "integer", "minimum": 0 },
         "totalFindings": { "type": "integer", "minimum": 0 },
         "complete": { "type": "boolean" },
         "duration": { "type": "number", "minimum": 0 }

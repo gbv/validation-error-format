@@ -2,6 +2,18 @@
 
 # Background
 
+---
+
+![](constrainify.png)
+
+---
+
+![](qa-catalogue.png)
+
+---
+
+![](junit-report.png)
+
 ## Motivation
 
 - Unify how errors in data are reported by different applications
@@ -35,21 +47,18 @@
 ```json
 {
   "message": "Syntax error at line 3",
-  "position": {
-    "line": "3"
-  }
+  "position": { "line": "3" }
 }
 {
   "message": "Invalid record element",
-  "position": {
-    "xpath": "/records/record[1]"
-  }
+  "position": { "xpath": "/records/record[1]" }
 }
 {
   "message": "Image width of PNG file is too large",
-  "position": {
-    "fq": "png:.chunks[0].width"
-  }
+  "position": { "fq": "png:.chunks[0].width" }
+}
+{ 
+  "level":"error" 
 }
 ```
 
@@ -67,15 +76,9 @@
 ## Error
 
 - `message` - for humans, could be generated automatically
-- `level` - severity (`error`, `warning`, or `info`)
+- `level` - severity (`error`: default, `warning`, or `info`)
 - `types` - kinds of error
 - `position` - where the error occurred in a document
-
-All fields are optional, `level` is implied!
-
-```json
-{"level":"error"}
-```
 
 ## Report
 
@@ -197,7 +200,18 @@ name            | document           | element/part
 `xpath`         | XML                | XML element/attribute
 `cells`         | tabular data       | tabular data
 
+# Summary
+
+- Report
+- Error
+- Position
+- Locators with Dimensions
+
 # Open Issues
+
+## Support skipped analysis?
+
+- Findings = compliances + errors + skipped?
 
 ## Writing a specification
 
